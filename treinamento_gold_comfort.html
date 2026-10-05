@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Treinamento Comercial: Lentes com Área de Relaxamento Gold Comfort & Gold Comfort IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: 1920px 1080px;
+    margin: 0;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #1e293b;
+    background-color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+    background: #f8fafc;
+    padding: 65px 85px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Slide Themes */
+  .slide.theme-dark {
+    background: radial-gradient(circle at 85% 15%, #132742 0%, #08111e 65%, #050b14 100%);
+    color: #ffffff;
+  }
+
+  .slide.theme-light {
+    background: radial-gradient(circle at 90% 10%, #f1f5f9 0%, #f8fafc 60%, #ffffff 100%);
+    color: #0f172a;
+  }
+
+  /* Header bar on slides */
+  .slide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid rgba(226, 232, 240, 0.8);
+    padding-bottom: 18px;
+    margin-bottom: 25px;
+  }
+
+  .theme-dark .slide-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .tagline-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(2, 132, 199, 0.1);
+    color: #0284c7;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 8px;
+  }
+
+  .theme-dark .tagline-badge {
+    background: rgba(0, 210, 223, 0.15);
+    color: #00d2df;
+    border: 1px solid rgba(0, 210, 223, 0.3);
+  }
+
+  .slide-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+  }
+
+  .slide-subtitle {
+    font-size: 17px;
+    color: #64748b;
+    margin-top: 5px;
+    font-weight: 500;
+  }
+
+  .theme-dark .slide-subtitle {
+    color: #94a3b8;
+  }
+
+  .header-logo {
+    text-align: right;
+  }
+
+  .brand-chip {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 8px 18px;
+    border-radius: 8px;
+    display: inline-block;
+    letter-spacing: 1px;
+  }
+
+  .theme-dark .brand-chip {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Slide Content Area */
+  .slide-body {
+    flex: 1;
+    display: flex;
+    gap: 35px;
+    align-items: stretch;
+  }
+
+  /* Footer bar */
+  .slide-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(226, 232, 240, 0.8);
+    padding-top: 14px;
+    font-size: 14px;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  .theme-dark .slide-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #64748b;
+  }
+
+  .footer-act {
+    font-weight: 700;
+    color: #0284c7;
+    letter-spacing: 0.5px;
+  }
+
+  .theme-dark .footer-act {
+    color: #00d2df;
+  }
+
+  /* Utility Cards & Grids */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    width: 100%;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px;
+    width: 100%;
+  }
+
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    width: 100%;
+  }
+
+  .grid-5 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    width: 100%;
+  }
+
+  .card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card-dark {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 28px;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card-highlight {
+    border-color: #0284c7;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+  }
+
+  .card-alert {
+    border-color: #f87171;
+    background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+  }
+
+  .card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Typography helpers */
+  .text-cyan { color: #00d2df; }
+  .text-blue { color: #0284c7; }
+  .text-coral { color: #ef4444; }
+  .text-green { color: #10b981; }
+  .text-amber { color: #f59e0b; }
+
+  .stat-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .dialog-box {
+    background: #f1f5f9;
+    border-left: 4px solid #0284c7;
+    padding: 16px 20px;
+    border-radius: 0 12px 12px 0;
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .dialog-box.alert {
+    background: #fef2f2;
+    border-left-color: #ef4444;
+  }
+
+  .dialog-box.success {
+    background: #f0fdf4;
+    border-left-color: #10b981;
+  }
+
+  /* Comparison Tables */
+  table.comp-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  }
+
+  table.comp-table th {
+    background: #0f172a;
+    color: #ffffff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 18px 20px;
+    text-align: left;
+    letter-spacing: 0.5px;
+  }
+
+  table.comp-table th.highlight-col {
+    background: #0284c7;
+    color: #ffffff;
+  }
+
+  table.comp-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 15px;
+    color: #334155;
+    vertical-align: middle;
+  }
+
+  table.comp-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  table.comp-table tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  table.comp-table tr:hover td {
+    background: #f0f9ff;
+  }
+
+  table.comp-table td.highlight-col {
+    background: #f0f9ff;
+    font-weight: 600;
+    color: #0369a1;
+    border-left: 2px solid #bae6fd;
+    border-right: 2px solid #bae6fd;
+  }
+
+  .badge-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .badge-green { background: #dcfce7; color: #15803d; }
+  .badge-blue { background: #e0f2fe; color: #0369a1; }
+  .badge-red { background: #fee2e2; color: #b91c1c; }
+  .badge-purple { background: #f3e8ff; color: #7e22ce; }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: CAPA -->
+<div class="slide theme-dark" style="justify-content: center; align-items: center; text-align: center; padding: 100px;">
+  <div style="position: absolute; top: 60px; right: 80px;" class="brand-chip">SOROLAB &bull; PERSONALITY</div>
+  
+  <div style="max-width: 1280px; margin: 0 auto; z-index: 2;">
+    <div class="tagline-badge" style="font-size: 15px; padding: 8px 24px; margin-bottom: 25px;">
+      PROGRAMA DE CAPACITAÇÃO COMERCIAL &bull; NÍVEL AVANÇADO
+    </div>
+    
+    <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 68px; font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 24px;">
+      O NOVO PADRÃO DA <br>
+      <span style="background: linear-gradient(90deg, #00d2df 0%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">VISÃO SIMPLES DIGITAL</span>
+    </h1>
+    
+    <p style="font-size: 26px; color: #cbd5e1; font-weight: 400; max-width: 950px; margin: 0 auto 50px; line-height: 1.4;">
+      Como transformar receitas de visão simples em vendas de alto valor e conforto absoluto com as lentes de relaxamento <strong style="color: #ffffff;">Gold Comfort</strong> e <strong style="color: #00d2df;">Gold Comfort IA</strong>.
+    </p>
+
+    <div style="display: flex; justify-content: center; gap: 40px; margin-top: 20px;">
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 20px 36px; border-radius: 14px; text-align: left;">
+        <div style="font-size: 13px; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Público-Alvo</div>
+        <div style="font-size: 18px; font-weight: 700; color: #ffffff; margin-top: 4px;">Consultores Ópticos de Balcão</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 20px 36px; border-radius: 14px; text-align: left;">
+        <div style="font-size: 13px; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Módulo Comercial</div>
+        <div style="font-size: 18px; font-weight: 700; color: #00d2df; margin-top: 4px;">Produto 2 em 1 &amp; Scripts de Alta Conversão</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 20px 36px; border-radius: 14px; text-align: left;">
+        <div style="font-size: 13px; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Tecnologia</div>
+        <div style="font-size: 18px; font-weight: 700; color: #38bdf8; margin-top: 4px;">Inteligência Artificial Preditiva (5 Níveis)</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: space-between; padding: 0 90px; font-size: 14px; color: #64748b;">
+    <div>Exclusivo para Treinamento de Equipes de Ópticas Parceiras</div>
+    <div>Edição 2026 &bull; Lâmina 01 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 2: O PONTO CEGO DO BALCÃO -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 1: O CHOQUE DE REALIDADE</div>
+      <h2 class="slide-title">O Ponto Cego do Balcão em 2026</h2>
+      <p class="slide-subtitle">Por que entregar uma "lente comum" é deixar dinheiro na mesa e negligenciar a dor do seu cliente.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <div style="flex: 1.1; display: flex; flex-direction: column; justify-content: space-between;">
+      <div class="card card-alert" style="margin-bottom: 20px;">
+        <div class="card-title text-coral">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          O Hábito Vicioso da "Lente Comum"
+        </div>
+        <p style="font-size: 16px; line-height: 1.6; color: #334155;">
+          Quando o cliente entrega uma receita de visão simples (Miopia, Hipermetropia ou Astigmatismo), 90% dos vendedores perguntam apenas: <em>"Quer antirreflexo?"</em> e vendem uma lente de estoque pronta.
+        </p>
+        <div class="dialog-box alert" style="margin-top: 14px;">
+          <strong>O Erro Fatal:</strong> A receita oftalmológica foi calculada para enxergar no <strong>infinito (&gt; 6 metros)</strong>. Mas seu cliente passa <strong>10 horas por dia a 35 centímetros</strong> nas telas. Ele sai da loja com a visão nítida para longe, mas com os olhos sobrecarregados para o trabalho.
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card" style="padding: 22px;">
+          <div class="stat-number text-blue">9.3h</div>
+          <div class="stat-label">Tempo Médio Diário em Telas</div>
+          <p style="font-size: 14px; color: #64748b; margin-top: 6px;">Alternância contínua entre smartphone, notebook e telas corporativas.</p>
+        </div>
+        <div class="card" style="padding: 22px;">
+          <div class="stat-number text-coral">78%</div>
+          <div class="stat-label">Sofrem de Astenopia Digital</div>
+          <p style="font-size: 14px; color: #64748b; margin-top: 6px;">Queixam-se de ardência, dores de cabeça e cansaço visual ao fim da tarde.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: 0.9; display: flex; flex-direction: column;">
+      <div class="card" style="height: 100%; background: #0f172a; color: #ffffff; border: none; justify-content: space-between;">
+        <div>
+          <div style="font-size: 13px; color: #00d2df; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">A Oportunidade de Ouro</div>
+          <h3 style="font-family: 'Space Grotesk'; font-size: 28px; line-height: 1.25; margin-bottom: 20px;">
+            Você não vende apenas grau.<br>Você vende alívio e produtividade.
+          </h3>
+          <p style="font-size: 16px; color: #94a3b8; line-height: 1.6; margin-bottom: 25px;">
+            O cliente não sabe que existe uma lente desenhada especificamente para descansar os olhos dele no celular. Quando você apresenta essa solução, você deixa de ser um "tirador de pedido" e se torna um <strong>Consultor Especialista</strong>.
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 22px; border-radius: 12px;">
+          <div style="font-weight: 700; font-size: 15px; color: #38bdf8; margin-bottom: 8px;">A Pergunta que Transforma a Venda:</div>
+          <div style="font-size: 16px; font-style: italic; color: #e2e8f0; line-height: 1.4;">
+            "O senhor usa computador ou celular no trabalho? Ao final do dia, sente os olhos pesados ou aquela dorzinha de cabeça chata?"
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 1 &bull; O Choque de Realidade no Balcão</div>
+    <div>Lâmina 02 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 3: A FISIOLOGIA DA FADIGA COM SVG DO OLHO -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 1: CIÊNCIA OCULAR DESCOMPLICADA</div>
+      <h2 class="slide-title">A Fisiologia da Fadiga: O Músculo Ciliar sob Ataque</h2>
+      <p class="slide-subtitle">Como explicar de forma simples e irresistível o porquê de os olhos arderem e cansarem nas telas.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <div style="flex: 1.1; display: flex; flex-direction: column; justify-content: space-between;">
+      <div class="card" style="border-left: 6px solid #ef4444; padding: 24px;">
+        <h3 class="card-title text-coral">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          O Mecanismo da Acomodação Contínua
+        </h3>
+        <p style="font-size: 15px; line-height: 1.6; color: #334155; margin-bottom: 12px;">
+          Para enxergar de <strong>longe</strong>, o <strong>músculo ciliar</strong> está 100% relaxado. Mas quando olhamos para um smartphone a 30 cm, esse músculo precisa se contrair com força para curvar o cristalino. 
+        </p>
+        <p style="font-size: 15px; line-height: 1.6; color: #334155;">
+          Ficar 8 a 12 horas nessa posição é o mesmo que <strong>segurar um haltere de academia com o braço esticado sem soltar o dia inteiro</strong>. O músculo entra em fadiga espástica crônica!
+        </p>
+      </div>
+
+      <!-- Diagrama SVG: Olho e Músculo Ciliar + Câmera -->
+      <div class="card" style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="font-weight: 700; font-size: 14px; color: #0f172a; text-transform: uppercase; letter-spacing: 0.8px;">
+            A Metáfora de Ouro: Câmera (Mecânica) vs. Olho (Biológico)
+          </div>
+          <span class="badge-tag badge-red">Sobrecarga Ciliar</span>
+        </div>
+        <div class="grid-2">
+          <div style="background: #ffffff; padding: 14px 18px; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; gap: 14px; align-items: center;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <div>
+              <div style="font-weight: 700; color: #0284c7; font-size: 15px;">Autofoco de Câmera</div>
+              <p style="font-size: 13px; color: #64748b; margin-top: 3px; line-height: 1.3;">
+                Estrutura mecânica. Pode focar por dias sem desgaste térmico ou cansaço muscular.
+              </p>
+            </div>
+          </div>
+          <div style="background: #ffffff; padding: 14px 18px; border-radius: 10px; border: 1px solid #fecaca; display: flex; gap: 14px; align-items: center;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><ellipse cx="12" cy="12" rx="4" ry="7" fill="rgba(239, 68, 68, 0.2)"/></svg>
+            <div>
+              <div style="font-weight: 700; color: #ef4444; font-size: 15px;">Autofoco Biológico</div>
+              <p style="font-size: 13px; color: #64748b; margin-top: 3px; line-height: 1.3;">
+                Músculos vivos e tecidos elásticos. Sofrem queimação, ressecamento e astenopia diária.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sintomas e Impactos no Cliente -->
+    <div style="flex: 0.9; display: flex; flex-direction: column; justify-content: space-between;">
+      <div class="card card-highlight" style="padding: 24px;">
+        <div style="font-weight: 700; font-size: 17px; color: #0369a1; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Os 4 Sintomas da Astenopia Digital
+        </div>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: #334155;">
+          <li style="display: flex; gap: 8px;"><strong>🔴 Olhos Secos &amp; Ardência:</strong> Em telas piscamos até 60% menos, evaporando a lágrima.</li>
+          <li style="display: flex; gap: 8px;"><strong>🔴 Cefaleia Temporal:</strong> Dores nas têmporas e na nuca após o almoço ou fim do dia.</li>
+          <li style="display: flex; gap: 8px;"><strong>🔴 Visão Turva Transitória:</strong> Dificuldade ao alternar o foco do celular para longe.</li>
+          <li style="display: flex; gap: 8px;"><strong>🔴 Queda de Produtividade:</strong> Fadiga mental e sonolência ao ler textos no computador.</li>
+        </ul>
+      </div>
+
+      <div class="card" style="background: #e0f2fe; border-color: #7dd3fc; padding: 22px;">
+        <div style="font-weight: 800; font-size: 16px; color: #0284c7; margin-bottom: 6px;">O que a Lente com Relaxamento faz?</div>
+        <p style="font-size: 15px; line-height: 1.5; color: #0369a1;">
+          Ela coloca uma <strong>"mola de amortecimento"</strong> na frente do olho. Quando o cliente olha para baixo, a lente assume uma fração do trabalho, permitindo que o músculo ciliar trabalhe relaxado!
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 1 &bull; Fisiologia da Fadiga Ocular</div>
+    <div>Lâmina 03 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 4: A ILUSÃO DAS LENTES PRONTAS -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 1: LIMITAÇÕES DE MERCADO</div>
+      <h2 class="slide-title">A Ilusão das Lentes Prontas &amp; Surfaçadas Comuns</h2>
+      <p class="slide-subtitle">Compreenda a fundo por que as opções genéricas não protegem a visão do usuário de telas.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-2" style="align-items: stretch;">
+      <!-- Lentes Prontas -->
+      <div class="card" style="border-top: 6px solid #ef4444; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 class="card-title text-coral" style="margin: 0;">Lentes Prontas (Estoque)</h3>
+            <span class="badge-tag badge-red">Limitação Extrema</span>
+          </div>
+          <p style="font-size: 15px; color: #64748b; margin-bottom: 18px;">Blocos industriais pré-moldados para dioptrias padronizadas.</p>
+          
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #334155;">
+            <li style="display: flex; gap: 10px;">❌ <strong>Curvas Esféricas Fixas:</strong> Não consideram a posição de uso, inclinação pantoscópica ou armação.</li>
+            <li style="display: flex; gap: 10px;">❌ <strong>Aberrações Periféricas:</strong> Distorções progressivas nas bordas da lente, causando desconforto lateral.</li>
+            <li style="display: flex; gap: 10px;">❌ <strong>Zero Compensação para Perto:</strong> Obriga o cristalino a fazer 100% da acomodação o dia todo.</li>
+            <li style="display: flex; gap: 10px;">❌ <strong>Comoditização:</strong> Produto de baixo valor agregado onde a loja disputa centavos com concorrentes.</li>
+          </ul>
+        </div>
+
+        <div class="dialog-box alert" style="margin-top: 20px;">
+          <strong>Veredito:</strong> Servem como lente provisória ou de emergência, mas são inadequadas para a rotina digital de qualquer cliente atual.
+        </div>
+      </div>
+
+      <!-- Visão Simples Tradicional Surfaçada -->
+      <div class="card" style="border-top: 6px solid #f59e0b; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 class="card-title text-amber" style="margin: 0;">Visão Simples Surfaçada Genérica</h3>
+            <span class="badge-tag" style="background: #fef3c7; color: #b45309;">Solução Parcial</span>
+          </div>
+          <p style="font-size: 15px; color: #64748b; margin-bottom: 18px;">Lentes surfaçadas digitalmente, porém com grau estático e uniforme.</p>
+          
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #334155;">
+            <li style="display: flex; gap: 10px;">⚠️ <strong>Dioptria Uniforme:</strong> Aplica a mesma potência de longe em toda a superfície da lente.</li>
+            <li style="display: flex; gap: 10px;">⚠️ <strong>Ignora a Zona de Convergência:</strong> Não prevê o movimento descendente dos olhos para telas de smartphone.</li>
+            <li style="display: flex; gap: 10px;">⚠️ <strong>Fadiga Residual:</strong> O cliente enxerga nítido longe, mas continua reclamando de peso ocular às 17h.</li>
+            <li style="display: flex; gap: 10px;">⚠️ <strong>Falta de Diferenciação:</strong> O cliente não sente que comprou algo tecnológico ou inovador.</li>
+          </ul>
+        </div>
+
+        <div class="dialog-box" style="margin-top: 20px; background: #fffbeb; border-left-color: #f59e0b;">
+          <strong>Veredito:</strong> Boa para quem não usa telas, mas ultrapassada para os 95% dos clientes que vivem conectados.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 1 &bull; Limitações de Lentes Comuns</div>
+    <div>Lâmina 04 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 5: A FÓRMULA 2 EM 1 -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 2: O CONCEITO REVOLUCIONÁRIO</div>
+      <h2 class="slide-title">A Fórmula "2 em 1": Longe Impecável + Relaxamento Ativo</h2>
+      <p class="slide-subtitle">Como apresentar a lente como uma revolução tecnológica dupla e indispensável.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <div style="flex: 1.1; display: flex; flex-direction: column; justify-content: space-between;">
+      <div class="card card-highlight">
+        <h3 class="card-title text-blue">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          O Poder do Conceito "2 em 1" no Balcão
+        </h3>
+        <p style="font-size: 16px; line-height: 1.6; color: #334155; margin-bottom: 12px;">
+          Em vendas, quando você oferece "duas soluções pelo valor de uma", o valor percebido pelo cérebro do consumidor multiplica instantaneamente.
+        </p>
+        <div style="background: #ffffff; border: 1px solid #bae6fd; border-radius: 12px; padding: 18px; margin-top: 8px;">
+          <div style="font-size: 13px; font-weight: 700; color: #0284c7; text-transform: uppercase;">Como Definir para o Cliente:</div>
+          <div style="font-size: 18px; font-weight: 600; color: #0f172a; margin-top: 6px; line-height: 1.4;">
+            "A Gold Comfort é uma lente 2 em 1: em cima ela corrige 100% da receita do seu médico para longe, e embaixo ela tem um amortecedor digital de relaxamento para o seu celular."
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card" style="border-left: 5px solid #0284c7; padding: 22px;">
+          <div style="font-size: 13px; font-weight: 800; color: #0284c7; text-transform: uppercase;">FUNÇÃO 1 &bull; LONGE PERFEITO</div>
+          <h4 style="font-size: 18px; font-weight: 700; margin: 6px 0 6px;">Precisão Cirúrgica</h4>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.5;">Correção esférica e cilíndrica de alta definição para trânsito, TV, esportes e visão ampla do dia a dia.</p>
+        </div>
+        <div class="card" style="border-left: 5px solid #10b981; padding: 22px;">
+          <div style="font-size: 13px; font-weight: 800; color: #10b981; text-transform: uppercase;">FUNÇÃO 2 &bull; RELAXAMENTO ATIVO</div>
+          <h4 style="font-size: 18px; font-weight: 700; margin: 6px 0 6px;">Amortecimento Digital</h4>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.5;">Redução milimétrica da potência óptica ao convergir os olhos para baixo, liberando a tensão do músculo ciliar.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ilustração de Perfil da Lente 2 em 1 -->
+    <div style="flex: 0.9; display: flex; flex-direction: column;">
+      <div class="card" style="height: 100%; background: #0f172a; color: #ffffff; border: none; align-items: center; justify-content: center; text-align: center; padding: 40px;">
+        <div style="font-size: 13px; color: #00d2df; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 25px;">
+          ESQUEMA ÓPTICO DO PRODUTO 2 EM 1
+        </div>
+        
+        <!-- SVG Visual da Lente com 2 Zonas -->
+        <svg width="270" height="350" viewBox="0 0 270 350" fill="none">
+          <ellipse cx="135" cy="175" rx="120" ry="160" stroke="rgba(255,255,255,0.25)" stroke-width="4" fill="rgba(255,255,255,0.03)"/>
+          
+          <!-- Zona de Longe (Azul) -->
+          <path d="M 26 155 C 60 135 210 135 244 155 C 253 125 250 75 208 38 C 166 6 104 6 62 38 C 20 75 18 125 26 155 Z" fill="rgba(2, 132, 199, 0.3)" stroke="#38bdf8" stroke-width="2.5"/>
+          <text x="135" y="85" text-anchor="middle" fill="#38bdf8" font-family="'Space Grotesk'" font-size="15" font-weight="700">100% GRAU DE LONGE</text>
+          <text x="135" y="108" text-anchor="middle" fill="#cbd5e1" font-size="13">Receita Médica &bull; Foco Infinito</text>
+
+          <!-- Linha de Transição Invisível -->
+          <path d="M 26 155 C 135 180 244 155 244 155" stroke="#00d2df" stroke-dasharray="6 6" stroke-width="2"/>
+          <text x="135" y="174" text-anchor="middle" fill="#00d2df" font-size="11" font-weight="700">TRANSIÇÃO SUAVE &bull; SEM SALTO</text>
+
+          <!-- Zona de Relaxamento (Verde) -->
+          <path d="M 26 155 C 135 180 244 155 C 244 225 208 300 156 322 C 104 322 26 255 26 155 Z" fill="rgba(16, 185, 129, 0.3)" stroke="#10b981" stroke-width="2.5"/>
+          <text x="135" y="238" text-anchor="middle" fill="#34d399" font-family="'Space Grotesk'" font-size="15" font-weight="700">ÁREA DE RELAXAMENTO</text>
+          <text x="135" y="260" text-anchor="middle" fill="#cbd5e1" font-size="13">Amortecedor Muscular para Telas</text>
+          <text x="135" y="282" text-anchor="middle" fill="#10b981" font-size="13" font-weight="700">Alívio Acomodativo (Boost)</text>
+        </svg>
+
+        <div style="font-size: 13px; color: #94a3b8; margin-top: 25px; line-height: 1.4;">
+          Nenhuma linha aparente &bull; Adaptação em minutos &bull; Estética 100% limpa
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 2 &bull; A Revolução do Produto 2 em 1</div>
+    <div>Lâmina 05 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 6: SALTO TECNOLÓGICO GOLD COMFORT VS IA -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 2: EVOLUÇÃO DE LINHA</div>
+      <h2 class="slide-title">Gold Comfort Standard vs. Gold Comfort IA</h2>
+      <p class="slide-subtitle">O que muda com a Inteligência Artificial Preditiva e quando indicar cada versão.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-2">
+      <!-- Gold Comfort Standard -->
+      <div class="card" style="border-top: 6px solid #0284c7; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 class="card-title text-blue" style="margin: 0;">VS Gold Comfort (Standard)</h3>
+            <span class="badge-tag badge-blue">Freeform Tradicional</span>
+          </div>
+          <p style="font-size: 15px; color: #64748b; margin-bottom: 18px;">
+            A entrada perfeita no universo das lentes com alívio acomodativo.
+          </p>
+
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 15px; color: #334155;">
+            <li style="display: flex; gap: 10px;">⚙️ <strong>Surfaçagem Digital Freeform:</strong> Lente usinada ponto a ponto na face interna.</li>
+            <li style="display: flex; gap: 10px;">⚙️ <strong>Relaxamento Padronizado:</strong> Uma curva calibrada para alívio diário do estresse ocular.</li>
+            <li style="display: flex; gap: 10px;">⚙️ <strong>Campo Visual Amplo:</strong> Reduz aberrações em comparação direta com lentes prontas de estoque (+40% de nitidez periférica).</li>
+            <li style="display: flex; gap: 10px;">⚙️ <strong>Excelente Custo-Benefício:</strong> Ideal para o cliente que busca conforto visual gastando pouco.</li>
+          </ul>
+        </div>
+
+        <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 16px; margin-top: 20px;">
+          <div style="font-weight: 700; color: #0284c7; font-size: 14px;">Indicação Principal:</div>
+          <div style="font-size: 14px; color: #0369a1; margin-top: 4px;">Clientes que passam até 4 a 6 horas em telas e buscam um upgrade econômico para sair da lente comum.</div>
+        </div>
+      </div>
+
+      <!-- Gold Comfort IA -->
+      <div class="card card-highlight" style="border-top: 6px solid #00d2df; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 class="card-title" style="margin: 0; color: #0891b2;">VS Gold Comfort IA</h3>
+            <span class="badge-tag badge-green">Inteligência Artificial</span>
+          </div>
+          <p style="font-size: 15px; color: #64748b; margin-bottom: 18px;">
+            O topo da engenharia óptica com personalização preditiva.
+          </p>
+
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 15px; color: #334155;">
+            <li style="display: flex; gap: 10px;">🧠 <strong>Algoritmo Preditivo por IA:</strong> Mapeia a trajetória dinâmica do olhar e calcula a lente em malha ultra-densa.</li>
+            <li style="display: flex; gap: 10px;">🧠 <strong>5 Zonas de Boost Personalizadas:</strong> Escolha exata da potência: <strong>D0.40, D0.60, D0.80, D1.00 e D1.25</strong>.</li>
+            <li style="display: flex; gap: 10px;">🧠 <strong>Eliminação do Astigmatismo Oblíquo:</strong> Zero sensação de flutuação lateral ou distorção em movimentos rápidos.</li>
+            <li style="display: flex; gap: 10px;">🧠 <strong>Adaptação Instantânea (Zero Rejeição):</strong> O cérebro não percebe a transição, apenas a leveza nos olhos.</li>
+          </ul>
+        </div>
+
+        <div style="background: #ecfeff; border: 1px solid #a5f3fc; border-radius: 10px; padding: 16px; margin-top: 20px;">
+          <div style="font-weight: 700; color: #0891b2; font-size: 14px;">Indicação Principal:</div>
+          <div style="font-size: 14px; color: #0e7490; margin-top: 4px;">Heavy users de telas (8h+), gamers, profissionais corporativos e pré-présbitas que exigem o máximo em precisão.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 2 &bull; Evolução Tecnológica</div>
+    <div>Lâmina 06 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 7: MATRIZ DE SEGMENTAÇÃO POR POTÊNCIA -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 3: GUIA PRÁTICO DE PRESCRIÇÃO</div>
+      <h2 class="slide-title">Segmentação Descomplicada das 5 Potências (D0.40 a D1.25)</h2>
+      <p class="slide-subtitle">Como escolher com rapidez e segurança a potência perfeita para cada perfil de cliente.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body" style="flex-direction: column; justify-content: space-between;">
+    <div class="grid-5" style="align-items: stretch;">
+      <!-- D0.40 -->
+      <div class="card" style="border-top: 4px solid #38bdf8; padding: 22px 18px; justify-content: space-between;">
+        <div>
+          <div style="font-family: 'Space Grotesk'; font-size: 26px; font-weight: 700; color: #0284c7;">D0.40</div>
+          <div style="font-size: 12px; font-weight: 700; color: #64748b; margin-top: 2px;">+0.40 D de Alívio</div>
+          <div style="margin-top: 14px; font-size: 14px; font-weight: 700; color: #0f172a;">18 a 25 anos</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 6px; line-height: 1.4;">
+            Estudantes, universitários, gamers e jovens profissionais.
+          </div>
+        </div>
+        <div style="background: #f0f9ff; padding: 10px; border-radius: 8px; font-size: 12px; color: #0369a1; font-weight: 600; margin-top: 12px;">
+          Foco: Prevenção de astenopia e alívio de olho seco.
+        </div>
+      </div>
+
+      <!-- D0.60 -->
+      <div class="card" style="border-top: 4px solid #00d2df; padding: 22px 18px; justify-content: space-between;">
+        <div>
+          <div style="font-family: 'Space Grotesk'; font-size: 26px; font-weight: 700; color: #0891b2;">D0.60</div>
+          <div style="font-size: 12px; font-weight: 700; color: #64748b; margin-top: 2px;">+0.60 D de Alívio</div>
+          <div style="margin-top: 14px; font-size: 14px; font-weight: 700; color: #0f172a;">25 a 33 anos</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 6px; line-height: 1.4;">
+            Analistas, advogados, TI e uso contínuo de telas múltiplas.
+          </div>
+        </div>
+        <div style="background: #ecfeff; padding: 10px; border-radius: 8px; font-size: 12px; color: #0e7490; font-weight: 600; margin-top: 12px;">
+          Foco: Eliminar dores nas têmporas ao fim do dia.
+        </div>
+      </div>
+
+      <!-- D0.80 -->
+      <div class="card" style="border-top: 4px solid #10b981; padding: 22px 18px; justify-content: space-between;">
+        <div>
+          <div style="font-family: 'Space Grotesk'; font-size: 26px; font-weight: 700; color: #059669;">D0.80</div>
+          <div style="font-size: 12px; font-weight: 700; color: #64748b; margin-top: 2px;">+0.80 D de Alívio</div>
+          <div style="margin-top: 14px; font-size: 14px; font-weight: 700; color: #0f172a;">33 a 38 anos</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 6px; line-height: 1.4;">
+            Adultos ativos com início sutil de lentidão no foco longe-perto.
+          </div>
+        </div>
+        <div style="background: #ecfdf5; padding: 10px; border-radius: 8px; font-size: 12px; color: #047857; font-weight: 600; margin-top: 12px;">
+          Foco: Agilidade e conforto na troca contínua de foco.
+        </div>
+      </div>
+
+      <!-- D1.00 -->
+      <div class="card" style="border-top: 4px solid #f59e0b; padding: 22px 18px; justify-content: space-between;">
+        <div>
+          <div style="font-family: 'Space Grotesk'; font-size: 26px; font-weight: 700; color: #d97706;">D1.00</div>
+          <div style="font-size: 12px; font-weight: 700; color: #64748b; margin-top: 2px;">+1.00 D de Alívio</div>
+          <div style="margin-top: 14px; font-size: 14px; font-weight: 700; color: #0f172a;">38 a 43 anos</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 6px; line-height: 1.4;">
+            <strong>Pré-présbitas clássicos</strong>. Esforço para ler rótulos e mensagens à noite.
+          </div>
+        </div>
+        <div style="background: #fffbeb; padding: 10px; border-radius: 8px; font-size: 12px; color: #b45309; font-weight: 600; margin-top: 12px;">
+          Foco: Leitura nítida sem estigma de "óculos de velho".
+        </div>
+      </div>
+
+      <!-- D1.25 -->
+      <div class="card" style="border-top: 4px solid #8b5cf6; padding: 22px 18px; justify-content: space-between;">
+        <div>
+          <div style="font-family: 'Space Grotesk'; font-size: 26px; font-weight: 700; color: #7c3aed;">D1.25</div>
+          <div style="font-size: 12px; font-weight: 700; color: #64748b; margin-top: 2px;">+1.25 D de Alívio</div>
+          <div style="margin-top: 14px; font-size: 14px; font-weight: 700; color: #0f172a;">42 a 46 anos</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 6px; line-height: 1.4;">
+            <strong>Ponte para Presbiopia</strong>. Transição suave antes do primeiro multifocal.
+          </div>
+        </div>
+        <div style="background: #f5f3ff; padding: 10px; border-radius: 8px; font-size: 12px; color: #6d28d9; font-weight: 600; margin-top: 12px;">
+          Foco: Leitura suave sem distorções laterais de multifocal.
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de Regra de Ouro -->
+    <div class="card" style="background: #0f172a; color: #ffffff; border: none; padding: 20px 30px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin-top: 20px;">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div style="background: #00d2df; color: #0f172a; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">!</div>
+        <div style="font-size: 16px;">
+          <strong style="color: #00d2df;">Regra Prática do Balcão:</strong> Na dúvida entre duas potências, selecione a menor para jovens (&lt;30 anos) e a maior para clientes acima de 38 anos. A adaptação é garantida e imediata.
+        </div>
+      </div>
+      <div style="font-family: 'Space Grotesk'; font-size: 14px; font-weight: 700; color: #94a3b8; text-transform: uppercase;">
+        5 Opções Exclusivas IA
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 3 &bull; Matriz de Segmentação por Potência</div>
+    <div>Lâmina 07 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 8: DUELO DE TITÃS -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 4: BATALHA DE MERCADO</div>
+      <h2 class="slide-title">Duelo de Titãs: Matriz Competitiva Direta</h2>
+      <p class="slide-subtitle">Como a Gold Comfort IA se posiciona frente aos gigantes multinacionais de mercado.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th style="width: 26%;">Parâmetro de Comparação</th>
+          <th class="highlight-col" style="width: 22%;">VS GOLD COMFORT IA</th>
+          <th style="width: 18%;">Essilor Eyezen Boost</th>
+          <th style="width: 17%;">Hoya Sync III</th>
+          <th style="width: 17%;">Zeiss SmartLife Digital</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Motor de Cálculo Óptico</strong></td>
+          <td class="highlight-col"><strong>Algoritmo Preditivo por IA</strong> (Malha Ultra-Densa)</td>
+          <td>Eyezen Focus</td>
+          <td>Binocular Eye Model</td>
+          <td>SmartView 2.0 / IA</td>
+        </tr>
+        <tr>
+          <td><strong>Opções de Potência de Alívio</strong></td>
+          <td class="highlight-col"><strong style="color: #0284c7;">5 Opções</strong> (0.40, 0.60, 0.80, 1.00, 1.25)</td>
+          <td>4 Opções (0.40, 0.60, 0.85, 1.10)</td>
+          <td>3 Opções (Sync 5, 9, 13)</td>
+          <td>4 Opções (0.50, 0.75, 1.00, 1.25)</td>
+        </tr>
+        <tr>
+          <td><strong>Controle de Astigmatismo Oblíquo</strong></td>
+          <td class="highlight-col">Otimização Ativa Ponto a Ponto</td>
+          <td>Otimizada</td>
+          <td>Otimizada</td>
+          <td>Individualizada</td>
+        </tr>
+        <tr>
+          <td><strong>Disponibilidade de Índices</strong></td>
+          <td class="highlight-col">1.50, 1.56, 1.59 (Poly), 1.61, 1.67, 1.74</td>
+          <td>1.50, Airwear (Poly), 1.67, 1.74</td>
+          <td>1.50, Trivex, 1.60, 1.67</td>
+          <td>1.50, Poly, 1.60, 1.67, 1.74</td>
+        </tr>
+        <tr>
+          <td><strong>Tratamentos Fotossensíveis</strong></td>
+          <td class="highlight-col">Transitions Gen S, XTRActive 2.0, Photo</td>
+          <td>Transitions Gen S</td>
+          <td>Sensity Fast / Shine</td>
+          <td>PhotoFusion X</td>
+        </tr>
+        <tr>
+          <td><strong>Faixa de Preço ao Consumidor</strong></td>
+          <td class="highlight-col"><strong style="font-size: 16px; color: #0284c7;">R$ 690 a R$ 1.190</strong> (Sweet Spot)</td>
+          <td>R$ 1.299 a R$ 2.500+</td>
+          <td>R$ 1.499 a R$ 2.800+</td>
+          <td>R$ 1.800 a R$ 3.500+</td>
+        </tr>
+        <tr>
+          <td><strong>Veredito Comercial</strong></td>
+          <td class="highlight-col"><span class="badge-tag badge-green">A Escolha Mais Inteligente</span></td>
+          <td><span class="badge-tag badge-blue">Marca de Massa / Cara</span></td>
+          <td><span class="badge-tag badge-purple">Marca de Nicho</span></td>
+          <td><span class="badge-tag badge-red">Grife / Alto Custo</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 4 &bull; Matriz Concorrencial</div>
+    <div>Lâmina 08 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 9: A EQUAÇÃO FINANCEIRA DO CONSUMIDOR -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 4: PSICOLOGIA DE PREÇO</div>
+      <h2 class="slide-title">A Equação Financeira para o Consumidor (O Sweet Spot)</h2>
+      <p class="slide-subtitle">Como posicionar o investimento no valor parcelado por dia e anular o preço da concorrência.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-3" style="align-items: stretch;">
+      <!-- Lentes Prontas -->
+      <div class="card" style="border-top: 6px solid #cbd5e1; justify-content: space-between;">
+        <div>
+          <div style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase;">ZONA ECONÔMICA BÁSICA</div>
+          <h3 style="font-family: 'Space Grotesk'; font-size: 24px; margin: 8px 0 12px; color: #475569;">Lentes Prontas</h3>
+          <div style="font-family: 'Space Grotesk'; font-size: 34px; font-weight: 700; color: #334155; margin-bottom: 8px;">
+            R$ 150 <span style="font-size: 18px; font-weight: 500; color: #94a3b8;">a R$ 350</span>
+          </div>
+          <p style="font-size: 15px; color: #64748b; line-height: 1.6; margin-bottom: 20px;">
+            Investimento baixo, porém sem nenhuma proteção visual. O cliente economiza na compra e gasta em analgésicos e colírios no mês seguinte.
+          </p>
+        </div>
+        <div style="background: #f1f5f9; padding: 16px; border-radius: 10px; font-size: 14px; color: #475569;">
+          <strong>Percepção do Cliente:</strong> "Comprei o básico de balcão."
+        </div>
+      </div>
+
+      <!-- Gold Comfort IA: The Sweet Spot -->
+      <div class="card card-highlight" style="border-top: 6px solid #00d2df; justify-content: space-between; transform: scale(1.02); box-shadow: 0 10px 30px rgba(0, 210, 223, 0.15);">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 13px; font-weight: 800; color: #0284c7; text-transform: uppercase;">O SWEET SPOT DO MERCADO</div>
+            <span class="badge-tag badge-green">Alta Conversão</span>
+          </div>
+          <h3 style="font-family: 'Space Grotesk'; font-size: 26px; margin: 8px 0 12px; color: #0f172a;">Gold Comfort IA</h3>
+          <div style="font-family: 'Space Grotesk'; font-size: 38px; font-weight: 800; color: #0284c7; margin-bottom: 8px;">
+            R$ 690 <span style="font-size: 18px; font-weight: 500; color: #64748b;">a R$ 1.190</span>
+          </div>
+          <div style="font-size: 18px; font-weight: 700; color: #10b981; margin-bottom: 14px;">
+            10x de R$ 69 a R$ 119/mês
+          </div>
+          <p style="font-size: 15px; color: #334155; line-height: 1.6; margin-bottom: 20px;">
+            Inteligência Artificial de ponta e conforto absoluto por <strong>menos de R$ 2,50 a R$ 3,00 por dia</strong> (menos que um cafezinho de padaria).
+          </p>
+        </div>
+        <div style="background: #ecfeff; border: 1px solid #a5f3fc; padding: 16px; border-radius: 10px; font-size: 14px; color: #0e7490; font-weight: 600;">
+          <strong>Percepção do Cliente:</strong> "Fiz a melhor compra da minha vida."
+        </div>
+      </div>
+
+      <!-- Multinacionais -->
+      <div class="card" style="border-top: 6px solid #818cf8; justify-content: space-between;">
+        <div>
+          <div style="font-size: 13px; font-weight: 700; color: #6366f1; text-transform: uppercase;">ZONA DE SOBREPREÇO</div>
+          <h3 style="font-family: 'Space Grotesk'; font-size: 24px; margin: 8px 0 12px; color: #4338ca;">Marcas de Grife</h3>
+          <div style="font-family: 'Space Grotesk'; font-size: 34px; font-weight: 700; color: #3730a3; margin-bottom: 8px;">
+            R$ 1.300 <span style="font-size: 18px; font-weight: 500; color: #94a3b8;">a R$ 2.800+</span>
+          </div>
+          <p style="font-size: 15px; color: #64748b; line-height: 1.6; margin-bottom: 20px;">
+            Tecnologia idêntica de relaxamento, porém inflacionada por royalties multinacionais e altíssimo investimento em publicidade de TV.
+          </p>
+        </div>
+        <div style="background: #f5f3ff; padding: 16px; border-radius: 10px; font-size: 14px; color: #4338ca;">
+          <strong>Percepção do Cliente:</strong> "Muito caro para uma visão simples."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 4 &bull; A Equação Financeira</div>
+    <div>Lâmina 09 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 10: OS 4 PILARES PSICOLÓGICOS DA VENDA -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 5: PSICOLOGIA DE CONVERSÃO</div>
+      <h2 class="slide-title">Os 4 Pilares Psicológicos da Venda Consultiva</h2>
+      <p class="slide-subtitle">Como acionar os gatilhos mentais certos para gerar decisão imediata no balcão.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-2" style="gap: 25px;">
+      <!-- Pilar 1 -->
+      <div class="card" style="border-left: 6px solid #ef4444; padding: 22px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <div style="background: #fee2e2; color: #b91c1c; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800;">1</div>
+          <h3 class="card-title text-coral" style="margin: 0; font-size: 19px;">Foco na Dor vs. Alívio Imediato</h3>
+        </div>
+        <p style="font-size: 14px; color: #334155; line-height: 1.5;">
+          O ser humano age com 3 vezes mais intensidade para <strong>evitar uma dor</strong> do que para obter um prazer.
+        </p>
+        <div class="dialog-box alert" style="margin-top: 10px; font-size: 14px;">
+          <strong>Aplicação Prática:</strong> Não venda "tecnologia de relaxamento". Venda o fim dos olhos vermelhos no trabalho e o alívio da dor de cabeça ao voltar para casa.
+        </div>
+      </div>
+
+      <!-- Pilar 2 -->
+      <div class="card" style="border-left: 6px solid #0284c7; padding: 22px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <div style="background: #e0f2fe; color: #0369a1; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800;">2</div>
+          <h3 class="card-title text-blue" style="margin: 0; font-size: 19px;">Preservação da Saúde Futura</h3>
+        </div>
+        <p style="font-size: 14px; color: #334155; line-height: 1.5;">
+          O cliente cuida da pele, faz exames de sangue e vai à academia. Mas negligencia o órgão que ele mais usa: os olhos.
+        </p>
+        <div class="dialog-box" style="margin-top: 10px; font-size: 14px;">
+          <strong>Aplicação Prática:</strong> <em>"O senhor cuida tanto da sua saúde... por que deixar seus olhos trabalhando sobrecarregados no limite todos os dias?"</em>
+        </div>
+      </div>
+
+      <!-- Pilar 3 -->
+      <div class="card" style="border-left: 6px solid #f59e0b; padding: 22px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <div style="background: #fef3c7; color: #b45309; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800;">3</div>
+          <h3 class="card-title text-amber" style="margin: 0; font-size: 19px;">A Metáfora Racional (Câmera Autofoco)</h3>
+        </div>
+        <p style="font-size: 14px; color: #334155; line-height: 1.5;">
+          A mente só compra aquilo que ela consegue visualizar e entender em menos de 10 segundos.
+        </p>
+        <div class="dialog-box" style="margin-top: 10px; font-size: 14px; background: #fffbeb; border-left-color: #f59e0b;">
+          <strong>Aplicação Prática:</strong> A metáfora da câmera com autofoco mecânico versus o olho com tecidos vivos desarma qualquer dúvida sobre a necessidade real da lente.
+        </div>
+      </div>
+
+      <!-- Pilar 4 -->
+      <div class="card" style="border-left: 6px solid #10b981; padding: 22px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <div style="background: #dcfce7; color: #15803d; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800;">4</div>
+          <h3 class="card-title text-green" style="margin: 0; font-size: 19px;">O Orgulho da Escolha Inteligente (IA)</h3>
+        </div>
+        <p style="font-size: 14px; color: #334155; line-height: 1.5;">
+          Todo cliente quer estar na vanguarda da tecnologia, mas se ressente de pagar o "pedágio" das marcas de luxo.
+        </p>
+        <div class="dialog-box success" style="margin-top: 10px; font-size: 14px;">
+          <strong>Aplicação Prática:</strong> A Gold Comfort IA dá a ele o prestígio de um produto calculado por Inteligência Artificial por um valor justo e acessível.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 5 &bull; Pilares Psicológicos da Venda</div>
+    <div>Lâmina 10 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 11: SCRIPT DE OURO DE BALCÃO (EXPANDIDO E EQUILIBRADO) -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 5: ROTEIRO PRÁTICO</div>
+      <h2 class="slide-title">Script de Ouro de Balcão (Sondagem &amp; Pitch 2 em 1)</h2>
+      <p class="slide-subtitle">O passo a passo exato do que falar assim que a receita de visão simples entra na loja.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-2" style="gap: 30px;">
+      <!-- Passo 1: Sondagem -->
+      <div class="card" style="justify-content: space-between;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+            <span class="badge-tag badge-blue" style="font-size: 13px; padding: 6px 12px;">FASE 1</span>
+            <h3 class="card-title" style="margin: 0; font-size: 21px;">Acolhimento &amp; As 3 Perguntas de Sondagem</h3>
+          </div>
+          <p style="font-size: 15px; color: #64748b; margin-bottom: 16px;">
+            Pegue a receita na mão com respeito, valide o trabalho do médico e faça as 3 perguntas antes de falar qualquer número:
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px;">
+              <strong style="color: #0284c7; font-size: 15px;">Pergunta 1 &bull; Rotina Digital:</strong>
+              <div style="font-size: 16px; color: #0f172a; margin-top: 5px; font-weight: 500;">
+                "Quantas horas por dia o senhor(a) passa diante de computadores, telas e smartphone?"
+              </div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px;">
+              <strong style="color: #0284c7; font-size: 15px;">Pergunta 2 &bull; Sintoma Físico:</strong>
+              <div style="font-size: 16px; color: #0f172a; margin-top: 5px; font-weight: 500;">
+                "Ao final do dia, já sentiu aquela sensação de olho pesado, ardência ou uma dorzinha de cabeça chata?"
+              </div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px;">
+              <strong style="color: #0284c7; font-size: 15px;">Pergunta 3 &bull; Descoberta do Problema:</strong>
+              <div style="font-size: 16px; color: #0f172a; margin-top: 5px; font-weight: 500;">
+                "Sabia que a receita médica corrige para longe, mas não foi pensada para a sobrecarga que o celular impõe hoje aos seus olhos?"
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #f1f5f9; padding: 14px 18px; border-radius: 10px; font-size: 14px; color: #475569; margin-top: 15px;">
+          💡 <strong>Efeito Psicológico:</strong> O cliente responde "SIM" para as 3 perguntas e percebe que uma lente comum não vai resolver a rotina dele.
+        </div>
+      </div>
+
+      <!-- Passo 2: Pitch 2 em 1 -->
+      <div class="card card-highlight" style="justify-content: space-between;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+            <span class="badge-tag badge-green" style="font-size: 13px; padding: 6px 12px;">FASE 2</span>
+            <h3 class="card-title text-blue" style="margin: 0; font-size: 21px;">O Pitch do Produto 2 em 1</h3>
+          </div>
+          <p style="font-size: 15px; color: #64748b; margin-bottom: 16px;">
+            Apresente a Gold Comfort IA com autoridade, entusiasmo e clareza absoluta:
+          </p>
+
+          <div style="background: #ffffff; border: 1px solid #bae6fd; border-radius: 14px; padding: 22px; font-size: 16px; line-height: 1.6; color: #0f172a;">
+            "Existe hoje uma tecnologia revolucionária que chamamos de <strong>produto 2 em 1: as lentes Gold Comfort IA</strong>.<br><br>
+            Em vez de uma lente simples comum, ela executa duas funções em um único bloco:<br>
+            <strong>1. Na parte superior:</strong> Corrige 100% da receita do seu médico com nitidez panorâmica para longe.<br>
+            <strong>2. Na parte inferior:</strong> Possui uma <strong>área de relaxamento calculada por Inteligência Artificial</strong> para a sua rotina de telas. É um amortecedor suave que não deixa seus olhos cansarem nem arderem ao longo do dia!"
+          </div>
+        </div>
+
+        <div class="dialog-box success" style="margin-top: 15px; padding: 18px 20px;">
+          <div style="font-weight: 800; font-size: 15px; color: #15803d; margin-bottom: 4px;">🎯 A Frase de Fechamento Irresistível:</div>
+          <div style="font-size: 16px; color: #166534; font-weight: 600;">
+            "Essa lente fica em apenas 10x de R$ 89 — dá menos de R$ 3 por dia para você ter conforto absoluto o dia inteiro. Vamos montar na armação que você escolheu?"
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 5 &bull; Script de Balcão</div>
+    <div>Lâmina 11 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 12: ARSENAL DE QUEBRA DE OBJEÇÕES (EQUILIBRADO E COMPLETO) -->
+<div class="slide theme-light">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge">ATO 5: CONTORNO DE OBJEÇÕES</div>
+      <h2 class="slide-title">Arsenal de Quebra de Objeções no Balcão</h2>
+      <p class="slide-subtitle">Como desarmar com elegância e autoridade as 4 maiores resistências do cliente.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-2" style="gap: 24px;">
+      <!-- Objeção 1 -->
+      <div class="card" style="padding: 22px; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 800; color: #ef4444; font-size: 15px;">❌ "O médico não pediu isso na receita."</div>
+            <span class="badge-tag" style="background: #fee2e2; color: #991b1b; font-size: 11px;">Receita</span>
+          </div>
+          <div style="font-size: 13px; color: #64748b; margin-bottom: 10px;"><em>A dúvida oculta: "Será que posso mudar o que o médico escreveu?"</em></div>
+          <div style="font-size: 14px; color: #1e293b; background: #f8fafc; border-left: 3px solid #0284c7; padding: 12px 14px; border-radius: 0 8px 8px 0; line-height: 1.5;">
+            <strong>Como Responder:</strong> "O médico oftalmologista é o especialista em saúde clínica — a função dele é medir sua dioptria com exatidão. Já o nosso papel na óptica é a consultoria técnica de como essa dioptria vai funcionar na sua vida de telas. A Gold Comfort IA mantém exatamente 100% do grau que ele receitou, mas com a tecnologia digital que protege seus olhos da fadiga moderna."
+          </div>
+        </div>
+        <div style="font-size: 13px; color: #0284c7; font-weight: 700; margin-top: 10px;">
+          Ponte de Fechamento: "Faz sentido proteger seus olhos no computador mantendo 100% do grau dele?"
+        </div>
+      </div>
+
+      <!-- Objeção 2 -->
+      <div class="card" style="padding: 22px; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 800; color: #ef4444; font-size: 15px;">❌ "A lente pronta de estoque é mais barata."</div>
+            <span class="badge-tag" style="background: #fee2e2; color: #991b1b; font-size: 11px;">Preço</span>
+          </div>
+          <div style="font-size: 13px; color: #64748b; margin-bottom: 10px;"><em>A dúvida oculta: "Por que pagar essa diferença de valor?"</em></div>
+          <div style="font-size: 14px; color: #1e293b; background: #f8fafc; border-left: 3px solid #0284c7; padding: 12px 14px; border-radius: 0 8px 8px 0; line-height: 1.5;">
+            <strong>Como Responder:</strong> "A lente pronta é excelente para uma emergência, mas ela não tem amortecimento muscular. A diferença entre a pronta e a Gold Comfort IA, dividida em 10 vezes, dá menos de <strong>R$ 2 a R$ 3 por dia</strong> — menos que um cafezinho. Vale a pena passar o dia inteiro com os olhos ardendo para economizar o valor de um café?"
+          </div>
+        </div>
+        <div style="font-size: 13px; color: #0284c7; font-weight: 700; margin-top: 10px;">
+          Ponte de Fechamento: "O senhor merece esse conforto todos os dias por menos de um café, concorda?"
+        </div>
+      </div>
+
+      <!-- Objeção 3 -->
+      <div class="card" style="padding: 22px; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 800; color: #ef4444; font-size: 15px;">❌ "Isso é multifocal? Vou demorar para acostumar?"</div>
+            <span class="badge-tag" style="background: #fee2e2; color: #991b1b; font-size: 11px;">Adaptação</span>
+          </div>
+          <div style="font-size: 13px; color: #64748b; margin-bottom: 10px;"><em>A dúvida oculta: "Vou sentir tontura ou distorção ao andar?"</em></div>
+          <div style="font-size: 14px; color: #1e293b; background: #f8fafc; border-left: 3px solid #0284c7; padding: 12px 14px; border-radius: 0 8px 8px 0; line-height: 1.5;">
+            <strong>Como Responder:</strong> "Não! Ela não é multifocal e não tem nenhuma linha visível ou salto de imagem. É uma lente de visão simples digital inteligente. A transição calculada por inteligência artificial é tão suave que a adaptação é imediata, no primeiro minuto em que você coloca os óculos no rosto."
+          </div>
+        </div>
+        <div style="font-size: 13px; color: #0284c7; font-weight: 700; margin-top: 10px;">
+          Ponte de Fechamento: "A adaptação é 100% garantida pela nossa garantia de satisfação."
+        </div>
+      </div>
+
+      <!-- Objeção 4 -->
+      <div class="card" style="padding: 22px; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 800; color: #ef4444; font-size: 15px;">❌ "E essas marcas famosas da TV (Eyezen, Zeiss)?"</div>
+            <span class="badge-tag" style="background: #fee2e2; color: #991b1b; font-size: 11px;">Marca</span>
+          </div>
+          <div style="font-size: 13px; color: #64748b; margin-bottom: 10px;"><em>A dúvida oculta: "Marca famosa é sinônimo de lente melhor?"</em></div>
+          <div style="font-size: 14px; color: #1e293b; background: #f8fafc; border-left: 3px solid #0284c7; padding: 12px 14px; border-radius: 0 8px 8px 0; line-height: 1.5;">
+            <strong>Como Responder:</strong> "São ótimas referências, mas cobram até R$ 2.500 pelo marketing de grife internacional. A Gold Comfort IA utiliza a mesma tecnologia de cálculo ponto a ponto por inteligência artificial, com antirreflexo nobre e 5 níveis de alívio personalizado, por praticamente metade do valor. É a escolha mais inteligente do mercado hoje."
+          </div>
+        </div>
+        <div style="font-size: 13px; color: #0284c7; font-weight: 700; margin-top: 10px;">
+          Ponte de Fechamento: "Por que pagar o dobro pela marca se a tecnologia preditiva é a mesma?"
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act">Ato 5 &bull; Quebra de Objeções</div>
+    <div>Lâmina 12 / 13</div>
+  </div>
+</div>
+
+<!-- SLIDE 13: CONCLUSÃO & CHECKLIST DO CONSULTOR -->
+<div class="slide theme-dark">
+  <div class="slide-header">
+    <div>
+      <div class="tagline-badge" style="background: rgba(0, 210, 223, 0.15); color: #00d2df;">CONCLUSÃO FINAL &bull; CHECKLIST DIÁRIO</div>
+      <h2 class="slide-title" style="color: #ffffff;">O Compromisso do Consultor de Alta Performance</h2>
+      <p class="slide-subtitle" style="color: #94a3b8;">As 4 regras de ouro para transformar o balcão da sua óptica em uma máquina de vendas de valor.</p>
+    </div>
+    <div class="header-logo"><span class="brand-chip">SOROLAB</span></div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-4" style="align-items: stretch;">
+      <!-- Regra 1 -->
+      <div class="card-dark" style="border-top: 4px solid #00d2df; justify-content: space-between;">
+        <div>
+          <div style="font-size: 13px; font-weight: 800; color: #00d2df; text-transform: uppercase;">REGRA 1</div>
+          <h4 style="font-family: 'Space Grotesk'; font-size: 20px; color: #ffffff; margin: 8px 0 12px;">Elimine a Oferta da Pronta</h4>
+          <p style="font-size: 14px; color: #94a3b8; line-height: 1.5;">
+            Nunca ofereça lente pronta de início. Ela é apenas uma opção emergencial para quem tem pressa extrema ou baixíssimo orçamento.
+          </p>
+        </div>
+        <div style="font-size: 13px; color: #38bdf8; font-weight: 700; margin-top: 15px;">
+          Ofereça sempre Valor primeiro!
+        </div>
+      </div>
+
+      <!-- Regra 2 -->
+      <div class="card-dark" style="border-top: 4px solid #38bdf8; justify-content: space-between;">
+        <div>
+          <div style="font-size: 13px; font-weight: 800; color: #38bdf8; text-transform: uppercase;">REGRA 2</div>
+          <h4 style="font-family: 'Space Grotesk'; font-size: 20px; color: #ffffff; margin: 8px 0 12px;">Investigue a Vida Digital</h4>
+          <p style="font-size: 14px; color: #94a3b8; line-height: 1.5;">
+            100% dos clientes de visão simples usam smartphone. Faça as 3 perguntas de sondagem antes de falar de qualquer especificação técnica.
+          </p>
+        </div>
+        <div style="font-size: 13px; color: #38bdf8; font-weight: 700; margin-top: 15px;">
+          Conecte-se com a dor do cliente!
+        </div>
+      </div>
+
+      <!-- Regra 3 -->
+      <div class="card-dark" style="border-top: 4px solid #10b981; justify-content: space-between;">
+        <div>
+          <div style="font-size: 13px; font-weight: 800; color: #10b981; text-transform: uppercase;">REGRA 3</div>
+          <h4 style="font-family: 'Space Grotesk'; font-size: 20px; color: #ffffff; margin: 8px 0 12px;">Posicione o "2 em 1"</h4>
+          <p style="font-size: 14px; color: #94a3b8; line-height: 1.5;">
+            Mostre que a Gold Comfort IA atende o grau para longe e adiciona um amortecedor com Inteligência Artificial para as telas.
+          </p>
+        </div>
+        <div style="font-size: 13px; color: #10b981; font-weight: 700; margin-top: 15px;">
+          Multiplique o valor percebido!
+        </div>
+      </div>
+
+      <!-- Regra 4 -->
+      <div class="card-dark" style="border-top: 4px solid #f59e0b; justify-content: space-between;">
+        <div>
+          <div style="font-size: 13px; font-weight: 800; color: #f59e0b; text-transform: uppercase;">REGRA 4</div>
+          <h4 style="font-family: 'Space Grotesk'; font-size: 20px; color: #ffffff; margin: 8px 0 12px;">Ancore no Custo Diário</h4>
+          <p style="font-size: 14px; color: #94a3b8; line-height: 1.5;">
+            Divida a diferença por 30 dias. Menos de R$ 3 por dia neutraliza o choque de preço e torna a compra óbvia e irresistível.
+          </p>
+        </div>
+        <div style="font-size: 13px; color: #fbbf24; font-weight: 700; margin-top: 15px;">
+          "Menos que um cafezinho!"
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="footer-act" style="color: #00d2df;">Sucesso nas Vendas &bull; Gold Comfort &amp; Gold Comfort IA</div>
+    <div>Lâmina 13 / 13</div>
+  </div>
+</div>
+
+</body>
+</html>

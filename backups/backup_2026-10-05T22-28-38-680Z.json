@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "platform": "Plataforma de Treinamentos para Ópticas SRL",
+    "createdAt": "2026-10-05T22:28:38.684Z",
+    "version": "1.0.0",
+    "environment": "test"
+  },
+  "tables": [
+    "stores",
+    "roles",
+    "profiles",
+    "courses",
+    "modules",
+    "lessons",
+    "quizzes",
+    "audit_logs"
+  ],
+  "backupId": "bkp_1791239318684"
+}
