@@ -23,6 +23,7 @@ export interface Profile {
   email: string;
   cpf: string;
   phone: string;
+  avatarUrl?: string;
   address?: string;
   storeId?: string;
   storeName?: string;
@@ -44,6 +45,10 @@ export interface Course {
   thumbnailUrl: string;
   pdfAttachmentUrl?: string;
   pdfAttachmentName?: string;
+  category?: string;
+  certificateEnabled?: boolean;
+  minScoreToPass?: number;
+  timelineStatus?: "draft" | "active" | "archived";
   isPublished: boolean;
   estimatedDurationMin: number;
   modulesCount?: number;
@@ -128,7 +133,10 @@ export interface AuditLog {
     | "DIAGNOSTIC_EMAIL_SENT"
     | "ADMIN_PASSWORD_RESET"
     | "TEMPLATE_UPDATED"
-    | "SETTINGS_UPDATED";
+    | "SETTINGS_UPDATED"
+    | "COURSE_CREATED"
+    | "COURSE_UPDATED"
+    | "COURSE_DELETED";
   ipAddress?: string;
   userAgent?: string;
   metadata?: Record<string, unknown>;

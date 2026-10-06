@@ -30,6 +30,7 @@ export default function SignUpRoute() {
         storeCnpj: data.storeCnpj,
         roleId: data.roleId,
         password: data.password,
+        avatarUrl: data.avatarUrl,
       });
 
       if (!res.success) {

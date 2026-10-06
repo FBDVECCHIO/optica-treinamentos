@@ -9,7 +9,7 @@ import {
   sendDiagnosticTestEmail,
   ResendMetricsSummary,
 } from "@/lib/email/resend";
-import { Role, Profile, Course } from "@/types/database";
+import { Role, Profile, Course, Module, Lesson, Quiz, QuizQuestion } from "@/types/database";
 import {
   getAllEmailTemplates,
   updateEmailTemplate,
@@ -249,6 +249,266 @@ export async function deleteUserAction(userId: string): Promise<{ success: boole
  */
 export async function getAllCoursesAdminAction(): Promise<Course[]> {
   return [...db.courses];
+}
+
+export async function createCourseAction(data: {
+  title: string;
+  description: string;
+  thumbnailUrl?: string;
+  pdfAttachmentUrl?: string;
+  pdfAttachmentName?: string;
+  category?: string;
+  estimatedDurationMin?: number;
+  certificateEnabled?: boolean;
+  minScoreToPass?: number;
+  isPublished?: boolean;
+}): Promise<{ success: boolean; course?: Course; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master" && user?.accessLevel !== "manager") {
+    return { success: false, error: "Apenas administradores podem cadastrar treinamentos." };
+  }
+
+  const cleanTitle = data.title.trim();
+  if (!cleanTitle) {
+    return { success: false, error: "O título do treinamento é obrigatório." };
+  }
+
+  const slug = cleanTitle
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+
+  const newCourseId = `course_${Date.now()}`;
+  const newCourse: Course = {
+    id: newCourseId,
+    title: cleanTitle,
+    slug: slug || `curso-${Date.now()}`,
+    description: data.description.trim(),
+    thumbnailUrl:
+      data.thumbnailUrl ||
+      "https://images.unsplash.com/photo-1591076482161-42ce6da69f68?q=80&w=800&auto=format&fit=crop",
+    pdfAttachmentUrl: data.pdfAttachmentUrl,
+    pdfAttachmentName: data.pdfAttachmentName || "Apostila Oficial do Treinamento.pdf",
+    category: data.category || "Comercial & Técnico",
+    certificateEnabled: data.certificateEnabled !== false,
+    minScoreToPass: data.minScoreToPass || 70,
+    timelineStatus: "active",
+    isPublished: data.isPublished !== false,
+    estimatedDurationMin: data.estimatedDurationMin || 120,
+    modulesCount: 0,
+    lessonsCount: 0,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  db.courses.push(newCourse);
+
+  // Inscrever automaticamente todos os colaboradores cadastrados
+  for (const profile of db.profiles) {
+    db.userCourses.push({
+      userId: profile.id,
+      courseId: newCourseId,
+      isEnabled: true,
+    });
+  }
+
+  await logAudit({
+    action: "COURSE_CREATED",
+    userId: user?.id || "admin",
+    userEmail: user?.email || "admin@optica.com.br",
+    metadata: { courseId: newCourseId, title: cleanTitle },
+  });
+
+  return { success: true, course: newCourse };
+}
+
+export async function updateCourseAction(
+  courseId: string,
+  data: Partial<Course>
+): Promise<{ success: boolean; course?: Course; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master" && user?.accessLevel !== "manager") {
+    return { success: false, error: "Não autorizado." };
+  }
+
+  const course = db.courses.find((c) => c.id === courseId);
+  if (!course) {
+    return { success: false, error: "Treinamento não localizado." };
+  }
+
+  if (data.title) course.title = data.title.trim();
+  if (data.description) course.description = data.description.trim();
+  if (data.thumbnailUrl) course.thumbnailUrl = data.thumbnailUrl;
+  if (data.pdfAttachmentUrl !== undefined) course.pdfAttachmentUrl = data.pdfAttachmentUrl;
+  if (data.pdfAttachmentName !== undefined) course.pdfAttachmentName = data.pdfAttachmentName;
+  if (data.category !== undefined) course.category = data.category;
+  if (data.certificateEnabled !== undefined) course.certificateEnabled = data.certificateEnabled;
+  if (data.minScoreToPass !== undefined) course.minScoreToPass = data.minScoreToPass;
+  if (data.isPublished !== undefined) course.isPublished = data.isPublished;
+  if (data.estimatedDurationMin !== undefined) course.estimatedDurationMin = data.estimatedDurationMin;
+  course.updatedAt = new Date().toISOString();
+
+  await logAudit({
+    action: "COURSE_UPDATED",
+    userId: user?.id || "admin",
+    userEmail: user?.email || "admin@optica.com.br",
+    metadata: { courseId, changes: data },
+  });
+
+  return { success: true, course };
+}
+
+export async function deleteCourseAction(courseId: string): Promise<{ success: boolean; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master") {
+    return { success: false, error: "Apenas Administrador Master pode excluir treinamentos." };
+  }
+
+  const course = db.courses.find((c) => c.id === courseId);
+  if (!course) return { success: true };
+
+  db.courses = db.courses.filter((c) => c.id !== courseId);
+  db.modules = db.modules.filter((m) => m.courseId !== courseId);
+  db.quizzes = db.quizzes.filter((q) => q.courseId !== courseId);
+  db.userCourses = db.userCourses.filter((uc) => uc.courseId !== courseId);
+
+  await logAudit({
+    action: "COURSE_DELETED",
+    userId: user.id,
+    userEmail: user.email,
+    metadata: { courseId, title: course.title },
+  });
+
+  return { success: true };
+}
+
+export async function getCourseFullDetailsAction(courseId: string): Promise<{
+  course: Course | null;
+  modules: Module[];
+  quiz: Quiz | null;
+}> {
+  const course = db.courses.find((c) => c.id === courseId) || null;
+  const courseModules = db.modules.filter((m) => m.courseId === courseId);
+  const quiz = db.quizzes.find((q) => q.courseId === courseId) || null;
+
+  return {
+    course,
+    modules: courseModules,
+    quiz,
+  };
+}
+
+export async function saveCourseStructureAction(
+  courseId: string,
+  data: {
+    modules: {
+      id?: string;
+      title: string;
+      description?: string;
+      orderIndex: number;
+      lessons: {
+        id?: string;
+        title: string;
+        description?: string;
+        videoProvider: "youtube" | "vimeo" | "direct_mp4";
+        videoUrl: string;
+        durationSeconds: number;
+        orderIndex: number;
+      }[];
+    }[];
+    quiz?: {
+      title: string;
+      minScoreToPass: number;
+      questions: {
+        id?: string;
+        questionText: string;
+        type: "multiple_choice" | "dissertative";
+        points: number;
+        orderIndex: number;
+        options?: { id: string; text: string }[];
+        correctAnswer?: string;
+        rubricKeywords?: string[];
+      }[];
+    };
+  }
+): Promise<{ success: boolean; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master" && user?.accessLevel !== "manager") {
+    return { success: false, error: "Apenas administradores podem estruturar cursos." };
+  }
+
+  const course = db.courses.find((c) => c.id === courseId);
+  if (!course) return { success: false, error: "Curso não encontrado." };
+
+  // Remove módulos antigos do curso e adiciona os novos
+  db.modules = db.modules.filter((m) => m.courseId !== courseId);
+
+  let totalLessons = 0;
+  for (const m of data.modules) {
+    const moduleId = m.id || `mod_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const formattedLessons: Lesson[] = m.lessons.map((l, lIdx) => ({
+      id: l.id || `les_${Date.now()}_${lIdx}`,
+      moduleId,
+      title: l.title,
+      description: l.description,
+      videoProvider: l.videoProvider,
+      videoUrl: l.videoUrl,
+      durationSeconds: l.durationSeconds || 600,
+      orderIndex: l.orderIndex || lIdx + 1,
+    }));
+
+    totalLessons += formattedLessons.length;
+
+    db.modules.push({
+      id: moduleId,
+      courseId,
+      title: m.title,
+      description: m.description,
+      orderIndex: m.orderIndex,
+      lessons: formattedLessons,
+    });
+  }
+
+  // Atualiza contadores no curso
+  course.modulesCount = data.modules.length;
+  course.lessonsCount = totalLessons;
+  course.updatedAt = new Date().toISOString();
+
+  // Salva / Atualiza Quiz se fornecido
+  if (data.quiz) {
+    db.quizzes = db.quizzes.filter((q) => q.courseId !== courseId);
+    const quizId = `quiz_${Date.now()}`;
+    const quizQuestions: QuizQuestion[] = data.quiz.questions.map((q, qIdx) => ({
+      id: q.id || `q_${quizId}_${qIdx}`,
+      quizId,
+      questionText: q.questionText,
+      type: q.type,
+      points: q.points || 25,
+      orderIndex: q.orderIndex || qIdx + 1,
+      options: q.options || [],
+      correctAnswer: q.correctAnswer || "A",
+      rubricKeywords: q.rubricKeywords || [],
+    }));
+
+    db.quizzes.push({
+      id: quizId,
+      courseId,
+      title: data.quiz.title,
+      minScoreToPass: data.quiz.minScoreToPass || 70,
+      questions: quizQuestions,
+    });
+  }
+
+  await logAudit({
+    action: "COURSE_UPDATED",
+    userId: user?.id || "admin",
+    userEmail: user?.email || "admin@optica.com.br",
+    metadata: { courseId, structureSaved: true, modulesCount: data.modules.length, lessonsCount: totalLessons },
+  });
+
+  return { success: true };
 }
 
 export async function toggleCourseVisibilityForUserAction(

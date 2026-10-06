@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Eye, EyeOff, Building2, User, Phone, FileText, Mail, MapPin, Briefcase } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Eye, EyeOff, Building2, User, Phone, FileText, Mail, MapPin, Briefcase, Camera, Trash2 } from "lucide-react";
 import { GoogleIcon, GlassInputWrapper } from "./sign-in";
 import { maskCPF, maskPhone, maskCNPJ, isValidCPF, isValidCNPJ } from "@/lib/utils/masks";
 
@@ -39,7 +39,25 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({
   const [storeCnpj, setStoreCnpj] = useState("");
   const [roleId, setRoleId] = useState(availableRoles[0]?.id || "");
   const [password, setPassword] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formError, setFormError] = useState<string | null>(null);
+
+  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setFormError("A imagem deve ter no máximo 5MB.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (event.target?.result) {
+        setAvatarUrl(event.target.result as string);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   // Manipuladores com conversão para MAIÚSCULAS em tempo real
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +130,7 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({
       storeCnpj,
       roleId,
       password,
+      avatarUrl,
     });
   };
 
@@ -147,6 +166,61 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Seção Foto de Perfil Estilo Instagram */}
+          <div className="flex flex-col items-center justify-center pb-5 mb-3 border-b border-white/5">
+            <div className="relative group">
+              <div className="w-24 h-24 rounded-full p-[3px] bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 shadow-xl shadow-purple-950/40">
+                <div className="w-full h-full rounded-full bg-zinc-950 overflow-hidden flex items-center justify-center border-2 border-[#09090b]">
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt="Foto do Usuário" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center text-zinc-500 group-hover:text-violet-400 transition-colors">
+                      <Camera className="w-8 h-8 mb-0.5" />
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-zinc-400">Foto</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute bottom-0 right-0 p-2 rounded-full bg-violet-600 text-white hover:bg-violet-500 shadow-lg transition-transform transform hover:scale-110 cursor-pointer"
+                title="Adicionar ou alterar foto"
+              >
+                <Camera className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <div className="text-center mt-2.5">
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="text-xs font-semibold text-violet-400 hover:text-violet-300 transition-colors cursor-pointer"
+              >
+                {avatarUrl ? "Trocar Foto de Perfil" : "Subir Foto de Perfil (Opcional)"}
+              </button>
+              {avatarUrl && (
+                <button
+                  type="button"
+                  onClick={() => setAvatarUrl("")}
+                  className="flex items-center gap-1 mx-auto text-[11px] text-red-400 hover:text-red-300 mt-1 cursor-pointer"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  <span>Remover foto</span>
+                </button>
+              )}
+              <p className="text-[11px] text-zinc-500 mt-0.5">
+                Sua foto será exibida no certificado oficial e no seu perfil corporativo.
+              </p>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Nome Completo */}
             <div className="sm:col-span-2">
