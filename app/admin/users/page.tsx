@@ -12,12 +12,17 @@ import {
   ChevronLeft,
   ChevronRight,
   Shield,
+  Pencil,
+  X,
+  Save,
+  Building2,
 } from "lucide-react";
 import {
   getUsersListAction,
   resetUserPasswordAction,
   toggleUserStatusAction,
   deleteUserAction,
+  updateUserAction,
   getRolesAction,
 } from "@/app/actions/admin";
 import { Profile, Role } from "@/types/database";
@@ -33,6 +38,8 @@ export default function UsersAdminPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [isPending, startTransition] = useTransition();
   const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [editingUser, setEditingUser] = useState<Profile | null>(null);
+  const [editLoading, setEditLoading] = useState(false);
 
   const fetchUsers = () => {
     startTransition(async () => {
@@ -75,14 +82,31 @@ export default function UsersAdminPage() {
   };
 
   const handleDeleteUser = async (user: Profile) => {
-    if (!confirm(`ATENÇÃO: Confirma a exclusão definitiva do usuário ${user.name}?`)) return;
+    if (!confirm(`ATENÇÃO: Confirma a exclusão definitiva do colaborador ${user.name}?`)) return;
     const res = await deleteUserAction(user.id);
     if (res.success) {
-      fetchUsers();
+      setUsers((prev) => prev.filter((u) => u.id !== user.id));
+      setTotalCount((prev) => Math.max(0, prev - 1));
       setActionMessage(`Usuário ${user.name} excluído com sucesso.`);
       setTimeout(() => setActionMessage(null), 4000);
     } else {
-      alert(res.error);
+      alert(res.error || "Não foi possível excluir o usuário.");
+    }
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser) return;
+    setEditLoading(true);
+    const res = await updateUserAction(editingUser.id, editingUser);
+    setEditLoading(false);
+    if (res.success) {
+      setUsers((prev) => prev.map((u) => (u.id === editingUser.id ? editingUser : u)));
+      setActionMessage(`Dados de ${editingUser.name} alterados com sucesso.`);
+      setEditingUser(null);
+      setTimeout(() => setActionMessage(null), 4000);
+    } else {
+      alert(res.error || "Falha ao salvar alterações.");
     }
   };
 
@@ -217,6 +241,15 @@ export default function UsersAdminPage() {
                     <div className="inline-flex items-center gap-2">
                       <button
                         type="button"
+                        onClick={() => setEditingUser({ ...user })}
+                        className="p-2 rounded-xl bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 transition-all cursor-pointer"
+                        title="Alterar cadastro do colaborador"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+
+                      <button
+                        type="button"
                         onClick={() => handleResetPassword(user)}
                         className="p-2 rounded-xl bg-violet-600/10 hover:bg-violet-600/20 text-violet-400 border border-violet-500/20 transition-all cursor-pointer"
                         title="Disparar link de redefinição de senha via Resend"
@@ -274,6 +307,184 @@ export default function UsersAdminPage() {
           </div>
         </div>
       </div>
+
+      {/* Modal de Edição de Usuário */}
+      {editingUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-element">
+          <div className="w-full max-w-xl bg-zinc-900 border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setEditingUser(null)}
+              className="absolute top-5 right-5 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2.5 rounded-2xl bg-blue-600/20 border border-blue-500/30 text-blue-400">
+                <Pencil className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-white tracking-tight">Alterar Cadastro do Colaborador</h2>
+                <p className="text-xs text-zinc-400">Atualização de dados cadastrais e permissões</p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSaveEdit} className="space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-zinc-400 font-medium block mb-1">Nome Completo</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingUser.name}
+                    onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value.toUpperCase() })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500/50"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-medium block mb-1">E-mail</label>
+                  <input
+                    type="email"
+                    required
+                    value={editingUser.email}
+                    onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value.toLowerCase() })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500/50"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-medium block mb-1">CPF</label>
+                  <input
+                    type="text"
+                    value={editingUser.cpf}
+                    onChange={(e) => setEditingUser({ ...editingUser, cpf: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500/50"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-medium block mb-1">WhatsApp</label>
+                  <input
+                    type="text"
+                    value={editingUser.phone}
+                    onChange={(e) => setEditingUser({ ...editingUser, phone: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500/50"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-medium block mb-1">Loja / Unidade</label>
+                  <input
+                    type="text"
+                    value={editingUser.storeName || ""}
+                    onChange={(e) => setEditingUser({ ...editingUser, storeName: e.target.value.toUpperCase() })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500/50"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-medium block mb-1">CNPJ da Filial</label>
+                  <input
+                    type="text"
+                    value={editingUser.storeCnpj || ""}
+                    onChange={(e) => setEditingUser({ ...editingUser, storeCnpj: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500/50"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-medium block mb-1">Cargo / Função</label>
+                  <select
+                    value={editingUser.roleId || ""}
+                    onChange={(e) => {
+                      const sel = roles.find((r) => r.id === e.target.value);
+                      setEditingUser({
+                        ...editingUser,
+                        roleId: e.target.value,
+                        roleTitle: sel ? sel.title : editingUser.roleTitle,
+                      });
+                    }}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500/50"
+                  >
+                    {roles.map((r) => (
+                      <option key={r.id} value={r.id} className="bg-zinc-900">
+                        {r.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-medium block mb-1">Nível de Permissão</label>
+                  <select
+                    value={editingUser.accessLevel}
+                    onChange={(e) =>
+                      setEditingUser({
+                        ...editingUser,
+                        accessLevel: e.target.value as "master" | "manager" | "student",
+                      })
+                    }
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500/50"
+                  >
+                    <option value="student" className="bg-zinc-900">Aluno / Consultor</option>
+                    <option value="manager" className="bg-zinc-900">Gerente de Loja</option>
+                    <option value="master" className="bg-zinc-900">Administrador Master</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <label className="text-zinc-400 font-medium block mb-1">Status da Conta</label>
+                <div className="flex items-center gap-4">
+                  <label className="inline-flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="status"
+                      checked={editingUser.active}
+                      onChange={() => setEditingUser({ ...editingUser, active: true })}
+                      className="accent-emerald-500"
+                    />
+                    <span className="text-emerald-400">Ativo</span>
+                  </label>
+                  <label className="inline-flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="status"
+                      checked={!editingUser.active}
+                      onChange={() => setEditingUser({ ...editingUser, active: false })}
+                      className="accent-red-500"
+                    />
+                    <span className="text-red-400">Bloqueado</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={() => setEditingUser(null)}
+                  className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 font-medium transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={editLoading}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+                >
+                  {editLoading ? (
+                    <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <Save className="w-3.5 h-3.5" />
+                  )}
+                  <span>Salvar Alterações</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

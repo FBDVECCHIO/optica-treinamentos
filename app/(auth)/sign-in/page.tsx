@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SignInPage, Testimonial } from "@/components/ui/sign-in";
-import { loginAction } from "@/app/actions/auth";
+import { GoogleAuthModal } from "@/components/ui/google-auth-modal";
+import { loginAction, loginWithGoogleAction } from "@/app/actions/auth";
 
 const testimonials: Testimonial[] = [
   {
@@ -24,6 +25,8 @@ export default function SignInRoute() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [googleModalOpen, setGoogleModalOpen] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,7 +50,28 @@ export default function SignInRoute() {
   };
 
   const handleGoogleSignIn = () => {
-    alert("Redirecionando para autenticação corporativa via Google OAuth com validação de domínio...");
+    setGoogleModalOpen(true);
+  };
+
+  const handleGoogleConfirm = async (email: string, name: string) => {
+    setError(null);
+    setGoogleLoading(true);
+
+    try {
+      const res = await loginWithGoogleAction({ email, name });
+      if (!res.success) {
+        setError(res.error || "Falha na autenticação Google.");
+        setGoogleLoading(false);
+        setGoogleModalOpen(false);
+      } else {
+        setGoogleModalOpen(false);
+        router.push(res.redirectUrl || "/dashboard");
+      }
+    } catch {
+      setError("Erro ao autenticar com Google.");
+      setGoogleLoading(false);
+      setGoogleModalOpen(false);
+    }
   };
 
   const handleResetPassword = () => {
@@ -59,21 +83,30 @@ export default function SignInRoute() {
   };
 
   return (
-    <SignInPage
-      title={
-        <span>
-          Acesse seu <span className="text-violet-400 font-semibold">Treinamento</span>
-        </span>
-      }
-      description="Entre com suas credenciais para acessar os módulos de capacitação das ópticas."
-      heroImageSrc="https://images.unsplash.com/photo-1591076482161-42ce6da69f68?q=80&w=1200&auto=format&fit=crop"
-      testimonials={testimonials}
-      onSignIn={handleSignIn}
-      onGoogleSignIn={handleGoogleSignIn}
-      onResetPassword={handleResetPassword}
-      onCreateAccount={handleCreateAccount}
-      errorMessage={error}
-      isLoading={loading}
-    />
+    <>
+      <SignInPage
+        title={
+          <span>
+            Acesse seu <span className="text-violet-400 font-semibold">Treinamento</span>
+          </span>
+        }
+        description="Entre com suas credenciais para acessar os módulos de capacitação das ópticas."
+        heroImageSrc="https://images.unsplash.com/photo-1591076482161-42ce6da69f68?q=80&w=1200&auto=format&fit=crop"
+        testimonials={testimonials}
+        onSignIn={handleSignIn}
+        onGoogleSignIn={handleGoogleSignIn}
+        onResetPassword={handleResetPassword}
+        onCreateAccount={handleCreateAccount}
+        errorMessage={error}
+        isLoading={loading}
+      />
+
+      <GoogleAuthModal
+        isOpen={googleModalOpen}
+        onClose={() => setGoogleModalOpen(false)}
+        onConfirm={handleGoogleConfirm}
+        isLoading={googleLoading}
+      />
+    </>
   );
 }

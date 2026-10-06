@@ -11,6 +11,7 @@ import {
   ExternalLink,
   LogOut,
   Mail,
+  MessageSquare,
 } from "lucide-react";
 import { getCurrentUser } from "@/app/actions/auth";
 
@@ -96,6 +97,14 @@ export default async function AdminLayout({
             >
               <Mail className="w-4 h-4 text-violet-400" />
               <span>Métricas de E-mails</span>
+            </Link>
+
+            <Link
+              href="/admin/messages"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <MessageSquare className="w-4 h-4 text-violet-400" />
+              <span>Gestão de Mensagens</span>
             </Link>
 
             {user?.accessLevel === "master" && (

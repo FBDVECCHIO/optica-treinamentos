@@ -10,6 +10,11 @@ import {
   ResendMetricsSummary,
 } from "@/lib/email/resend";
 import { Role, Profile, Course } from "@/types/database";
+import {
+  getAllEmailTemplates,
+  updateEmailTemplate,
+  EmailTemplate,
+} from "@/lib/email/templates";
 
 /**
  * 1. GESTÃO DE FUNÇÕES / CARGOS (Alimenta o select no cadastro)
@@ -156,15 +161,74 @@ export async function toggleUserStatusAction(userId: string): Promise<{ success:
   return { success: true, active: profile.active };
 }
 
-export async function deleteUserAction(userId: string): Promise<{ success: boolean; error?: string }> {
+export async function updateUserAction(
+  userId: string,
+  data: {
+    name?: string;
+    email?: string;
+    cpf?: string;
+    phone?: string;
+    storeName?: string;
+    storeCnpj?: string;
+    roleId?: string;
+    accessLevel?: "master" | "manager" | "student";
+    active?: boolean;
+  }
+): Promise<{ success: boolean; error?: string }> {
   const currentUser = await getCurrentUser();
-  if (currentUser?.accessLevel !== "master") {
-    return { success: false, error: "Apenas Administrador Master pode excluir cadastros." };
+  if (currentUser && currentUser.accessLevel !== "master" && currentUser.accessLevel !== "manager") {
+    return { success: false, error: "Apenas administradores podem editar colaboradores." };
   }
 
   const profile = db.profiles.find((p) => p.id === userId);
-  if (profile?.accessLevel === "master") {
-    return { success: false, error: "Não é permitido excluir o usuário Master do sistema." };
+  if (!profile) {
+    return { success: false, error: "Usuário não localizado no sistema." };
+  }
+
+  if (data.name) profile.name = data.name.trim().toUpperCase();
+  if (data.email) profile.email = data.email.trim().toLowerCase();
+  if (data.cpf) profile.cpf = data.cpf.trim();
+  if (data.phone) profile.phone = data.phone.trim();
+  if (data.storeName) profile.storeName = data.storeName.trim().toUpperCase();
+  if (data.storeCnpj) profile.storeCnpj = data.storeCnpj.trim();
+  if (data.roleId) {
+    profile.roleId = data.roleId;
+    const role = db.roles.find((r) => r.id === data.roleId);
+    if (role) profile.roleTitle = role.title;
+  }
+  if (data.accessLevel) {
+    profile.accessLevel = data.accessLevel;
+  }
+  if (typeof data.active === "boolean") {
+    profile.active = data.active;
+  }
+  profile.updatedAt = new Date().toISOString();
+
+  await logAudit({
+    action: "USER_UPDATED",
+    userId: profile.id,
+    userEmail: profile.email,
+    metadata: { updatedBy: currentUser?.email || "admin@optica.com.br", changes: data },
+  });
+
+  return { success: true };
+}
+
+export async function deleteUserAction(userId: string): Promise<{ success: boolean; error?: string }> {
+  const currentUser = await getCurrentUser();
+  // Se for gerente tentando excluir, não permite
+  if (currentUser && currentUser.accessLevel === "manager") {
+    return { success: false, error: "Gerentes de loja não têm permissão para excluir colaboradores." };
+  }
+
+  const profile = db.profiles.find((p) => p.id === userId);
+  if (!profile) {
+    // Se já foi excluído da memória
+    return { success: true };
+  }
+
+  if (profile.accessLevel === "master" || profile.id === "usr_master") {
+    return { success: false, error: "Não é permitido excluir o usuário Administrador Master do sistema." };
   }
 
   db.profiles = db.profiles.filter((p) => p.id !== userId);
@@ -173,8 +237,8 @@ export async function deleteUserAction(userId: string): Promise<{ success: boole
   await logAudit({
     action: "USER_DELETED",
     userId,
-    userEmail: profile?.email,
-    metadata: { name: profile?.name },
+    userEmail: profile.email,
+    metadata: { name: profile.name, deletedBy: currentUser?.email || "admin@optica.com.br" },
   });
 
   return { success: true };
@@ -278,5 +342,36 @@ export async function sendDiagnosticEmailAction(toEmail: string): Promise<{
     return { success: false, error: "Apenas administradores podem disparar testes de diagnóstico." };
   }
   return await sendDiagnosticTestEmail(toEmail);
+}
+
+/**
+ * 6. GESTÃO E PERSONALIZAÇÃO DE MENSAGENS / TEMPLATES DE E-MAIL
+ */
+export async function getEmailTemplatesAction(): Promise<EmailTemplate[]> {
+  return getAllEmailTemplates();
+}
+
+export async function saveEmailTemplateAction(
+  id: string,
+  data: Partial<EmailTemplate>
+): Promise<{ success: boolean; error?: string; template?: EmailTemplate }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master" && user?.accessLevel !== "manager") {
+    return { success: false, error: "Apenas administradores podem alterar modelos de mensagens." };
+  }
+
+  const updated = updateEmailTemplate(id, data);
+  if (!updated) {
+    return { success: false, error: "Modelo de e-mail não encontrado." };
+  }
+
+  await logAudit({
+    action: "TEMPLATE_UPDATED",
+    userId: user?.id || "master",
+    userEmail: user?.email || "admin@optica.com.br",
+    metadata: { updatedTemplateId: id, templateName: updated.name },
+  });
+
+  return { success: true, template: updated };
 }
 

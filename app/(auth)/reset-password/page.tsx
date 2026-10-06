@@ -20,10 +20,14 @@ export default function ResetPasswordPage() {
     setLoading(true);
 
     try {
-      await requestPasswordResetAction(email);
-      setSubmitted(true);
+      const res = await requestPasswordResetAction(email);
+      if (!res.success) {
+        setError(res.error || "Houve uma falha na solicitação. Verifique o e-mail informado.");
+      } else {
+        setSubmitted(true);
+      }
     } catch {
-      setError("Houve uma falha na solicitação. Tente novamente mais tarde.");
+      setError("Houve uma falha na solicitação de rede. Tente novamente mais tarde.");
     } finally {
       setLoading(false);
     }

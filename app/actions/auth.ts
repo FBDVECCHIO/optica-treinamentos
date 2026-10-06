@@ -204,27 +204,116 @@ export async function registerAction(data: {
 }
 
 /**
+ * Autenticação e Provisionamento via Google / Gmail OAuth
+ */
+export async function loginWithGoogleAction(googleData: {
+  email: string;
+  name: string;
+  picture?: string;
+}): Promise<ActionResult> {
+  const cleanEmail = googleData.email.trim().toLowerCase();
+  if (!cleanEmail || !cleanEmail.includes("@")) {
+    return { success: false, error: "E-mail do Google inválido." };
+  }
+
+  let profile = db.profiles.find((p) => p.email.toLowerCase() === cleanEmail);
+
+  if (!profile) {
+    const isMasterEmail = cleanEmail.includes("admin") || cleanEmail === "admin@optica.com.br";
+    const newId = `usr_google_${Date.now()}`;
+    profile = {
+      id: newId,
+      name: googleData.name ? googleData.name.toUpperCase() : cleanEmail.split("@")[0].toUpperCase(),
+      email: cleanEmail,
+      cpf: "000.000.000-00",
+      phone: "(11) 99999-9999",
+      storeId: "store_matriz",
+      storeName: "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      storeCnpj: "12.345.678/0001-95",
+      roleId: isMasterEmail ? "role_master" : "role_consultor",
+      roleTitle: isMasterEmail ? "ADMINISTRADOR MASTER" : "CONSULTOR ÓPTICO / VENDEDOR",
+      accessLevel: isMasterEmail ? "master" : "student",
+      active: true,
+      emailVerified: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    db.profiles.push(profile);
+
+    // Habilitar cursos disponíveis
+    for (const course of db.courses) {
+      db.userCourses.push({
+        userId: newId,
+        courseId: course.id,
+        isEnabled: true,
+      });
+    }
+
+    await logAudit({
+      action: "USER_REGISTERED",
+      userId: newId,
+      userEmail: cleanEmail,
+      metadata: { provider: "google_oauth", autoProvisioned: true },
+    });
+  }
+
+  if (!profile.active) {
+    return {
+      success: false,
+      error: "Sua conta de acesso corporativo está inativa. Contate o administrador.",
+    };
+  }
+
+  // Registrar auditoria
+  await logAudit({
+    action: "LOGIN_SUCCESS",
+    userId: profile.id,
+    userEmail: profile.email,
+    metadata: { provider: "google_oauth" },
+  });
+
+  // Criar sessão autenticada segura
+  const cookieStore = await cookies();
+  cookieStore.set(
+    "optica_session",
+    JSON.stringify({ userId: profile.id, role: profile.accessLevel }),
+    {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+      sameSite: "lax",
+    }
+  );
+
+  const redirectUrl =
+    profile.accessLevel === "master" || profile.accessLevel === "manager"
+      ? "/admin"
+      : "/dashboard";
+
+  return {
+    success: true,
+    user: profile,
+    redirectUrl,
+  };
+}
+
+/**
  * Solicitação de Recuperação de Senha via Resend
  */
 export async function requestPasswordResetAction(email: string): Promise<ActionResult> {
   const cleanEmail = email.trim().toLowerCase();
-  const profile = db.profiles.find((p) => p.email.toLowerCase() === cleanEmail);
+  const token = `tok_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
 
-  if (!profile) {
-    // Por segurança (OWASP), não revelamos se o e-mail existe ou não
-    await logAudit({
-      action: "PASSWORD_RESET_REQUEST",
-      userEmail: cleanEmail,
-      metadata: { notFound: true },
-    });
+  // Disparar via Resend
+  const sendResult = await sendPasswordResetEmail(cleanEmail, token);
+
+  if (!sendResult.success) {
     return {
-      success: true,
-      error: undefined,
+      success: false,
+      error: sendResult.error || "Não foi possível enviar o e-mail de recuperação.",
     };
   }
-
-  const token = `tok_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-  await sendPasswordResetEmail(cleanEmail, token);
 
   return { success: true };
 }

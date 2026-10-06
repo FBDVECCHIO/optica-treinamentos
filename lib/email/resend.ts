@@ -1,4 +1,5 @@
 import { logAudit, getAuditLogs } from "@/lib/audit";
+import { getEmailTemplateByKey, renderEmailTemplate } from "./templates";
 
 export interface SendEmailResult {
   success: boolean;
@@ -68,6 +69,13 @@ export async function sendPasswordResetEmail(
   }
 
   try {
+    const template = getEmailTemplateByKey("password_reset");
+    const rendered = renderEmailTemplate(template, {
+      nome: toEmail.split("@")[0].toUpperCase(),
+      email: toEmail,
+      link: resetUrl,
+    });
+
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -77,20 +85,8 @@ export async function sendPasswordResetEmail(
       body: JSON.stringify({
         from: process.env.RESEND_FROM_EMAIL || "Treinamentos Optica <onboarding@resend.dev>",
         to: [toEmail],
-        subject: "Redefinição de Senha - Plataforma de Treinamento para Ópticas",
-        html: `
-          <div style="font-family: Arial, sans-serif; background-color: #09090b; color: #fafafa; padding: 40px; border-radius: 12px; max-width: 560px; margin: 0 auto; border: 1px solid rgba(255,255,255,0.1);">
-            <div style="margin-bottom: 24px;">
-              <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; color: #a78bfa; background: rgba(167, 139, 250, 0.1); padding: 4px 10px; border-radius: 20px;">Segurança de Acesso</span>
-            </div>
-            <h2 style="color: #ffffff; margin-bottom: 12px; font-size: 22px;">Recuperação de Senha</h2>
-            <p style="color: #a1a1aa; font-size: 14px; line-height: 1.6;">Você solicitou a redefinição de sua senha de acesso à Plataforma de Treinamento Corporativo para Ópticas (Linha Gold Comfort IA / Guia Smartplay).</p>
-            <div style="margin: 32px 0;">
-              <a href="${resetUrl}" style="background-color: #7c3aed; color: #ffffff; padding: 14px 28px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">Redefinir Minha Senha</a>
-            </div>
-            <p style="color: #71717a; font-size: 12px; line-height: 1.5;">Se você não solicitou esta redefinição, desconsidere este e-mail. Por segurança, este link expira em 15 minutos.</p>
-          </div>
-        `,
+        subject: rendered.subject,
+        html: rendered.html,
       }),
     });
 
@@ -144,6 +140,16 @@ export async function sendWelcomeVerificationEmail(
   }
 
   try {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://optica-treinamentos.vercel.app";
+    const template = getEmailTemplateByKey("welcome");
+    const rendered = renderEmailTemplate(template, {
+      nome: userName,
+      email: toEmail,
+      loja: "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      cargo: "CONSULTOR ÓPTICO",
+      link: `${appUrl}/dashboard`,
+    });
+
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -153,19 +159,8 @@ export async function sendWelcomeVerificationEmail(
       body: JSON.stringify({
         from: process.env.RESEND_FROM_EMAIL || "Treinamentos Optica <onboarding@resend.dev>",
         to: [toEmail],
-        subject: "Bem-vindo à Plataforma de Treinamentos para Ópticas",
-        html: `
-          <div style="font-family: Arial, sans-serif; background-color: #09090b; color: #fafafa; padding: 40px; border-radius: 12px; max-width: 560px; margin: 0 auto; border: 1px solid rgba(255,255,255,0.1);">
-            <div style="margin-bottom: 20px;">
-              <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; color: #34d399; background: rgba(52, 211, 153, 0.1); padding: 4px 10px; border-radius: 20px;">Credenciamento Ativo</span>
-            </div>
-            <h2 style="color: #ffffff; margin-bottom: 12px; font-size: 22px;">Olá, ${userName}!</h2>
-            <p style="color: #a1a1aa; font-size: 14px; line-height: 1.6;">Seu cadastro na plataforma corporativa foi concluído com sucesso. Os módulos da <strong>Linha Gold Comfort IA</strong> e do <strong>Guia Smartplay</strong> já estão liberados para seu estudo.</p>
-            <div style="margin: 28px 0;">
-              <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://optica-treinamentos.vercel.app"}/dashboard" style="background-color: #7c3aed; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; display: inline-block;">Acessar Treinamentos</a>
-            </div>
-          </div>
-        `,
+        subject: rendered.subject,
+        html: rendered.html,
       }),
     });
 
@@ -214,6 +209,17 @@ export async function sendCertificateEmail(
   }
 
   try {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://optica-treinamentos.vercel.app";
+    const template = getEmailTemplateByKey("certificate");
+    const rendered = renderEmailTemplate(template, {
+      nome: userName,
+      email: toEmail,
+      curso: courseTitle,
+      nota: String(score),
+      loja: "REDE DE ÓPTICAS SRL",
+      link: `${appUrl}/dashboard`,
+    });
+
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -223,16 +229,8 @@ export async function sendCertificateEmail(
       body: JSON.stringify({
         from: process.env.RESEND_FROM_EMAIL || "Treinamentos Optica <onboarding@resend.dev>",
         to: [toEmail],
-        subject: `🏆 Parabéns! Certificado de Conclusão: ${courseTitle}`,
-        html: `
-          <div style="font-family: Arial, sans-serif; background-color: #09090b; color: #fafafa; padding: 40px; border-radius: 12px; max-width: 560px; margin: 0 auto; border: 1px solid rgba(255,255,255,0.1);">
-            <div style="margin-bottom: 20px;">
-              <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; color: #fbbf24; background: rgba(251, 191, 36, 0.1); padding: 4px 10px; border-radius: 20px;">Certificação Conquistada</span>
-            </div>
-            <h2 style="color: #ffffff; margin-bottom: 12px; font-size: 22px;">Parabéns, ${userName}!</h2>
-            <p style="color: #a1a1aa; font-size: 14px; line-height: 1.6;">Você obteve <strong>${score}%</strong> de aproveitamento no treinamento <strong>${courseTitle}</strong> e seu certificado oficial já está disponível no seu painel.</p>
-          </div>
-        `,
+        subject: rendered.subject,
+        html: rendered.html,
       }),
     });
 

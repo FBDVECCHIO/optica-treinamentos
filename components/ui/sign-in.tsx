@@ -190,9 +190,6 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                   Criar Cadastro
                 </a>
               </p>
-              <div className="mt-4 pt-3 border-t border-white/5 text-[11px] text-zinc-500">
-                Acesso Master de Teste: <code className="text-zinc-300 font-mono">admin@optica.com.br</code> / Senha: <code className="text-zinc-300 font-mono">MasterOptica2026!</code>
-              </div>
             </div>
           </div>
         </div>

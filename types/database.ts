@@ -126,7 +126,9 @@ export interface AuditLog {
     | "QUIZ_SUBMITTED"
     | "CERTIFICATE_ISSUED"
     | "DIAGNOSTIC_EMAIL_SENT"
-    | "ADMIN_PASSWORD_RESET";
+    | "ADMIN_PASSWORD_RESET"
+    | "TEMPLATE_UPDATED"
+    | "SETTINGS_UPDATED";
   ipAddress?: string;
   userAgent?: string;
   metadata?: Record<string, unknown>;

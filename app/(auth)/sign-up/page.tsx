@@ -3,13 +3,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SignUpPage } from "@/components/ui/sign-up";
-import { registerAction } from "@/app/actions/auth";
+import { GoogleAuthModal } from "@/components/ui/google-auth-modal";
+import { registerAction, loginWithGoogleAction } from "@/app/actions/auth";
 
 export default function SignUpRoute() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [googleModalOpen, setGoogleModalOpen] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleSignUp = async (data: Record<string, string>) => {
     setError(null);
@@ -45,7 +48,28 @@ export default function SignUpRoute() {
   };
 
   const handleGoogleSignUp = () => {
-    alert("Iniciando credenciamento via Google Workspace com validação corporativa...");
+    setGoogleModalOpen(true);
+  };
+
+  const handleGoogleConfirm = async (email: string, name: string) => {
+    setError(null);
+    setGoogleLoading(true);
+
+    try {
+      const res = await loginWithGoogleAction({ email, name });
+      if (!res.success) {
+        setError(res.error || "Falha ao credenciar com Google.");
+        setGoogleLoading(false);
+        setGoogleModalOpen(false);
+      } else {
+        setGoogleModalOpen(false);
+        router.push(res.redirectUrl || "/dashboard");
+      }
+    } catch {
+      setError("Erro de comunicação ao validar conta Google.");
+      setGoogleLoading(false);
+      setGoogleModalOpen(false);
+    }
   };
 
   const handleNavigateToLogin = () => {
@@ -53,13 +77,22 @@ export default function SignUpRoute() {
   };
 
   return (
-    <SignUpPage
-      onSignUp={handleSignUp}
-      onGoogleSignUp={handleGoogleSignUp}
-      onNavigateToLogin={handleNavigateToLogin}
-      errorMessage={error}
-      successMessage={success}
-      isLoading={loading}
-    />
+    <>
+      <SignUpPage
+        onSignUp={handleSignUp}
+        onGoogleSignUp={handleGoogleSignUp}
+        onNavigateToLogin={handleNavigateToLogin}
+        errorMessage={error}
+        successMessage={success}
+        isLoading={loading}
+      />
+
+      <GoogleAuthModal
+        isOpen={googleModalOpen}
+        onClose={() => setGoogleModalOpen(false)}
+        onConfirm={handleGoogleConfirm}
+        isLoading={googleLoading}
+      />
+    </>
   );
 }
