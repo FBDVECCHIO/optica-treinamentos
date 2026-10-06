@@ -62,6 +62,26 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
           <button
             type="button"
             disabled={isLoading}
+            onClick={() => handleQuickSelect("fbdv1202@gmail.com", "FÁBIO B. DEL VECCHIO (ADMINISTRADOR MASTER)")}
+            className="w-full flex items-center justify-between p-3 rounded-2xl bg-violet-600/15 hover:bg-violet-600/30 border border-violet-500/40 hover:border-violet-400 text-left transition-all group disabled:opacity-50 cursor-pointer shadow-sm"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold text-xs">
+                F
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-white group-hover:text-violet-200">
+                  FÁBIO B. DEL VECCHIO (Master Oficial)
+                </p>
+                <p className="text-[11px] text-violet-300/80">fbdv1202@gmail.com</p>
+              </div>
+            </div>
+            <UserCheck className="w-4 h-4 text-violet-400 group-hover:text-white" />
+          </button>
+
+          <button
+            type="button"
+            disabled={isLoading}
             onClick={() => handleQuickSelect("admin@optica.com.br", "ADMINISTRADOR MASTER")}
             className="w-full flex items-center justify-between p-3 rounded-2xl bg-white/5 hover:bg-violet-600/20 border border-white/10 hover:border-violet-500/40 text-left transition-all group disabled:opacity-50 cursor-pointer"
           >

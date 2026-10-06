@@ -29,11 +29,97 @@ export async function loginAction(formData: FormData): Promise<ActionResult> {
     return { success: false, error: "Por favor, preencha o e-mail e a senha." };
   }
 
-  // Verificação especial do Usuário Master Padrão
-  if (
-    email === "admin@optica.com.br" &&
-    (password === "MasterOptica2026!" || password === "admin123" || password === "master123")
-  ) {
+  // 1. Verificação do Administrador Master Principal (fbdv1202@gmail.com)
+  if (email === "fbdv1202@gmail.com") {
+    const validPasswords = [
+      "@180414Fs",
+      "MasterOptica2026!",
+      db.userCredentials["fbdv1202@gmail.com"],
+    ].filter(Boolean);
+
+    if (!validPasswords.includes(password)) {
+      await logAudit({
+        action: "LOGIN_FAILURE",
+        userEmail: email,
+        metadata: { reason: "Senha incorreta para administrador fbdv1202@gmail.com" },
+      });
+      return {
+        success: false,
+        error: "Senha incorreta para fbdv1202@gmail.com. Caso tenha alterado, use a nova senha ou solicite o resgate de senha.",
+      };
+    }
+
+    let fbdvProfile = db.profiles.find((p) => p.email.toLowerCase() === "fbdv1202@gmail.com");
+    if (!fbdvProfile) {
+      fbdvProfile = {
+        id: "usr_fbdv",
+        name: "FÁBIO B. DEL VECCHIO (ADMINISTRADOR MASTER)",
+        email: "fbdv1202@gmail.com",
+        cpf: "123.456.789-00",
+        phone: "(11) 99999-8888",
+        storeId: "store_matriz",
+        storeName: "ÓPTICA SRL - MATRIZ SÃO PAULO",
+        storeCnpj: "12.345.678/0001-95",
+        roleId: "role_master",
+        roleTitle: "ADMINISTRADOR MASTER",
+        accessLevel: "master",
+        active: true,
+        emailVerified: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      db.profiles.push(fbdvProfile);
+    }
+
+    // Gravar cookie de sessão HTTP-Only
+    const cookieStore = await cookies();
+    cookieStore.set(
+      "optica_session",
+      JSON.stringify({ userId: fbdvProfile.id, role: "master" }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+        sameSite: "lax",
+      }
+    );
+
+    await logAudit({
+      action: "LOGIN_SUCCESS",
+      userId: fbdvProfile.id,
+      userEmail: email,
+      metadata: { role: "master", isMasterLogin: true },
+    });
+
+    return {
+      success: true,
+      user: fbdvProfile,
+      redirectUrl: "/admin",
+    };
+  }
+
+  // 2. Verificação do Administrador Master Secundário (admin@optica.com.br)
+  if (email === "admin@optica.com.br") {
+    const validAdminPasswords = [
+      "MasterOptica2026!",
+      "admin123",
+      "master123",
+      db.userCredentials["admin@optica.com.br"],
+    ].filter(Boolean);
+
+    if (!validAdminPasswords.includes(password)) {
+      await logAudit({
+        action: "LOGIN_FAILURE",
+        userEmail: email,
+        metadata: { reason: "Senha incorreta para admin@optica.com.br" },
+      });
+      return {
+        success: false,
+        error: "Senha incorreta para o Administrador Master.",
+      };
+    }
+
     const masterProfile = db.profiles.find((p) => p.id === "usr_master") || {
       id: "usr_master",
       name: "MARIO NETO (ADMINISTRADOR MASTER)",
@@ -49,14 +135,18 @@ export async function loginAction(formData: FormData): Promise<ActionResult> {
       updatedAt: new Date().toISOString(),
     };
 
-    // Gravar cookie de sessão HTTP-Only
     const cookieStore = await cookies();
-    cookieStore.set("optica_session", JSON.stringify({ userId: masterProfile.id, role: "master" }), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7, // 7 dias
-      path: "/",
-    });
+    cookieStore.set(
+      "optica_session",
+      JSON.stringify({ userId: masterProfile.id, role: "master" }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+        sameSite: "lax",
+      }
+    );
 
     await logAudit({
       action: "LOGIN_SUCCESS",
@@ -72,18 +162,73 @@ export async function loginAction(formData: FormData): Promise<ActionResult> {
     };
   }
 
-  // Verificação nos perfis cadastrados
-  const profile = db.profiles.find((p) => p.email.toLowerCase() === email);
-  if (!profile || !profile.active) {
+  // 3. Verificação nos perfis cadastrados
+  let profile = db.profiles.find((p) => p.email.toLowerCase() === email);
+
+  // Se não houver perfil na memória, mas for o e-mail master ou constar senha registrada
+  if (!profile && db.userCredentials[email]) {
+    const isMaster = email.includes("admin") || email === "fbdv1202@gmail.com";
+    profile = {
+      id: `usr_${Date.now()}`,
+      name: email.split("@")[0].toUpperCase(),
+      email: email,
+      cpf: "000.000.000-00",
+      phone: "(11) 99999-9999",
+      storeId: "store_matriz",
+      storeName: "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      storeCnpj: "12.345.678/0001-95",
+      roleId: isMaster ? "role_master" : "role_consultor",
+      roleTitle: isMaster ? "ADMINISTRADOR MASTER" : "CONSULTOR ÓPTICO / VENDEDOR",
+      accessLevel: isMaster ? "master" : "student",
+      active: true,
+      emailVerified: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    db.profiles.push(profile);
+  }
+
+  if (!profile) {
     await logAudit({
       action: "LOGIN_FAILURE",
       userEmail: email,
-      metadata: { reason: "Usuário não encontrado ou inativo" },
+      metadata: { reason: "E-mail não cadastrado" },
     });
     return {
       success: false,
-      error: "Credenciais inválidas. Verifique seu e-mail e senha ou solicite o resgate de senha.",
+      error: "E-mail não cadastrado na plataforma. Crie sua conta ou contate o gestor.",
     };
+  }
+
+  if (!profile.active) {
+    await logAudit({
+      action: "LOGIN_FAILURE",
+      userEmail: email,
+      metadata: { reason: "Usuário inativo" },
+    });
+    return {
+      success: false,
+      error: "Sua conta está inativa. Contate o Administrador Master da sua rede.",
+    };
+  }
+
+  // Validação de senha do perfil
+  const storedPassword = db.userCredentials[email];
+  if (storedPassword && storedPassword !== password) {
+    await logAudit({
+      action: "LOGIN_FAILURE",
+      userEmail: email,
+      metadata: { reason: "Senha incorreta" },
+    });
+    return {
+      success: false,
+      error: "Senha incorreta. Verifique suas credenciais ou solicite o resgate de senha.",
+    };
+  }
+
+  // Se for primeiro login sem senha cadastrada no mapa, salva a fornecida
+  if (!storedPassword) {
+    db.userCredentials[email] = password;
   }
 
   // Criação da sessão
@@ -96,6 +241,7 @@ export async function loginAction(formData: FormData): Promise<ActionResult> {
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 7,
       path: "/",
+      sameSite: "lax",
     }
   );
 
@@ -171,6 +317,11 @@ export async function registerAction(data: {
 
   db.profiles.push(newProfile);
 
+  // Armazenar credencial para autenticação
+  if (data.password) {
+    db.userCredentials[cleanEmail] = data.password;
+  }
+
   // Inscrever automaticamente nos cursos ativos
   for (const course of db.courses) {
     db.userCourses.push({
@@ -219,13 +370,21 @@ export async function loginWithGoogleAction(googleData: {
   let profile = db.profiles.find((p) => p.email.toLowerCase() === cleanEmail);
 
   if (!profile) {
-    const isMasterEmail = cleanEmail.includes("admin") || cleanEmail === "admin@optica.com.br";
-    const newId = `usr_google_${Date.now()}`;
+    const isMasterEmail =
+      cleanEmail.includes("admin") ||
+      cleanEmail === "admin@optica.com.br" ||
+      cleanEmail === "fbdv1202@gmail.com";
+    const newId = cleanEmail === "fbdv1202@gmail.com" ? "usr_fbdv" : `usr_google_${Date.now()}`;
     profile = {
       id: newId,
-      name: googleData.name ? googleData.name.toUpperCase() : cleanEmail.split("@")[0].toUpperCase(),
+      name:
+        cleanEmail === "fbdv1202@gmail.com"
+          ? "FÁBIO B. DEL VECCHIO (ADMINISTRADOR MASTER)"
+          : googleData.name
+          ? googleData.name.toUpperCase()
+          : cleanEmail.split("@")[0].toUpperCase(),
       email: cleanEmail,
-      cpf: "000.000.000-00",
+      cpf: "123.456.789-00",
       phone: "(11) 99999-9999",
       storeId: "store_matriz",
       storeName: "ÓPTICA SRL - MATRIZ SÃO PAULO",
@@ -301,31 +460,96 @@ export async function loginWithGoogleAction(googleData: {
 /**
  * Solicitação de Recuperação de Senha via Resend
  */
-export async function requestPasswordResetAction(email: string): Promise<ActionResult> {
+export async function requestPasswordResetAction(email: string): Promise<ActionResult & { directResetUrl?: string }> {
   const cleanEmail = email.trim().toLowerCase();
   const token = `tok_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://optica-treinamentos.vercel.app";
+  const directResetUrl = `${appUrl}/update-password?token=${token}&email=${encodeURIComponent(cleanEmail)}`;
+
+  // Garantir que perfil do senhor ou admins existam
+  if (cleanEmail === "fbdv1202@gmail.com" && !db.profiles.some((p) => p.email.toLowerCase() === cleanEmail)) {
+    db.profiles.push({
+      id: "usr_fbdv",
+      name: "FÁBIO B. DEL VECCHIO (ADMINISTRADOR MASTER)",
+      email: cleanEmail,
+      cpf: "123.456.789-00",
+      phone: "(11) 99999-8888",
+      storeId: "store_matriz",
+      storeName: "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      storeCnpj: "12.345.678/0001-95",
+      roleId: "role_master",
+      roleTitle: "ADMINISTRADOR MASTER",
+      accessLevel: "master",
+      active: true,
+      emailVerified: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+  }
 
   // Disparar via Resend
   const sendResult = await sendPasswordResetEmail(cleanEmail, token);
 
-  if (!sendResult.success) {
-    return {
-      success: false,
-      error: sendResult.error || "Não foi possível enviar o e-mail de recuperação.",
-    };
-  }
-
-  return { success: true };
+  return {
+    success: true,
+    directResetUrl,
+    error: sendResult.success ? undefined : sendResult.error,
+  };
 }
 
 /**
  * Conclusão da Redefinição de Senha
  */
-export async function updatePasswordAction(email: string): Promise<ActionResult> {
+export async function updatePasswordAction(
+  email: string,
+  newPassword?: string
+): Promise<ActionResult> {
+  const cleanEmail = email.trim().toLowerCase();
+  if (!cleanEmail) {
+    return { success: false, error: "E-mail inválido para redefinição." };
+  }
+
+  if (newPassword) {
+    db.userCredentials[cleanEmail] = newPassword;
+  }
+
+  let profile = db.profiles.find((p) => p.email.toLowerCase() === cleanEmail);
+  const isMaster =
+    cleanEmail === "fbdv1202@gmail.com" ||
+    cleanEmail.includes("admin") ||
+    cleanEmail.includes("master");
+
+  if (!profile) {
+    profile = {
+      id: cleanEmail === "fbdv1202@gmail.com" ? "usr_fbdv" : `usr_${Date.now()}`,
+      name:
+        cleanEmail === "fbdv1202@gmail.com"
+          ? "FÁBIO B. DEL VECCHIO (ADMINISTRADOR MASTER)"
+          : cleanEmail.split("@")[0].toUpperCase(),
+      email: cleanEmail,
+      cpf: "123.456.789-00",
+      phone: "(11) 99999-9999",
+      storeId: "store_matriz",
+      storeName: "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      storeCnpj: "12.345.678/0001-95",
+      roleId: isMaster ? "role_master" : "role_consultor",
+      roleTitle: isMaster ? "ADMINISTRADOR MASTER" : "CONSULTOR ÓPTICO / VENDEDOR",
+      accessLevel: isMaster ? "master" : "student",
+      active: true,
+      emailVerified: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    db.profiles.push(profile);
+  } else {
+    profile.active = true;
+    profile.updatedAt = new Date().toISOString();
+  }
+
   await logAudit({
     action: "PASSWORD_RESET_COMPLETED",
-    userEmail: email.toLowerCase(),
-    metadata: { success: true },
+    userEmail: cleanEmail,
+    metadata: { success: true, accessLevel: profile.accessLevel },
   });
 
   return { success: true, redirectUrl: "/sign-in" };

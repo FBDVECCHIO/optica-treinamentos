@@ -10,7 +10,7 @@ function UpdatePasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const emailParam = searchParams.get("email") || "";
-
+  const [emailInput, setEmailInput] = useState(emailParam || "fbdv1202@gmail.com");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -21,6 +21,12 @@ function UpdatePasswordContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    const targetEmail = (emailParam || emailInput).trim().toLowerCase();
+    if (!targetEmail || !targetEmail.includes("@")) {
+      setError("Informe um endereço de e-mail válido.");
+      return;
+    }
 
     if (password.length < 6) {
       setError("A nova senha deve possuir no mínimo 6 caracteres.");
@@ -34,7 +40,11 @@ function UpdatePasswordContent() {
 
     setLoading(true);
     try {
-      await updatePasswordAction(emailParam);
+      const res = await updatePasswordAction(targetEmail, password);
+      if (!res.success) {
+        setError(res.error || "Falha ao atualizar a senha. Solicite um novo link.");
+        return;
+      }
       setSuccess(true);
       setTimeout(() => {
         router.push("/sign-in");
@@ -79,6 +89,22 @@ function UpdatePasswordContent() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {!emailParam && (
+              <div>
+                <label className="text-xs font-medium text-zinc-400 mb-1.5 block">E-mail Cadastrado</label>
+                <GlassInputWrapper>
+                  <input
+                    type="email"
+                    required
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    placeholder="fbdv1202@gmail.com"
+                    className="w-full bg-transparent text-sm p-3.5 rounded-2xl focus:outline-none text-white placeholder:text-zinc-600"
+                  />
+                </GlassInputWrapper>
+              </div>
+            )}
+
             <div>
               <label className="text-xs font-medium text-zinc-400 mb-1.5 block">Nova Senha</label>
               <GlassInputWrapper>

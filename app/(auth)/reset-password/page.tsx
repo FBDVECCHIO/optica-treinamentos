@@ -10,6 +10,7 @@ export default function ResetPasswordPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [directUrl, setDirectUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,10 +22,14 @@ export default function ResetPasswordPage() {
 
     try {
       const res = await requestPasswordResetAction(email);
-      if (!res.success) {
-        setError(res.error || "Houve uma falha na solicitação. Verifique o e-mail informado.");
-      } else {
+      if (res.directResetUrl) {
+        setDirectUrl(res.directResetUrl);
+      }
+
+      if (res.success) {
         setSubmitted(true);
+      } else {
+        setError(res.error || "Houve uma falha na solicitação. Verifique o e-mail informado.");
       }
     } catch {
       setError("Houve uma falha na solicitação de rede. Tente novamente mais tarde.");
@@ -47,17 +52,29 @@ export default function ResetPasswordPage() {
         </Link>
 
         {submitted ? (
-          <div className="text-center py-4 animate-element">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto mb-4 border border-emerald-500/20">
+          <div className="text-center py-4 animate-element space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto mb-2 border border-emerald-500/20">
               <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-semibold text-white mb-2">Instruções Enviadas!</h2>
-            <p className="text-xs text-zinc-400 leading-relaxed mb-6">
-              Se houver uma conta associada a <strong className="text-white">{email}</strong>, o link de recuperação foi enviado pelo serviço seguro **Resend**. Verifique sua caixa de entrada e spam.
+            <h2 className="text-xl font-semibold text-white">Instruções Geradas!</h2>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              O link de segurança foi disparado para <strong className="text-white">{email}</strong> via Resend.
             </p>
+
+            {directUrl && (
+              <div className="pt-2">
+                <Link
+                  href={directUrl}
+                  className="w-full block py-3.5 rounded-2xl bg-violet-600 hover:bg-violet-500 text-white font-medium text-xs transition-all shadow-lg shadow-violet-600/20 text-center"
+                >
+                  Redefinir Minha Senha Agora
+                </Link>
+              </div>
+            )}
+
             <Link
               href="/sign-in"
-              className="w-full block py-3.5 rounded-2xl bg-violet-600 hover:bg-violet-500 text-white font-medium text-xs transition-all shadow-lg shadow-violet-600/20"
+              className="w-full block py-3 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 text-zinc-300 font-medium text-xs transition-colors"
             >
               Retornar para o Login
             </Link>

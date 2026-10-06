@@ -69,6 +69,24 @@ class DatabaseStore {
 
   public profiles: Profile[] = [
     {
+      id: "usr_fbdv",
+      name: "FÁBIO B. DEL VECCHIO (ADMINISTRADOR MASTER)",
+      email: "fbdv1202@gmail.com",
+      cpf: "123.456.789-00",
+      phone: "(11) 99999-8888",
+      address: "AV. PAULISTA, 1500 - SÃO PAULO - SP",
+      storeId: "store_matriz",
+      storeName: "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      storeCnpj: "12.345.678/0001-95",
+      roleId: "role_master",
+      roleTitle: "ADMINISTRADOR MASTER",
+      accessLevel: "master",
+      active: true,
+      emailVerified: true,
+      createdAt: new Date("2026-01-01").toISOString(),
+      updatedAt: new Date("2026-01-01").toISOString(),
+    },
+    {
       id: "usr_master",
       name: "MARIO NETO (ADMINISTRADOR MASTER)",
       email: "admin@optica.com.br",
@@ -157,8 +175,18 @@ class DatabaseStore {
     },
   ];
 
+  // Credenciais / Senhas de Acesso do Sistema (Persistência com fallback seguro)
+  public userCredentials: Record<string, string> = {
+    "admin@optica.com.br": "MasterOptica2026!",
+    "fbdv1202@gmail.com": "@180414Fs",
+    "gerente@optica.com.br": "gerente123",
+    "aluno@optica.com.br": "aluno123",
+  };
+
   // Associação Usuário -> Curso (Controle de Habilitação)
   public userCourses: { userId: string; courseId: string; isEnabled: boolean }[] = [
+    { userId: "usr_fbdv", courseId: "course_gold_comfort", isEnabled: true },
+    { userId: "usr_fbdv", courseId: "course_smartplay", isEnabled: true },
     { userId: "usr_master", courseId: "course_gold_comfort", isEnabled: true },
     { userId: "usr_master", courseId: "course_smartplay", isEnabled: true },
     { userId: "usr_gerente", courseId: "course_gold_comfort", isEnabled: true },
