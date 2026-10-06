@@ -123,7 +123,10 @@ export interface AuditLog {
     | "USER_UPDATED"
     | "USER_DELETED"
     | "COURSE_ACCESS_TOGGLED"
-    | "QUIZ_SUBMITTED";
+    | "QUIZ_SUBMITTED"
+    | "CERTIFICATE_ISSUED"
+    | "DIAGNOSTIC_EMAIL_SENT"
+    | "ADMIN_PASSWORD_RESET";
   ipAddress?: string;
   userAgent?: string;
   metadata?: Record<string, unknown>;

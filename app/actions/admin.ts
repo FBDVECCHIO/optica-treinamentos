@@ -3,7 +3,12 @@
 import { db } from "@/lib/db/mock-store";
 import { getCurrentUser } from "./auth";
 import { logAudit } from "@/lib/audit";
-import { sendPasswordResetEmail } from "@/lib/email/resend";
+import {
+  sendPasswordResetEmail,
+  getResendLiveMetrics,
+  sendDiagnosticTestEmail,
+  ResendMetricsSummary,
+} from "@/lib/email/resend";
 import { Role, Profile, Course } from "@/types/database";
 
 /**
@@ -254,3 +259,24 @@ export async function getStudentPerformanceReportAction(): Promise<{
     };
   });
 }
+
+/**
+ * 5. MÉTRICAS E DISPARO DE E-MAILS AUTOMÁTICOS VIA RESEND
+ */
+export async function getResendMetricsAction(): Promise<ResendMetricsSummary> {
+  return await getResendLiveMetrics();
+}
+
+export async function sendDiagnosticEmailAction(toEmail: string): Promise<{
+  success: boolean;
+  messageId?: string;
+  error?: string;
+  latencyMs?: number;
+}> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master" && user?.accessLevel !== "manager") {
+    return { success: false, error: "Apenas administradores podem disparar testes de diagnóstico." };
+  }
+  return await sendDiagnosticTestEmail(toEmail);
+}
+

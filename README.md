@@ -34,7 +34,12 @@ Ambiente corporativo de capacitação profissional e certificação de consultor
    - **Matriz de Cursos:** Ferramenta para habilitar e desabilitar cursos individualmente por usuário ou por loja.
    - **Evolução, Performance e Notas:** Tabela analítica demonstrando o rendimento, notas de avaliação e status de certificação de cada colaborador.
    - **Logs de Auditoria:** Rastreabilidade inviolável de logins, falhas, cadastros e recuperações de senha com IP e timestamp.
-5. **Rotina Automática de Backup:**
+5. **Métricas de E-mails Automáticos (Resend API):**
+   - **Dashboard em Tempo Real (`/admin/emails`):** Contadores de e-mails transacionais (boas-vindas, recuperação de senha, certificação e testes diagnósticos).
+   - **Indicadores de Desempenho:** Taxa de entregabilidade, tempo de resposta (latência) da API e status do domínio.
+   - **Disparo de Teste de Diagnóstico:** Ferramenta interativa para disparo imediato e validação de entrega na API Resend.
+   - **Histórico e Trilha:** Tabela com busca, status de entrega (`delivered`, `sent`) e IDs de rastreio oficial.
+6. **Rotina Automática de Backup:**
    - Script automatizado (`scripts/backup.mjs`) que gera snapshots completos em JSON com integridade criptográfica SHA-256.
 
 ---

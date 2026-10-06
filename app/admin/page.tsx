@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Users, Building2, BookOpen, HelpCircle, ShieldCheck, ArrowRight } from "lucide-react";
+import { Users, Building2, BookOpen, HelpCircle, ShieldCheck, ArrowRight, Mail } from "lucide-react";
 import { db } from "@/lib/db/mock-store";
 
 export default function AdminOverviewPage() {
@@ -61,7 +61,7 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* Ações Rápidas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Link
           href="/admin/users"
           className="p-6 rounded-3xl bg-zinc-900/70 border border-white/10 hover:border-violet-500/30 transition-all group flex flex-col justify-between"
@@ -74,7 +74,7 @@ export default function AdminOverviewPage() {
               Gestão de Usuários
             </h3>
             <p className="text-xs text-zinc-400 mt-1">
-              Listar colaboradores, redefinir senhas, habilitar acessos e filtrar por loja e cargo.
+              Listar colaboradores, redefinir senhas e filtrar por filial.
             </p>
           </div>
           <div className="mt-4 flex items-center gap-1.5 text-xs text-violet-400 font-medium">
@@ -95,7 +95,7 @@ export default function AdminOverviewPage() {
               Cadastro de Funções
             </h3>
             <p className="text-xs text-zinc-400 mt-1">
-              Gerenciar os cargos disponíveis no dropdown do cadastro público de colaboradores.
+              Gerenciar cargos disponíveis no dropdown público.
             </p>
           </div>
           <div className="mt-4 flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
@@ -116,11 +116,32 @@ export default function AdminOverviewPage() {
               Matriz de Cursos
             </h3>
             <p className="text-xs text-zinc-400 mt-1">
-              Habilitar e desabilitar treinamentos individualmente por usuário ou filial.
+              Habilitar e desabilitar treinamentos individualmente.
             </p>
           </div>
           <div className="mt-4 flex items-center gap-1.5 text-xs text-blue-400 font-medium">
             <span>Configurar Matriz</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </Link>
+
+        <Link
+          href="/admin/emails"
+          className="p-6 rounded-3xl bg-zinc-900/70 border border-white/10 hover:border-violet-500/30 transition-all group flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-10 h-10 rounded-2xl bg-amber-600/20 text-amber-400 flex items-center justify-center mb-4">
+              <Mail className="w-5 h-5" />
+            </div>
+            <h3 className="font-semibold text-white group-hover:text-amber-300 transition-colors">
+              Métricas do Resend
+            </h3>
+            <p className="text-xs text-zinc-400 mt-1">
+              Auditoria de e-mails automáticos, entregas e diagnósticos.
+            </p>
+          </div>
+          <div className="mt-4 flex items-center gap-1.5 text-xs text-amber-400 font-medium">
+            <span>Ver Métricas</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </div>
         </Link>

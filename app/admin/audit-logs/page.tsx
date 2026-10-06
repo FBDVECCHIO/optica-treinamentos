@@ -71,6 +71,9 @@ export default function AdminAuditLogsPage() {
             <option value="USER_UPDATED" className="bg-zinc-900">USER_UPDATED</option>
             <option value="COURSE_ACCESS_TOGGLED" className="bg-zinc-900">COURSE_ACCESS_TOGGLED</option>
             <option value="QUIZ_SUBMITTED" className="bg-zinc-900">QUIZ_SUBMITTED</option>
+            <option value="CERTIFICATE_ISSUED" className="bg-zinc-900">CERTIFICATE_ISSUED</option>
+            <option value="DIAGNOSTIC_EMAIL_SENT" className="bg-zinc-900">DIAGNOSTIC_EMAIL_SENT</option>
+            <option value="ADMIN_PASSWORD_RESET" className="bg-zinc-900">ADMIN_PASSWORD_RESET</option>
           </select>
         </div>
       </div>

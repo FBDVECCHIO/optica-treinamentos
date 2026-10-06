@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   ExternalLink,
   LogOut,
+  Mail,
 } from "lucide-react";
 import { getCurrentUser } from "@/app/actions/auth";
 
@@ -87,6 +88,14 @@ export default async function AdminLayout({
             >
               <BarChart3 className="w-4 h-4 text-violet-400" />
               <span>Evolução & Notas</span>
+            </Link>
+
+            <Link
+              href="/admin/emails"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <Mail className="w-4 h-4 text-violet-400" />
+              <span>Métricas de E-mails</span>
             </Link>
 
             {user?.accessLevel === "master" && (
