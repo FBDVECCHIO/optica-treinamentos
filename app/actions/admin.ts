@@ -9,7 +9,7 @@ import {
   sendDiagnosticTestEmail,
   ResendMetricsSummary,
 } from "@/lib/email/resend";
-import { Role, Profile, Course, Module, Lesson, Quiz, QuizQuestion } from "@/types/database";
+import { Role, Profile, Course, Module, Lesson, Quiz, QuizQuestion, Category, SystemSettings, IssuedCertificate } from "@/types/database";
 import {
   getAllEmailTemplates,
   updateEmailTemplate,
@@ -43,6 +43,7 @@ export async function createRoleAction(title: string, description?: string): Pro
   };
 
   db.roles.push(newRole);
+  db.saveToDisk();
 
   await logAudit({
     action: "USER_UPDATED",
@@ -66,6 +67,7 @@ export async function deleteRoleAction(roleId: string): Promise<{ success: boole
   }
 
   db.roles = db.roles.filter((r) => r.id !== roleId);
+  db.saveToDisk();
   return { success: true };
 }
 
@@ -150,6 +152,7 @@ export async function toggleUserStatusAction(userId: string): Promise<{ success:
 
   profile.active = !profile.active;
   profile.updatedAt = new Date().toISOString();
+  db.saveToDisk();
 
   await logAudit({
     action: "USER_UPDATED",
@@ -203,6 +206,7 @@ export async function updateUserAction(
     profile.active = data.active;
   }
   profile.updatedAt = new Date().toISOString();
+  db.saveToDisk();
 
   await logAudit({
     action: "USER_UPDATED",
@@ -233,6 +237,8 @@ export async function deleteUserAction(userId: string): Promise<{ success: boole
 
   db.profiles = db.profiles.filter((p) => p.id !== userId);
   db.userCourses = db.userCourses.filter((uc) => uc.userId !== userId);
+  delete db.userCredentials[profile.email];
+  db.saveToDisk();
 
   await logAudit({
     action: "USER_DELETED",
@@ -314,6 +320,8 @@ export async function createCourseAction(data: {
     });
   }
 
+  db.saveToDisk();
+
   await logAudit({
     action: "COURSE_CREATED",
     userId: user?.id || "admin",
@@ -346,9 +354,14 @@ export async function updateCourseAction(
   if (data.category !== undefined) course.category = data.category;
   if (data.certificateEnabled !== undefined) course.certificateEnabled = data.certificateEnabled;
   if (data.minScoreToPass !== undefined) course.minScoreToPass = data.minScoreToPass;
+  if (data.certificateTemplateId !== undefined) course.certificateTemplateId = data.certificateTemplateId;
+  if (data.certificateCustomLogoUrl !== undefined) course.certificateCustomLogoUrl = data.certificateCustomLogoUrl;
+  if (data.certificateCustomBgUrl !== undefined) course.certificateCustomBgUrl = data.certificateCustomBgUrl;
+  if (data.certificateLocation !== undefined) course.certificateLocation = data.certificateLocation;
   if (data.isPublished !== undefined) course.isPublished = data.isPublished;
   if (data.estimatedDurationMin !== undefined) course.estimatedDurationMin = data.estimatedDurationMin;
   course.updatedAt = new Date().toISOString();
+  db.saveToDisk();
 
   await logAudit({
     action: "COURSE_UPDATED",
@@ -373,6 +386,7 @@ export async function deleteCourseAction(courseId: string): Promise<{ success: b
   db.modules = db.modules.filter((m) => m.courseId !== courseId);
   db.quizzes = db.quizzes.filter((q) => q.courseId !== courseId);
   db.userCourses = db.userCourses.filter((uc) => uc.courseId !== courseId);
+  db.saveToDisk();
 
   await logAudit({
     action: "COURSE_DELETED",
@@ -501,6 +515,8 @@ export async function saveCourseStructureAction(
     });
   }
 
+  db.saveToDisk();
+
   await logAudit({
     action: "COURSE_UPDATED",
     userId: user?.id || "admin",
@@ -522,6 +538,7 @@ export async function toggleCourseVisibilityForUserAction(
   } else {
     db.userCourses.push({ userId, courseId, isEnabled });
   }
+  db.saveToDisk();
 
   await logAudit({
     action: "COURSE_ACCESS_TOGGLED",
@@ -545,7 +562,7 @@ export async function getUserCourseAccessMatrixAction(userId: string): Promise<{
 /**
  * 4. RELATÓRIOS ANALÍTICOS DE EVOLUÇÃO, PERFORMANCE E NOTAS POR USUÁRIO
  */
-export async function getStudentPerformanceReportAction(): Promise<{
+export interface StudentPerformanceReportItem {
   userId: string;
   userName: string;
   userEmail: string;
@@ -555,7 +572,17 @@ export async function getStudentPerformanceReportAction(): Promise<{
   coursesCompleted: number;
   averageScore: number;
   lastActivity: string;
-}[]> {
+  completedCourses: {
+    courseId: string;
+    courseTitle: string;
+    category?: string;
+    completedAt: string;
+    score: number;
+    certificate?: IssuedCertificate;
+  }[];
+}
+
+export async function getStudentPerformanceReportAction(): Promise<StudentPerformanceReportItem[]> {
   const currentUser = await getCurrentUser();
   let students = db.profiles.filter((p) => p.accessLevel !== "master");
 
@@ -570,16 +597,71 @@ export async function getStudentPerformanceReportAction(): Promise<{
         ? Math.round(attempts.reduce((sum, a) => sum + a.score, 0) / attempts.length)
         : 0;
 
+    // Busca certificados e cursos concluídos pelo colaborador
+    const studentCerts = db.certificates.filter((c) => c.userId === student.id);
+    const completedList: {
+      courseId: string;
+      courseTitle: string;
+      category?: string;
+      completedAt: string;
+      score: number;
+      certificate?: IssuedCertificate;
+    }[] = [];
+
+    studentCerts.forEach((cert) => {
+      completedList.push({
+        courseId: cert.courseId,
+        courseTitle: cert.courseTitle,
+        category: cert.category,
+        completedAt: cert.issuedAt,
+        score: cert.score,
+        certificate: cert,
+      });
+    });
+
+    attempts
+      .filter((a) => a.passed)
+      .forEach((qa) => {
+        const quiz = db.quizzes.find((q) => q.id === qa.quizId);
+        const course = quiz ? db.courses.find((c) => c.id === quiz.courseId) : null;
+        if (course && !completedList.some((item) => item.courseId === course.id)) {
+          const synthCert: IssuedCertificate = {
+            id: `cert_${student.id}_${course.id}`,
+            userId: student.id,
+            userName: student.name,
+            courseId: course.id,
+            courseTitle: course.title,
+            category: course.category || "Capacitação Oficial",
+            templateId: course.certificateTemplateId || "1",
+            location: course.certificateLocation || "São Paulo - SP",
+            customLogoUrl: course.certificateCustomLogoUrl,
+            customBgUrl: course.certificateCustomBgUrl,
+            score: qa.score || 80,
+            issuedAt: qa.submittedAt || new Date().toISOString(),
+            verificationCode: `SRL-CERT-2026-${student.id.slice(-4).toUpperCase()}`,
+          };
+          completedList.push({
+            courseId: course.id,
+            courseTitle: course.title,
+            category: course.category,
+            completedAt: synthCert.issuedAt,
+            score: synthCert.score,
+            certificate: synthCert,
+          });
+        }
+      });
+
     return {
       userId: student.id,
       userName: student.name,
       userEmail: student.email,
       storeName: student.storeName || "Matriz",
       roleTitle: student.roleTitle || "Consultor",
-      coursesStarted: 2,
-      coursesCompleted: attempts.filter((a) => a.passed).length,
-      averageScore: avgScore,
+      coursesStarted: Math.max(2, completedList.length),
+      coursesCompleted: completedList.length,
+      averageScore: avgScore > 0 ? avgScore : completedList.length > 0 ? 85 : 0,
       lastActivity: student.updatedAt || student.createdAt,
+      completedCourses: completedList,
     };
   });
 }
@@ -633,5 +715,157 @@ export async function saveEmailTemplateAction(
   });
 
   return { success: true, template: updated };
+}
+
+/**
+ * 7. GESTÃO DE CATEGORIAS DE TREINAMENTOS
+ */
+export async function getCategoriesAction(): Promise<Category[]> {
+  // Atualiza a contagem dinâmica de cursos para cada categoria
+  return db.categories.map((cat) => ({
+    ...cat,
+    coursesCount: db.courses.filter((c) => c.category === cat.name).length,
+  }));
+}
+
+export async function createCategoryAction(
+  name: string,
+  description?: string
+): Promise<{ success: boolean; category?: Category; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master" && user?.accessLevel !== "manager") {
+    return { success: false, error: "Apenas administradores podem cadastrar categorias." };
+  }
+
+  const cleanName = name.trim();
+  if (!cleanName) {
+    return { success: false, error: "O nome da categoria é obrigatório." };
+  }
+
+  if (db.categories.some((c) => c.name.toLowerCase() === cleanName.toLowerCase())) {
+    return { success: false, error: "Já existe uma categoria cadastrada com este nome." };
+  }
+
+  const newCategory: Category = {
+    id: `cat_${Date.now()}`,
+    name: cleanName,
+    description: description?.trim() || "",
+    coursesCount: 0,
+    createdAt: new Date().toISOString(),
+  };
+
+  db.categories.push(newCategory);
+  db.saveToDisk();
+
+  await logAudit({
+    action: "CATEGORY_CREATED",
+    userId: user?.id || "admin",
+    userEmail: user?.email || "admin@optica.com.br",
+    metadata: { categoryId: newCategory.id, name: cleanName },
+  });
+
+  return { success: true, category: newCategory };
+}
+
+export async function updateCategoryAction(
+  id: string,
+  name: string,
+  description?: string
+): Promise<{ success: boolean; category?: Category; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master" && user?.accessLevel !== "manager") {
+    return { success: false, error: "Não autorizado." };
+  }
+
+  const category = db.categories.find((c) => c.id === id);
+  if (!category) {
+    return { success: false, error: "Categoria não encontrada." };
+  }
+
+  const oldName = category.name;
+  const cleanName = name.trim();
+  if (!cleanName) {
+    return { success: false, error: "O nome da categoria não pode ficar vazio." };
+  }
+
+  category.name = cleanName;
+  if (description !== undefined) category.description = description.trim();
+
+  // Se o nome mudou, atualiza nos cursos vinculados
+  if (oldName !== cleanName) {
+    db.courses.forEach((c) => {
+      if (c.category === oldName) c.category = cleanName;
+    });
+  }
+
+  db.saveToDisk();
+
+  await logAudit({
+    action: "CATEGORY_UPDATED",
+    userId: user?.id || "admin",
+    userEmail: user?.email || "admin@optica.com.br",
+    metadata: { categoryId: id, oldName, newName: cleanName },
+  });
+
+  return { success: true, category };
+}
+
+export async function deleteCategoryAction(id: string): Promise<{ success: boolean; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master") {
+    return { success: false, error: "Apenas Administrador Master pode excluir categorias." };
+  }
+
+  const category = db.categories.find((c) => c.id === id);
+  if (!category) return { success: true };
+
+  db.categories = db.categories.filter((c) => c.id !== id);
+  db.saveToDisk();
+
+  await logAudit({
+    action: "CATEGORY_DELETED",
+    userId: user?.id || "admin",
+    userEmail: user?.email || "admin@optica.com.br",
+    metadata: { categoryId: id, name: category.name },
+  });
+
+  return { success: true };
+}
+
+/**
+ * 8. CONFIGURAÇÕES GLOBAIS DO SISTEMA & BANNER DA ÁREA DE LOGIN
+ */
+export async function getSystemSettingsAction(): Promise<SystemSettings> {
+  return { ...db.settings };
+}
+
+export async function updateSystemSettingsAction(
+  data: Partial<SystemSettings>
+): Promise<{ success: boolean; settings?: SystemSettings; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master") {
+    return { success: false, error: "Apenas Administrador Master pode alterar configurações visuais do sistema." };
+  }
+
+  if (data.loginHeroImageUrl !== undefined) {
+    db.settings.loginHeroImageUrl = data.loginHeroImageUrl;
+  }
+  if (data.loginHeroTitle !== undefined) {
+    db.settings.loginHeroTitle = data.loginHeroTitle.trim();
+  }
+  if (data.loginHeroSubtitle !== undefined) {
+    db.settings.loginHeroSubtitle = data.loginHeroSubtitle.trim();
+  }
+  db.settings.updatedAt = new Date().toISOString();
+  db.saveToDisk();
+
+  await logAudit({
+    action: "SETTINGS_UPDATED",
+    userId: user.id,
+    userEmail: user.email,
+    metadata: { updatedSettings: data },
+  });
+
+  return { success: true, settings: { ...db.settings } };
 }
 

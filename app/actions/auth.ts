@@ -333,6 +333,8 @@ export async function registerAction(data: {
     });
   }
 
+  db.saveToDisk();
+
   // Disparo de e-mail de boas-vindas / confirmação
   await sendWelcomeVerificationEmail(cleanEmail, newProfile.name);
 
@@ -409,6 +411,8 @@ export async function loginWithGoogleAction(googleData: {
         isEnabled: true,
       });
     }
+
+    db.saveToDisk();
 
     await logAudit({
       action: "USER_REGISTERED",
@@ -548,6 +552,8 @@ export async function updatePasswordAction(
     profile.updatedAt = new Date().toISOString();
   }
 
+  db.saveToDisk();
+
   await logAudit({
     action: "PASSWORD_RESET_COMPLETED",
     userEmail: cleanEmail,
@@ -619,6 +625,7 @@ export async function updateUserProfileAction(data: {
   if (data.address) profile.address = data.address.trim().toUpperCase();
   if (data.avatarUrl !== undefined) profile.avatarUrl = data.avatarUrl;
   profile.updatedAt = new Date().toISOString();
+  db.saveToDisk();
 
   await logAudit({
     action: "USER_UPDATED",

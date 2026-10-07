@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SignInPage, Testimonial } from "@/components/ui/sign-in";
 import { GoogleAuthModal } from "@/components/ui/google-auth-modal";
 import { loginAction, loginWithGoogleAction } from "@/app/actions/auth";
+import { getSystemSettingsAction } from "@/app/actions/admin";
+import { SystemSettings } from "@/types/database";
 
 const testimonials: Testimonial[] = [
   {
@@ -27,6 +29,13 @@ export default function SignInRoute() {
   const [loading, setLoading] = useState(false);
   const [googleModalOpen, setGoogleModalOpen] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [systemSettings, setSystemSettings] = useState<SystemSettings | null>(null);
+
+  useEffect(() => {
+    getSystemSettingsAction()
+      .then((data) => setSystemSettings(data))
+      .catch(() => {});
+  }, []);
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,7 +100,9 @@ export default function SignInRoute() {
           </span>
         }
         description="Entre com suas credenciais para acessar os módulos de capacitação das ópticas."
-        heroImageSrc="https://images.unsplash.com/photo-1591076482161-42ce6da69f68?q=80&w=1200&auto=format&fit=crop"
+        heroImageSrc={systemSettings?.loginHeroImageUrl || "https://images.unsplash.com/photo-1591076482161-42ce6da69f68?q=80&w=1200&auto=format&fit=crop"}
+        heroTitle={systemSettings?.loginHeroTitle}
+        heroSubtitle={systemSettings?.loginHeroSubtitle}
         testimonials={testimonials}
         onSignIn={handleSignIn}
         onGoogleSignIn={handleGoogleSignIn}

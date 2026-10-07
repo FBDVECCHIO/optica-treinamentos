@@ -19,6 +19,7 @@ import {
   ChevronLeft,
   ChevronRight,
   User,
+  Settings,
 } from "lucide-react";
 import { Profile } from "@/types/database";
 import { ThemeToggle } from "@/components/theme-provider";
@@ -95,6 +96,7 @@ export function AdminSidebar({ initialUser }: AdminSidebarProps) {
     { href: "/admin/reports", label: "Evolução & Notas", icon: BarChart3 },
     { href: "/admin/emails", label: "Métricas de E-mails", icon: Mail },
     { href: "/admin/messages", label: "Gestão de Mensagens", icon: MessageSquare },
+    { href: "/admin/settings", label: "Configurações", icon: Settings },
   ];
 
   if (currentUser?.accessLevel === "master") {

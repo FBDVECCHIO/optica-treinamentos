@@ -1,0 +1,1414 @@
+{
+  "stores": [
+    {
+      "id": "store_matriz",
+      "name": "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      "cnpj": "12.345.678/0001-95",
+      "address": "AV. PAULISTA, 1500 - BELA VISTA, SÃO PAULO - SP",
+      "active": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "store_filial1",
+      "name": "ÓPTICA SRL - FILIAL SHOPPING",
+      "cnpj": "12.345.678/0002-76",
+      "address": "SHOPPING METRÔ TAUBATÉ, LOJA 45",
+      "active": true,
+      "createdAt": "2026-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "store_franqueado",
+      "name": "ÓPTICA PARCEIRA MARIO NETO",
+      "cnpj": "98.765.432/0001-10",
+      "address": "RUA DO COMÉRCIO, 250 - CENTRO",
+      "active": true,
+      "createdAt": "2026-02-01T00:00:00.000Z"
+    },
+    {
+      "id": "store_campinas",
+      "name": "ÓPTICA SRL - FILIAL CAMPINAS SHOPPING",
+      "cnpj": "12.345.678/0002-76",
+      "address": "AV. JACY-PARANÁ, 500 - CAMPINAS - SP",
+      "phone": "(19) 3234-5678",
+      "active": true,
+      "createdAt": "2026-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "store_rj",
+      "name": "ÓPTICA SRL - FILIAL BARRA DA TIJUCA RJ",
+      "cnpj": "12.345.678/0003-57",
+      "address": "AV. DAS AMÉRICAS, 4666 - RIO DE JANEIRO - RJ",
+      "phone": "(21) 2430-9000",
+      "active": true,
+      "createdAt": "2026-01-20T00:00:00.000Z"
+    },
+    {
+      "id": "store_bh",
+      "name": "ÓPTICA SRL - FILIAL BELO HORIZONTE SAVASSI",
+      "cnpj": "12.345.678/0004-38",
+      "address": "RUA PERNAMBUCO, 1000 - BELO HORIZONTE - MG",
+      "phone": "(31) 3280-4000",
+      "active": true,
+      "createdAt": "2026-02-01T00:00:00.000Z"
+    }
+  ],
+  "roles": [
+    {
+      "id": "role_consultor",
+      "title": "CONSULTOR ÓPTICO / VENDEDOR",
+      "description": "Atendimento comercial no balcão, recomendação de armações e prescrição de lentes oftálmicas",
+      "isSystem": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "role_gerente",
+      "title": "GERENTE DE LOJA",
+      "description": "Gestão operacional, treinamento da equipe e acompanhamento de metas da filial",
+      "isSystem": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "role_optometrista",
+      "title": "OPTOMETRISTA / TÉCNICO ÓPTICO",
+      "description": "Avaliação refrativa, ergonomia visual e acompanhamento técnico de adaptação de lentes progressivas",
+      "isSystem": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "role_montador",
+      "title": "MONTADOR / LABORATÓRIO",
+      "description": "Bisotagem, montagem em armações solares e receituário, verificação no lensômetro",
+      "isSystem": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "role_master",
+      "title": "ADMINISTRADOR MASTER",
+      "description": "Gestão global da rede, cursos, auditoria e cadastros",
+      "isSystem": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "usr_fbdv",
+      "name": "FÁBIO B. DEL VECCHIO (ADMINISTRADOR MASTER)",
+      "email": "fbdv1202@gmail.com",
+      "cpf": "123.456.789-00",
+      "phone": "(11) 99999-8888",
+      "address": "AV. PAULISTA, 1500 - SÃO PAULO - SP",
+      "storeId": "store_matriz",
+      "storeName": "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      "storeCnpj": "12.345.678/0001-95",
+      "roleId": "role_master",
+      "roleTitle": "ADMINISTRADOR MASTER",
+      "accessLevel": "master",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-10-07T13:24:42.781Z"
+    },
+    {
+      "id": "usr_master",
+      "name": "MARIO NETO (ADMINISTRADOR MASTER)",
+      "email": "admin@optica.com.br",
+      "cpf": "111.222.333-44",
+      "phone": "(11) 98765-4321",
+      "address": "AV. PAULISTA, 1500 - SÃO PAULO - SP",
+      "storeId": "store_matriz",
+      "storeName": "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      "storeCnpj": "12.345.678/0001-95",
+      "roleId": "role_master",
+      "roleTitle": "ADMINISTRADOR MASTER",
+      "accessLevel": "master",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "usr_gerente",
+      "name": "CARLOS GERENTE DE FILIAL",
+      "email": "gerente@optica.com.br",
+      "cpf": "222.333.444-55",
+      "phone": "(11) 97777-8888",
+      "address": "RUA DAS FLORES, 120",
+      "storeId": "store_matriz",
+      "storeName": "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      "storeCnpj": "12.345.678/0001-95",
+      "roleId": "role_gerente",
+      "roleTitle": "GERENTE DE LOJA",
+      "accessLevel": "manager",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-02-01T00:00:00.000Z",
+      "updatedAt": "2026-02-01T00:00:00.000Z"
+    },
+    {
+      "id": "usr_aluno",
+      "name": "JULIANA CONSULTORA ÓPTICA",
+      "email": "aluno@optica.com.br",
+      "cpf": "333.444.555-66",
+      "phone": "(11) 96666-5555",
+      "address": "AV. BRASIL, 300",
+      "storeId": "store_matriz",
+      "storeName": "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      "storeCnpj": "12.345.678/0001-95",
+      "roleId": "role_consultor",
+      "roleTitle": "CONSULTOR ÓPTICO / VENDEDOR",
+      "accessLevel": "student",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-02-10T00:00:00.000Z",
+      "updatedAt": "2026-02-10T00:00:00.000Z"
+    },
+    {
+      "id": "usr_lucas",
+      "name": "LUCAS MENDONÇA",
+      "email": "lucas.mendonca@optica.com.br",
+      "cpf": "444.555.666-77",
+      "phone": "(19) 98111-2233",
+      "address": "RUA BARÃO DE ITAPURA, 400 - CAMPINAS - SP",
+      "storeId": "store_campinas",
+      "storeName": "ÓPTICA SRL - FILIAL CAMPINAS SHOPPING",
+      "storeCnpj": "12.345.678/0002-76",
+      "roleId": "role_consultor",
+      "roleTitle": "CONSULTOR ÓPTICO / VENDEDOR",
+      "accessLevel": "student",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-02-15T00:00:00.000Z",
+      "updatedAt": "2026-02-15T00:00:00.000Z"
+    },
+    {
+      "id": "usr_mariana",
+      "name": "MARIANA ALBUQUERQUE",
+      "email": "mariana.opt@optica.com.br",
+      "cpf": "555.666.777-88",
+      "phone": "(21) 99222-3344",
+      "address": "AV. ATLÂNTICA, 1200 - RIO DE JANEIRO - RJ",
+      "storeId": "store_rj",
+      "storeName": "ÓPTICA SRL - FILIAL BARRA DA TIJUCA RJ",
+      "storeCnpj": "12.345.678/0003-57",
+      "roleId": "role_optometrista",
+      "roleTitle": "OPTOMETRISTA / TÉCNICO ÓPTICO",
+      "accessLevel": "student",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-02-16T00:00:00.000Z",
+      "updatedAt": "2026-02-16T00:00:00.000Z"
+    },
+    {
+      "id": "usr_rodrigo",
+      "name": "RODRIGO SILVEIRA",
+      "email": "rodrigo.lab@optica.com.br",
+      "cpf": "666.777.888-99",
+      "phone": "(11) 97333-4455",
+      "address": "RUA DA CONSOLAÇÃO, 800 - SÃO PAULO - SP",
+      "storeId": "store_matriz",
+      "storeName": "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      "storeCnpj": "12.345.678/0001-95",
+      "roleId": "role_montador",
+      "roleTitle": "MONTADOR / LABORATÓRIO",
+      "accessLevel": "student",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-02-18T00:00:00.000Z",
+      "updatedAt": "2026-02-18T00:00:00.000Z"
+    },
+    {
+      "id": "usr_camila",
+      "name": "CAMILA ROCHA",
+      "email": "camila.vendas@optica.com.br",
+      "cpf": "777.888.999-00",
+      "phone": "(31) 98444-5566",
+      "address": "AV. AFONSO PENA, 2500 - BELO HORIZONTE - MG",
+      "storeId": "store_bh",
+      "storeName": "ÓPTICA SRL - FILIAL BELO HORIZONTE SAVASSI",
+      "storeCnpj": "12.345.678/0004-38",
+      "roleId": "role_consultor",
+      "roleTitle": "CONSULTOR ÓPTICO / VENDEDOR",
+      "accessLevel": "student",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-02-20T00:00:00.000Z",
+      "updatedAt": "2026-02-20T00:00:00.000Z"
+    },
+    {
+      "id": "usr_felipe",
+      "name": "FELIPE DINIZ",
+      "email": "felipe.gerente@optica.com.br",
+      "cpf": "888.999.000-11",
+      "phone": "(19) 97555-6677",
+      "address": "AV. JOSÉ DE SOUZA CAMPOS, 110 - CAMPINAS - SP",
+      "storeId": "store_campinas",
+      "storeName": "ÓPTICA SRL - FILIAL CAMPINAS SHOPPING",
+      "storeCnpj": "12.345.678/0002-76",
+      "roleId": "role_gerente",
+      "roleTitle": "GERENTE DE LOJA",
+      "accessLevel": "manager",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-02-22T00:00:00.000Z",
+      "updatedAt": "2026-02-22T00:00:00.000Z"
+    },
+    {
+      "id": "usr_beatriz",
+      "name": "BEATRIZ VASCONCELOS",
+      "email": "beatriz.vendas@optica.com.br",
+      "cpf": "999.000.111-22",
+      "phone": "(21) 98666-7788",
+      "address": "RUA VISCONDE DE PIRAJA, 300 - RIO DE JANEIRO - RJ",
+      "storeId": "store_rj",
+      "storeName": "ÓPTICA SRL - FILIAL BARRA DA TIJUCA RJ",
+      "storeCnpj": "12.345.678/0003-57",
+      "roleId": "role_consultor",
+      "roleTitle": "CONSULTOR ÓPTICO / VENDEDOR",
+      "accessLevel": "student",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-02-25T00:00:00.000Z",
+      "updatedAt": "2026-02-25T00:00:00.000Z"
+    },
+    {
+      "id": "usr_gustavo",
+      "name": "GUSTAVO PINHEIRO",
+      "email": "gustavo.lab@optica.com.br",
+      "cpf": "000.111.222-33",
+      "phone": "(31) 99777-8899",
+      "address": "RUA DA BAHIA, 1500 - BELO HORIZONTE - MG",
+      "storeId": "store_bh",
+      "storeName": "ÓPTICA SRL - FILIAL BELO HORIZONTE SAVASSI",
+      "storeCnpj": "12.345.678/0004-38",
+      "roleId": "role_montador",
+      "roleTitle": "MONTADOR / LABORATÓRIO",
+      "accessLevel": "student",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-03-01T00:00:00.000Z",
+      "updatedAt": "2026-03-01T00:00:00.000Z"
+    },
+    {
+      "id": "usr_larissa",
+      "name": "LARISSA FONTANA",
+      "email": "larissa.estilo@optica.com.br",
+      "cpf": "123.321.456-65",
+      "phone": "(11) 98888-9900",
+      "address": "RUA OSCAR FREIRE, 950 - SÃO PAULO - SP",
+      "storeId": "store_matriz",
+      "storeName": "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      "storeCnpj": "12.345.678/0001-95",
+      "roleId": "role_consultor",
+      "roleTitle": "CONSULTOR ÓPTICO / VENDEDOR",
+      "accessLevel": "student",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-03-05T00:00:00.000Z",
+      "updatedAt": "2026-03-05T00:00:00.000Z"
+    },
+    {
+      "id": "usr_1791374171927",
+      "name": "NOVO.GESTOR.MASTER",
+      "email": "novo.gestor.master@optica.com.br",
+      "cpf": "123.456.789-00",
+      "phone": "(11) 99999-9999",
+      "storeId": "store_matriz",
+      "storeName": "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      "storeCnpj": "12.345.678/0001-95",
+      "roleId": "role_master",
+      "roleTitle": "ADMINISTRADOR MASTER",
+      "accessLevel": "master",
+      "active": true,
+      "emailVerified": true,
+      "createdAt": "2026-10-07T11:56:11.927Z",
+      "updatedAt": "2026-10-07T13:24:42.793Z"
+    }
+  ],
+  "courses": [
+    {
+      "id": "course_gold_comfort",
+      "title": "Treinamento Comercial: Linha Gold Comfort IA",
+      "slug": "linha-gold-comfort-ia",
+      "description": "Capacitação completa sobre tecnologia de lentes multifocais digitais, campos visuais ampliados, tratamento antirreflexo e técnicas de venda de alto valor.",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1591076482161-42ce6da69f68?q=80&w=800&auto=format&fit=crop",
+      "pdfAttachmentUrl": "/TREINAMENTO_COMERCIAL_GOLD_COMFORT_IA.pdf",
+      "pdfAttachmentName": "Apostila Comercial Gold Comfort IA.pdf",
+      "isPublished": true,
+      "estimatedDurationMin": 180,
+      "modulesCount": 3,
+      "lessonsCount": 6,
+      "createdAt": "2026-01-10T00:00:00.000Z",
+      "updatedAt": "2026-01-10T00:00:00.000Z"
+    },
+    {
+      "id": "course_smartplay",
+      "title": "Guia Oficial Smartplay: Atendimento e Precisão Óptica",
+      "slug": "guia-smartplay-optica",
+      "description": "Manual operacional para consultores ópticos: tomada de medidas pupilares (DNP), altura de montagem, ajustes anatômicos de armação e pós-venda.",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?q=80&w=800&auto=format&fit=crop",
+      "pdfAttachmentUrl": "/GUIA SMARTPLAY.pdf",
+      "pdfAttachmentName": "Guia Oficial Smartplay Ópticas.pdf",
+      "isPublished": true,
+      "estimatedDurationMin": 120,
+      "modulesCount": 2,
+      "lessonsCount": 4,
+      "createdAt": "2026-01-15T00:00:00.000Z",
+      "updatedAt": "2026-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "course_fotossensiveis",
+      "title": "Especialização em Lentes Fotossensíveis & Filtro Azul",
+      "slug": "lentes-fotossensiveis-filtro-azul",
+      "description": "Dominando as moléculas termossensíveis de transição, bloqueio de UV400, atenuação de luz azul violeta nociva e argumentos de prescrição preventiva.",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=800&auto=format&fit=crop",
+      "pdfAttachmentUrl": "/APOSTILA_LENTES_FOTOSSENSIVEIS_2026.pdf",
+      "pdfAttachmentName": "Apostila Lentes Fotossensíveis 2026.pdf",
+      "category": "Lentes Fotossensíveis & Tratamentos",
+      "certificateEnabled": true,
+      "minScoreToPass": 70,
+      "certificateTemplateId": "3",
+      "certificateLocation": "São Paulo - SP",
+      "timelineStatus": "active",
+      "isPublished": true,
+      "estimatedDurationMin": 120,
+      "modulesCount": 2,
+      "lessonsCount": 4,
+      "createdAt": "2026-02-15T00:00:00.000Z",
+      "updatedAt": "2026-02-15T00:00:00.000Z"
+    },
+    {
+      "id": "course_bisotagem",
+      "title": "Técnicas Avançadas de Bisotagem & Montagem em Laboratório",
+      "slug": "tecnicas-bisotagem-montagem-laboratorio",
+      "description": "Parametrização de facetadoras CNC, faceta plana, mini-bisel, montagem fio de nylon (ranhura) e parafusadas (três peças), com controle de tensão por polariscópio.",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1508296695146-257a814070b4?q=80&w=800&auto=format&fit=crop",
+      "pdfAttachmentUrl": "/MANUAL_LABORATORIO_BISOTAGEM_2026.pdf",
+      "pdfAttachmentName": "Manual Laboratório Bisotagem 2026.pdf",
+      "category": "Laboratório & Montagem",
+      "certificateEnabled": true,
+      "minScoreToPass": 75,
+      "certificateTemplateId": "2",
+      "certificateLocation": "São Paulo - SP",
+      "timelineStatus": "active",
+      "isPublished": true,
+      "estimatedDurationMin": 150,
+      "modulesCount": 2,
+      "lessonsCount": 4,
+      "createdAt": "2026-02-20T00:00:00.000Z",
+      "updatedAt": "2026-02-20T00:00:00.000Z"
+    },
+    {
+      "id": "course_visagismo",
+      "title": "Atendimento Consultivo de Alto Padrão e Visagismo Óptico",
+      "slug": "atendimento-alto-padrao-visagismo",
+      "description": "Técnicas de consultoria de imagem facial, formatos de rostos (oval, quadrado, coração), harmonização de armações com tonalidade de pele e condução de negociações de luxo.",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=800&auto=format&fit=crop",
+      "pdfAttachmentUrl": "/GUIA_VISAGISMO_OPTICO_PREMIUM.pdf",
+      "pdfAttachmentName": "Guia Visagismo Óptico Premium.pdf",
+      "category": "Atendimento & Vendas",
+      "certificateEnabled": true,
+      "minScoreToPass": 70,
+      "certificateTemplateId": "5",
+      "certificateLocation": "São Paulo - SP",
+      "timelineStatus": "active",
+      "isPublished": true,
+      "estimatedDurationMin": 90,
+      "modulesCount": 2,
+      "lessonsCount": 4,
+      "createdAt": "2026-02-25T00:00:00.000Z",
+      "updatedAt": "2026-02-25T00:00:00.000Z"
+    }
+  ],
+  "modules": [
+    {
+      "id": "mod_gc_1",
+      "courseId": "course_gold_comfort",
+      "title": "Módulo 1: Fundamentos da Linha Gold Comfort",
+      "description": "Entenda o conceito de inteligência visual e os diferenciais da tecnologia Freeform.",
+      "orderIndex": 1,
+      "lessons": [
+        {
+          "id": "les_gc_101",
+          "moduleId": "mod_gc_1",
+          "title": "Aula 1: Apresentação da Linha e Conceito de Conforto Visual",
+          "description": "Visão panorâmica dos perfis de usuários e indicação de dioptrias.",
+          "videoProvider": "youtube",
+          "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+          "durationSeconds": 720,
+          "orderIndex": 1
+        },
+        {
+          "id": "les_gc_102",
+          "moduleId": "mod_gc_1",
+          "title": "Aula 2: Geometria de Lentes Progressivas Digitais",
+          "description": "Como a tecnologia de cálculo por IA elimina aberrações laterais.",
+          "videoProvider": "youtube",
+          "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+          "durationSeconds": 960,
+          "orderIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "mod_gc_2",
+      "courseId": "course_gold_comfort",
+      "title": "Módulo 2: Argumentação Comercial e Venda Consultiva",
+      "description": "Como encantar o cliente no balcão e demonstrar valor perceptível.",
+      "orderIndex": 2,
+      "lessons": [
+        {
+          "id": "les_gc_201",
+          "moduleId": "mod_gc_2",
+          "title": "Aula 1: Quebra de Objeções sobre Lentes Multifocais",
+          "description": "Superando o medo de adaptação e reforçando a garantia de satisfação.",
+          "videoProvider": "youtube",
+          "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+          "durationSeconds": 840,
+          "orderIndex": 1
+        },
+        {
+          "id": "les_gc_202",
+          "moduleId": "mod_gc_2",
+          "title": "Aula 2: Demonstração Prática com o Guia Smartplay",
+          "description": "O passo a passo para usar os mostruários e testes no balcão da ótica.",
+          "videoProvider": "youtube",
+          "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+          "durationSeconds": 900,
+          "orderIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "mod_foto_01",
+      "courseId": "course_fotossensiveis",
+      "title": "Módulo 1: Física dos Corantes Fotoquímicos",
+      "description": "Comportamento das moléculas sob diferentes intensidades UV e faixas térmicas.",
+      "order": 1,
+      "lessons": [
+        {
+          "id": "les_foto_01",
+          "moduleId": "mod_foto_01",
+          "title": "Ativação Rápida e Clareamento em Ambientes Fechados",
+          "description": "Entenda o ciclo dinâmico das lentes fotossensíveis modernas.",
+          "durationSec": 900,
+          "order": 1,
+          "videoProvider": "youtube",
+          "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "id": "les_foto_02",
+          "moduleId": "mod_foto_01",
+          "title": "Tecnologia Atrás do Para-brisa do Veículo",
+          "description": "Soluções foto polarizadas para motoristas e bloqueio de reflexos de asfalto.",
+          "durationSec": 1050,
+          "order": 2,
+          "videoProvider": "mp4",
+          "videoUrl": "/videos/aula-fotossensivel-veicular.mp4"
+        }
+      ]
+    },
+    {
+      "id": "mod_biso_01",
+      "courseId": "course_bisotagem",
+      "title": "Módulo 1: Calibração de Equipamentos CNC e Traçado 3D",
+      "description": "Leitura de aro óptico digital e compensação de curvatura de base da lente.",
+      "order": 1,
+      "lessons": [
+        {
+          "id": "les_biso_01",
+          "moduleId": "mod_biso_01",
+          "title": "Aferição de Faceta e Centralização de Eixo Astigmático",
+          "description": "Evitando torção de eixo cilíndrico durante o travamento da ventosa.",
+          "durationSec": 1200,
+          "order": 1,
+          "videoProvider": "youtube",
+          "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "id": "les_biso_02",
+          "moduleId": "mod_biso_01",
+          "title": "Controle de Tensões com Polariscópio",
+          "description": "Garantindo zero birrefringência e quebra prematura de lentes em policarbonato.",
+          "durationSec": 1100,
+          "order": 2,
+          "videoProvider": "mp4",
+          "videoUrl": "/videos/aula-polariscopio-montagem.mp4"
+        }
+      ]
+    },
+    {
+      "id": "mod_visag_01",
+      "courseId": "course_visagismo",
+      "title": "Módulo 1: Visagismo Óptico e Formatos Anatômicos",
+      "description": "Identificação da proporção áurea facial e harmonização com formatos de ponte e aro.",
+      "order": 1,
+      "lessons": [
+        {
+          "id": "les_visag_01",
+          "moduleId": "mod_visag_01",
+          "title": "Rostos Angulares vs Arredondados: Escolha Perfeita da Armação",
+          "description": "Como criar equilíbrio estético e realçar o olhar do cliente.",
+          "durationSec": 980,
+          "order": 1,
+          "videoProvider": "youtube",
+          "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }
+      ]
+    }
+  ],
+  "lessonProgress": [
+    {
+      "userId": "usr_aluno",
+      "lessonId": "les_gc_101",
+      "completed": true,
+      "completedAt": "2026-02-11T00:00:00.000Z"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "quiz_gold_comfort",
+      "courseId": "course_gold_comfort",
+      "title": "Avaliação de Certificação: Linha Gold Comfort IA",
+      "minScoreToPass": 70,
+      "questions": [
+        {
+          "id": "q1",
+          "quizId": "quiz_gold_comfort",
+          "questionText": "Qual é o principal benefício da tecnologia digital Freeform na Linha Gold Comfort?",
+          "type": "multiple_choice",
+          "orderIndex": 1,
+          "points": 25,
+          "options": [
+            {
+              "id": "A",
+              "text": "Diminuição do custo da armação"
+            },
+            {
+              "id": "B",
+              "text": "Redução de aberrações periféricas e amplitude de campo de visão perto e longe"
+            },
+            {
+              "id": "C",
+              "text": "Apenas coloração mais escura em ambientes externos"
+            },
+            {
+              "id": "D",
+              "text": "Eliminação total de necessidade de tomada de medidas pupilares"
+            }
+          ],
+          "correctAnswer": "B"
+        },
+        {
+          "id": "q2",
+          "quizId": "quiz_gold_comfort",
+          "questionText": "Para qual perfil de paciente as lentes Gold Comfort são prioritariamente recomendadas?",
+          "type": "multiple_choice",
+          "orderIndex": 2,
+          "points": 25,
+          "options": [
+            {
+              "id": "A",
+              "text": "Apenas crianças menores de 10 anos"
+            },
+            {
+              "id": "B",
+              "text": "Usuários présbitas que necessitam de visão nítida contínua (perto, intermediário e longe)"
+            },
+            {
+              "id": "C",
+              "text": "Somente para prática de esportes aquáticos"
+            },
+            {
+              "id": "D",
+              "text": "Pacientes sem nenhuma queixa de visão cansada"
+            }
+          ],
+          "correctAnswer": "B"
+        },
+        {
+          "id": "q3",
+          "quizId": "quiz_gold_comfort",
+          "questionText": "Explique com suas palavras como você abordaria um cliente receoso de usar lentes multifocais, utilizando os diferenciais da Gold Comfort IA.",
+          "type": "dissertative",
+          "orderIndex": 3,
+          "points": 50,
+          "rubricKeywords": [
+            "adaptação",
+            "campo de visão",
+            "inteligência",
+            "suavidade",
+            "garantia",
+            "conforto",
+            "distorção"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quiz_fotossensiveis",
+      "courseId": "course_fotossensiveis",
+      "title": "Avaliação Oficial: Lentes Fotossensíveis & Luz Azul",
+      "description": "Teste final para obtenção da Certificação Safira Tech.",
+      "minScoreToPass": 70,
+      "questions": [
+        {
+          "id": "q_foto_1",
+          "text": "Qual fator ambiental acelera o retorno das lentes fotossensíveis ao estado transparente?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Temperatura elevada (calor)"
+            },
+            {
+              "id": "opt_2",
+              "text": "Radiação ultravioleta intensa"
+            },
+            {
+              "id": "opt_3",
+              "text": "Alta umidade do ar"
+            },
+            {
+              "id": "opt_4",
+              "text": "Luz de telas LED"
+            }
+          ],
+          "correctOptionId": "opt_1"
+        },
+        {
+          "id": "q_foto_2",
+          "text": "Por que as lentes fotossensíveis convencionais clareiam menos dentro de automóveis?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "O ar condicionado bloqueia a ativação"
+            },
+            {
+              "id": "opt_b",
+              "text": "O para-brisa filtra grande parte da radiação UV necessária à ativação"
+            },
+            {
+              "id": "opt_c",
+              "text": "A velocidade do veículo dispersa os fótons"
+            },
+            {
+              "id": "opt_d",
+              "text": "A luz interna do carro neutraliza a matriz química"
+            }
+          ],
+          "correctOptionId": "opt_b"
+        }
+      ]
+    },
+    {
+      "id": "quiz_bisotagem",
+      "courseId": "course_bisotagem",
+      "title": "Avaliação Técnica: Montagem de Laboratório & CNC",
+      "description": "Avaliação prática e teórica de conformidade técnica SRL.",
+      "minScoreToPass": 75,
+      "questions": [
+        {
+          "id": "q_biso_1",
+          "text": "Qual equipamento óptico é essencial para detectar pontos de estresse e tensão após a montagem?",
+          "options": [
+            {
+              "id": "opt_1",
+              "text": "Pupilômetro Digital"
+            },
+            {
+              "id": "opt_2",
+              "text": "Polariscópio"
+            },
+            {
+              "id": "opt_3",
+              "text": "Espessímetro mecânico"
+            },
+            {
+              "id": "opt_4",
+              "text": "Ceratômetro de Javal"
+            }
+          ],
+          "correctOptionId": "opt_2"
+        },
+        {
+          "id": "q_biso_2",
+          "text": "Para armações parafusadas (três peças), qual material de lente é o mais recomendado devido à alta resistência a impacto e furação?",
+          "options": [
+            {
+              "id": "opt_a",
+              "text": "CR-39 (Resina comum 1.499)"
+            },
+            {
+              "id": "opt_b",
+              "text": "Trivex ou Policarbonato"
+            },
+            {
+              "id": "opt_c",
+              "text": "Cristal mineral 1.70"
+            },
+            {
+              "id": "opt_d",
+              "text": "Acrílico simples"
+            }
+          ],
+          "correctOptionId": "opt_b"
+        }
+      ]
+    }
+  ],
+  "quizAttempts": [
+    {
+      "id": "qa_usr_mariana_quiz_fotossensiveis",
+      "userId": "usr_mariana",
+      "quizId": "quiz_fotossensiveis",
+      "score": 95,
+      "passed": true,
+      "attemptedAt": "2026-03-01T15:00:00.000Z"
+    },
+    {
+      "id": "qa_usr_mariana_quiz_gold_comfort",
+      "userId": "usr_mariana",
+      "quizId": "quiz_gold_comfort",
+      "score": 90,
+      "passed": true,
+      "attemptedAt": "2026-03-01T15:00:00.000Z"
+    },
+    {
+      "id": "qa_usr_lucas_quiz_gold_comfort",
+      "userId": "usr_lucas",
+      "quizId": "quiz_gold_comfort",
+      "score": 85,
+      "passed": true,
+      "attemptedAt": "2026-03-01T15:00:00.000Z"
+    },
+    {
+      "id": "qa_usr_lucas_quiz_visagismo",
+      "userId": "usr_lucas",
+      "quizId": "quiz_visagismo",
+      "score": 80,
+      "passed": true,
+      "attemptedAt": "2026-03-01T15:00:00.000Z"
+    },
+    {
+      "id": "qa_usr_rodrigo_quiz_bisotagem",
+      "userId": "usr_rodrigo",
+      "quizId": "quiz_bisotagem",
+      "score": 100,
+      "passed": true,
+      "attemptedAt": "2026-03-01T15:00:00.000Z"
+    },
+    {
+      "id": "qa_usr_camila_quiz_gold_comfort",
+      "userId": "usr_camila",
+      "quizId": "quiz_gold_comfort",
+      "score": 88,
+      "passed": true,
+      "attemptedAt": "2026-03-01T15:00:00.000Z"
+    },
+    {
+      "id": "qa_usr_beatriz_quiz_visagismo",
+      "userId": "usr_beatriz",
+      "quizId": "quiz_visagismo",
+      "score": 92,
+      "passed": true,
+      "attemptedAt": "2026-03-01T15:00:00.000Z"
+    },
+    {
+      "id": "qa_usr_gustavo_quiz_bisotagem",
+      "userId": "usr_gustavo",
+      "quizId": "quiz_bisotagem",
+      "score": 85,
+      "passed": true,
+      "attemptedAt": "2026-03-01T15:00:00.000Z"
+    },
+    {
+      "id": "qa_usr_larissa_quiz_visagismo",
+      "userId": "usr_larissa",
+      "quizId": "quiz_visagismo",
+      "score": 96,
+      "passed": true,
+      "attemptedAt": "2026-03-01T15:00:00.000Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "log_1791379482792_af6ho",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "PASSWORD_RESET_COMPLETED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "success": true,
+        "accessLevel": "master"
+      },
+      "createdAt": "2026-10-07T13:24:42.792Z"
+    },
+    {
+      "id": "log_1791379476801_ffw55",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_DELETED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791379476746",
+        "name": "Design de Armações & Visagismo Óptico"
+      },
+      "createdAt": "2026-10-07T13:24:36.801Z"
+    },
+    {
+      "id": "log_1791379476782_c7qjl",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791379476746",
+        "oldName": "Design de Armações & Estilo",
+        "newName": "Design de Armações & Visagismo Óptico"
+      },
+      "createdAt": "2026-10-07T13:24:36.782Z"
+    },
+    {
+      "id": "log_1791379476759_st37i",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_CREATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791379476746",
+        "name": "Design de Armações & Estilo"
+      },
+      "createdAt": "2026-10-07T13:24:36.759Z"
+    },
+    {
+      "id": "log_1791379472321_a3c5e",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "COURSE_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "courseId": "course_1791379472262",
+        "changes": {
+          "title": "Treinamento Antirreflexo Premium (Edição 2026)",
+          "estimatedDurationMin": 120
+        }
+      },
+      "createdAt": "2026-10-07T13:24:32.321Z"
+    },
+    {
+      "id": "log_1791379472299_hka0z",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "COURSE_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "courseId": "course_1791379472262",
+        "structureSaved": true,
+        "modulesCount": 1,
+        "lessonsCount": 2
+      },
+      "createdAt": "2026-10-07T13:24:32.299Z"
+    },
+    {
+      "id": "log_1791379472275_xbv51",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "COURSE_CREATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "courseId": "course_1791379472262",
+        "title": "Treinamento de Lentes Antirreflexo Premium"
+      },
+      "createdAt": "2026-10-07T13:24:32.275Z"
+    },
+    {
+      "id": "log_1791374171926_acfvt",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "PASSWORD_RESET_COMPLETED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "success": true,
+        "accessLevel": "master"
+      },
+      "createdAt": "2026-10-07T11:56:11.926Z"
+    },
+    {
+      "id": "log_1791374163072_hgwy6",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_DELETED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791374163018",
+        "name": "Design de Armações & Visagismo Óptico"
+      },
+      "createdAt": "2026-10-07T11:56:03.072Z"
+    },
+    {
+      "id": "log_1791374163051_oqoq8",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791374163018",
+        "oldName": "Design de Armações & Estilo",
+        "newName": "Design de Armações & Visagismo Óptico"
+      },
+      "createdAt": "2026-10-07T11:56:03.051Z"
+    },
+    {
+      "id": "log_1791374163030_ixlnp",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_CREATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791374163018",
+        "name": "Design de Armações & Estilo"
+      },
+      "createdAt": "2026-10-07T11:56:03.030Z"
+    },
+    {
+      "id": "log_1791374160840_7haoo",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "COURSE_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "courseId": "course_1791374160781",
+        "changes": {
+          "title": "Treinamento Antirreflexo Premium (Edição 2026)",
+          "estimatedDurationMin": 120
+        }
+      },
+      "createdAt": "2026-10-07T11:56:00.840Z"
+    },
+    {
+      "id": "log_1791374160820_xfi76",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "COURSE_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "courseId": "course_1791374160781",
+        "structureSaved": true,
+        "modulesCount": 1,
+        "lessonsCount": 2
+      },
+      "createdAt": "2026-10-07T11:56:00.820Z"
+    },
+    {
+      "id": "log_1791374160795_xroxs",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "COURSE_CREATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "courseId": "course_1791374160781",
+        "title": "Treinamento de Lentes Antirreflexo Premium"
+      },
+      "createdAt": "2026-10-07T11:56:00.795Z"
+    },
+    {
+      "id": "log_1791374084832_byxgv",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_DELETED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791374084647",
+        "name": "Design de Armações & Visagismo Óptico"
+      },
+      "createdAt": "2026-10-07T11:54:44.832Z"
+    },
+    {
+      "id": "log_1791374084780_pnud4",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791374084647",
+        "oldName": "Design de Armações & Estilo",
+        "newName": "Design de Armações & Visagismo Óptico"
+      },
+      "createdAt": "2026-10-07T11:54:44.780Z"
+    },
+    {
+      "id": "log_1791374084709_6k8wy",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_CREATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791374084647",
+        "name": "Design de Armações & Estilo"
+      },
+      "createdAt": "2026-10-07T11:54:44.709Z"
+    },
+    {
+      "id": "log_1791373037194_364ui",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_DELETED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791373037140",
+        "name": "Design de Armações & Visagismo Óptico"
+      },
+      "createdAt": "2026-10-07T11:37:17.194Z"
+    },
+    {
+      "id": "log_1791373037175_px0sq",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791373037140",
+        "oldName": "Design de Armações & Estilo",
+        "newName": "Design de Armações & Visagismo Óptico"
+      },
+      "createdAt": "2026-10-07T11:37:17.175Z"
+    },
+    {
+      "id": "log_1791373037151_uvtui",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_CREATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791373037140",
+        "name": "Design de Armações & Estilo"
+      },
+      "createdAt": "2026-10-07T11:37:17.151Z"
+    },
+    {
+      "id": "log_init_01",
+      "userId": "usr_master",
+      "userEmail": "admin@optica.com.br",
+      "action": "USER_REGISTERED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "A.T.L.A.S. System Init",
+      "metadata": {
+        "role": "ADMINISTRADOR MASTER",
+        "systemInit": true
+      },
+      "createdAt": "2026-01-01T08:00:00.000Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat_multifocais",
+      "name": "Lentes Multifocais",
+      "description": "Geometrias progressivas, campos visuais ampliados e personalização digital Freeform.",
+      "coursesCount": 1,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "cat_tecnologia",
+      "name": "Tratamentos & Tecnologia",
+      "description": "Camadas antirreflexo de alta durabilidade, proteção UV400, luz azul e fotossensíveis.",
+      "coursesCount": 1,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "cat_comercial",
+      "name": "Atendimento & Venda Consultiva",
+      "description": "Técnicas de abordagem, sondagem de necessidades e superação de objeções no balcão.",
+      "coursesCount": 1,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "cat_optometria",
+      "name": "Optometria & Medidas Ópticas",
+      "description": "Tomada precisa de DNP, altura pupilar, ângulo pantoscópico e ergonomia visual.",
+      "coursesCount": 1,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "cat_laboratorio",
+      "name": "Laboratório & Montagem",
+      "description": "Bisotagem, montagem em armações especiais, verificação no lensômetro e controle de qualidade.",
+      "coursesCount": 1,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "settings": {
+    "loginHeroImageUrl": "https://images.unsplash.com/custom-test-image.jpg",
+    "loginHeroTitle": "Treinamento Exclusivo Rede Óptica 2026",
+    "loginHeroSubtitle": "Aumente a conversão de lentes de valor agregado, elimine erros de adaptação e garanta a satisfação do cliente da ótica.",
+    "updatedAt": "2026-10-07T13:24:36.802Z"
+  },
+  "certificates": [
+    {
+      "id": "cert_aluno_gc_01",
+      "userId": "usr_aluno",
+      "userName": "JULIANA CONSULTORA ÓPTICA",
+      "courseId": "course_gold_comfort",
+      "courseTitle": "Treinamento Comercial: Linha Gold Comfort IA",
+      "category": "Lentes Multifocais",
+      "templateId": "1",
+      "location": "São Paulo - SP",
+      "score": 85,
+      "issuedAt": "2026-02-15T14:30:00.000Z",
+      "verificationCode": "SRL-CERT-2026-GC85"
+    },
+    {
+      "id": "cert_mariana_foto",
+      "userId": "usr_mariana",
+      "userName": "MARIANA ALBUQUERQUE",
+      "courseId": "course_fotossensiveis",
+      "courseTitle": "Especialização em Lentes Fotossensíveis & Filtro Azul",
+      "category": "Lentes Fotossensíveis & Tratamentos",
+      "templateId": "3",
+      "location": "Rio de Janeiro - RJ",
+      "score": 95,
+      "issuedAt": "2026-03-01T16:10:00.000Z",
+      "verificationCode": "SRL-CERT-2026-FT95"
+    },
+    {
+      "id": "cert_lucas_gc",
+      "userId": "usr_lucas",
+      "userName": "LUCAS MENDONÇA",
+      "courseId": "course_gold_comfort",
+      "courseTitle": "Treinamento Comercial: Linha Gold Comfort IA",
+      "category": "Lentes Multifocais",
+      "templateId": "1",
+      "location": "Campinas - SP",
+      "score": 85,
+      "issuedAt": "2026-03-02T11:00:00.000Z",
+      "verificationCode": "SRL-CERT-2026-LM85"
+    },
+    {
+      "id": "cert_rodrigo_biso",
+      "userId": "usr_rodrigo",
+      "userName": "RODRIGO SILVEIRA",
+      "courseId": "course_bisotagem",
+      "courseTitle": "Técnicas Avançadas de Bisotagem & Montagem em Laboratório",
+      "category": "Laboratório & Montagem",
+      "templateId": "2",
+      "location": "São Paulo - SP",
+      "score": 100,
+      "issuedAt": "2026-03-03T17:30:00.000Z",
+      "verificationCode": "SRL-CERT-2026-RS100"
+    },
+    {
+      "id": "cert_camila_gc",
+      "userId": "usr_camila",
+      "userName": "CAMILA ROCHA",
+      "courseId": "course_gold_comfort",
+      "courseTitle": "Treinamento Comercial: Linha Gold Comfort IA",
+      "category": "Lentes Multifocais",
+      "templateId": "4",
+      "location": "Belo Horizonte - MG",
+      "score": 88,
+      "issuedAt": "2026-03-04T14:20:00.000Z",
+      "verificationCode": "SRL-CERT-2026-CR88"
+    },
+    {
+      "id": "cert_larissa_visag",
+      "userId": "usr_larissa",
+      "userName": "LARISSA FONTANA",
+      "courseId": "course_visagismo",
+      "courseTitle": "Atendimento Consultivo de Alto Padrão e Visagismo Óptico",
+      "category": "Atendimento & Vendas",
+      "templateId": "5",
+      "location": "São Paulo - SP",
+      "score": 96,
+      "issuedAt": "2026-03-05T18:00:00.000Z",
+      "verificationCode": "SRL-CERT-2026-LF96"
+    },
+    {
+      "id": "cert_beatriz_visag",
+      "userId": "usr_beatriz",
+      "userName": "BEATRIZ VASCONCELOS",
+      "courseId": "course_visagismo",
+      "courseTitle": "Atendimento Consultivo de Alto Padrão e Visagismo Óptico",
+      "category": "Atendimento & Vendas",
+      "templateId": "1",
+      "location": "Rio de Janeiro - RJ",
+      "score": 92,
+      "issuedAt": "2026-03-06T12:00:00.000Z",
+      "verificationCode": "SRL-CERT-2026-BV92"
+    },
+    {
+      "id": "cert_gustavo_biso",
+      "userId": "usr_gustavo",
+      "userName": "GUSTAVO PINHEIRO",
+      "courseId": "course_bisotagem",
+      "courseTitle": "Técnicas Avançadas de Bisotagem & Montagem em Laboratório",
+      "category": "Laboratório & Montagem",
+      "templateId": "2",
+      "location": "Belo Horizonte - MG",
+      "score": 85,
+      "issuedAt": "2026-03-07T15:45:00.000Z",
+      "verificationCode": "SRL-CERT-2026-GP85"
+    }
+  ],
+  "userCredentials": {
+    "admin@optica.com.br": "MasterOptica2026!",
+    "fbdv1202@gmail.com": "@180414Fs",
+    "gerente@optica.com.br": "gerente123",
+    "aluno@optica.com.br": "aluno123",
+    "novo.gestor.master@optica.com.br": "SenhaMaster123!"
+  },
+  "userCourses": [
+    {
+      "userId": "usr_fbdv",
+      "courseId": "course_gold_comfort",
+      "isEnabled": true
+    },
+    {
+      "userId": "usr_fbdv",
+      "courseId": "course_smartplay",
+      "isEnabled": true
+    },
+    {
+      "userId": "usr_master",
+      "courseId": "course_gold_comfort",
+      "isEnabled": true
+    },
+    {
+      "userId": "usr_master",
+      "courseId": "course_smartplay",
+      "isEnabled": true
+    },
+    {
+      "userId": "usr_gerente",
+      "courseId": "course_gold_comfort",
+      "isEnabled": true
+    },
+    {
+      "userId": "usr_gerente",
+      "courseId": "course_smartplay",
+      "isEnabled": true
+    },
+    {
+      "userId": "usr_aluno",
+      "courseId": "course_gold_comfort",
+      "isEnabled": true
+    },
+    {
+      "userId": "usr_aluno",
+      "courseId": "course_smartplay",
+      "isEnabled": true
+    },
+    {
+      "userId": "usr_mariana",
+      "courseId": "course_fotossensiveis",
+      "status": "completed",
+      "progressPercent": 100,
+      "id": "uc_usr_mariana_course_fotossensiveis",
+      "startedAt": "2026-02-20T10:00:00.000Z",
+      "completedAt": "2026-03-01T16:00:00.000Z"
+    },
+    {
+      "userId": "usr_mariana",
+      "courseId": "course_gold_comfort",
+      "status": "completed",
+      "progressPercent": 100,
+      "id": "uc_usr_mariana_course_gold_comfort",
+      "startedAt": "2026-02-20T10:00:00.000Z",
+      "completedAt": "2026-03-01T16:00:00.000Z"
+    },
+    {
+      "userId": "usr_lucas",
+      "courseId": "course_gold_comfort",
+      "status": "completed",
+      "progressPercent": 100,
+      "id": "uc_usr_lucas_course_gold_comfort",
+      "startedAt": "2026-02-20T10:00:00.000Z",
+      "completedAt": "2026-03-01T16:00:00.000Z"
+    },
+    {
+      "userId": "usr_lucas",
+      "courseId": "course_visagismo",
+      "status": "completed",
+      "progressPercent": 100,
+      "id": "uc_usr_lucas_course_visagismo",
+      "startedAt": "2026-02-20T10:00:00.000Z",
+      "completedAt": "2026-03-01T16:00:00.000Z"
+    },
+    {
+      "userId": "usr_rodrigo",
+      "courseId": "course_bisotagem",
+      "status": "completed",
+      "progressPercent": 100,
+      "id": "uc_usr_rodrigo_course_bisotagem",
+      "startedAt": "2026-02-20T10:00:00.000Z",
+      "completedAt": "2026-03-01T16:00:00.000Z"
+    },
+    {
+      "userId": "usr_camila",
+      "courseId": "course_gold_comfort",
+      "status": "completed",
+      "progressPercent": 100,
+      "id": "uc_usr_camila_course_gold_comfort",
+      "startedAt": "2026-02-20T10:00:00.000Z",
+      "completedAt": "2026-03-01T16:00:00.000Z"
+    },
+    {
+      "userId": "usr_camila",
+      "courseId": "course_fotossensiveis",
+      "status": "in_progress",
+      "progressPercent": 65,
+      "id": "uc_usr_camila_course_fotossensiveis",
+      "startedAt": "2026-02-20T10:00:00.000Z"
+    },
+    {
+      "userId": "usr_beatriz",
+      "courseId": "course_visagismo",
+      "status": "completed",
+      "progressPercent": 100,
+      "id": "uc_usr_beatriz_course_visagismo",
+      "startedAt": "2026-02-20T10:00:00.000Z",
+      "completedAt": "2026-03-01T16:00:00.000Z"
+    },
+    {
+      "userId": "usr_gustavo",
+      "courseId": "course_bisotagem",
+      "status": "completed",
+      "progressPercent": 100,
+      "id": "uc_usr_gustavo_course_bisotagem",
+      "startedAt": "2026-02-20T10:00:00.000Z",
+      "completedAt": "2026-03-01T16:00:00.000Z"
+    },
+    {
+      "userId": "usr_larissa",
+      "courseId": "course_visagismo",
+      "status": "completed",
+      "progressPercent": 100,
+      "id": "uc_usr_larissa_course_visagismo",
+      "startedAt": "2026-02-20T10:00:00.000Z",
+      "completedAt": "2026-03-01T16:00:00.000Z"
+    },
+    {
+      "userId": "usr_felipe",
+      "courseId": "course_gold_comfort",
+      "status": "in_progress",
+      "progressPercent": 50,
+      "id": "uc_usr_felipe_course_gold_comfort",
+      "startedAt": "2026-02-20T10:00:00.000Z"
+    }
+  ]
+}

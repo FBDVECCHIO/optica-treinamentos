@@ -48,6 +48,10 @@ export interface Course {
   category?: string;
   certificateEnabled?: boolean;
   minScoreToPass?: number;
+  certificateTemplateId?: string;
+  certificateCustomLogoUrl?: string;
+  certificateCustomBgUrl?: string;
+  certificateLocation?: string;
   timelineStatus?: "draft" | "active" | "archived";
   isPublished: boolean;
   estimatedDurationMin: number;
@@ -136,9 +140,43 @@ export interface AuditLog {
     | "SETTINGS_UPDATED"
     | "COURSE_CREATED"
     | "COURSE_UPDATED"
-    | "COURSE_DELETED";
+    | "COURSE_DELETED"
+    | "CATEGORY_CREATED"
+    | "CATEGORY_UPDATED"
+    | "CATEGORY_DELETED";
   ipAddress?: string;
   userAgent?: string;
   metadata?: Record<string, unknown>;
   createdAt: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  description?: string;
+  coursesCount?: number;
+  createdAt: string;
+}
+
+export interface SystemSettings {
+  loginHeroImageUrl?: string;
+  loginHeroTitle?: string;
+  loginHeroSubtitle?: string;
+  updatedAt: string;
+}
+
+export interface IssuedCertificate {
+  id: string;
+  userId: string;
+  userName: string;
+  courseId: string;
+  courseTitle: string;
+  category?: string;
+  templateId: string;
+  location: string;
+  customLogoUrl?: string;
+  customBgUrl?: string;
+  score: number;
+  issuedAt: string;
+  verificationCode: string;
 }

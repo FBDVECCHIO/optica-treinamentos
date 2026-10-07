@@ -1,6 +1,19 @@
-import { Store, Role, Profile, Course, Module, Lesson, Quiz, QuizAttempt, AuditLog } from "@/types/database";
+import {
+  Store,
+  Role,
+  Profile,
+  Course,
+  Module,
+  Lesson,
+  Quiz,
+  QuizAttempt,
+  AuditLog,
+  Category,
+  SystemSettings,
+  IssuedCertificate,
+} from "@/types/database";
 
-// In-Memory & Local Database Store with Pre-Seeded Optical Data
+// In-Memory & Local Database Store with Pre-Seeded Optical Data & Disk Persistence
 class DatabaseStore {
   public stores: Store[] = [
     {
@@ -325,6 +338,70 @@ class DatabaseStore {
     },
   ];
 
+  // Categorias de Treinamentos Cadastradas
+  public categories: Category[] = [
+    {
+      id: "cat_multifocais",
+      name: "Lentes Multifocais",
+      description: "Geometrias progressivas, campos visuais ampliados e personalização digital Freeform.",
+      coursesCount: 1,
+      createdAt: new Date("2026-01-01").toISOString(),
+    },
+    {
+      id: "cat_tecnologia",
+      name: "Tratamentos & Tecnologia",
+      description: "Camadas antirreflexo de alta durabilidade, proteção UV400, luz azul e fotossensíveis.",
+      coursesCount: 1,
+      createdAt: new Date("2026-01-01").toISOString(),
+    },
+    {
+      id: "cat_comercial",
+      name: "Atendimento & Venda Consultiva",
+      description: "Técnicas de abordagem, sondagem de necessidades e superação de objeções no balcão.",
+      coursesCount: 1,
+      createdAt: new Date("2026-01-01").toISOString(),
+    },
+    {
+      id: "cat_optometria",
+      name: "Optometria & Medidas Ópticas",
+      description: "Tomada precisa de DNP, altura pupilar, ângulo pantoscópico e ergonomia visual.",
+      coursesCount: 1,
+      createdAt: new Date("2026-01-01").toISOString(),
+    },
+    {
+      id: "cat_laboratorio",
+      name: "Laboratório & Montagem",
+      description: "Bisotagem, montagem em armações especiais, verificação no lensômetro e controle de qualidade.",
+      coursesCount: 1,
+      createdAt: new Date("2026-01-01").toISOString(),
+    },
+  ];
+
+  // Configurações Globais do Sistema (Área de Login e Identidade Visual)
+  public settings: SystemSettings = {
+    loginHeroImageUrl: "https://images.unsplash.com/photo-1591076482161-42ce6da69f68?q=80&w=1200&auto=format&fit=crop",
+    loginHeroTitle: "Capacitação Técnica de Alta Performance",
+    loginHeroSubtitle: "Aumente a conversão de lentes de valor agregado, elimine erros de adaptação e garanta a satisfação do cliente da ótica.",
+    updatedAt: new Date("2026-01-01").toISOString(),
+  };
+
+  // Certificados Oficiais Emitidos
+  public certificates: IssuedCertificate[] = [
+    {
+      id: "cert_aluno_gc_01",
+      userId: "usr_aluno",
+      userName: "JULIANA CONSULTORA ÓPTICA",
+      courseId: "course_gold_comfort",
+      courseTitle: "Treinamento Comercial: Linha Gold Comfort IA",
+      category: "Lentes Multifocais",
+      templateId: "1",
+      location: "São Paulo - SP",
+      score: 85,
+      issuedAt: new Date("2026-02-15T14:30:00Z").toISOString(),
+      verificationCode: "SRL-CERT-2026-GC85",
+    },
+  ];
+
   public quizAttempts: QuizAttempt[] = [];
 
   // Logs de Auditoria do Sistema
@@ -340,6 +417,83 @@ class DatabaseStore {
       createdAt: new Date("2026-01-01T08:00:00Z").toISOString(),
     },
   ];
+
+  constructor() {
+    this.loadFromDisk();
+  }
+
+  /**
+   * Salva o estado atual do banco de dados no disco rígido para evitar perda em F5/Ctrl+F5
+   */
+  public saveToDisk(): void {
+    if (typeof window !== "undefined") return;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const fs = require("fs");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const path = require("path");
+      const dataDir = path.join(process.cwd(), "data");
+      if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+      }
+      const filePath = path.join(dataDir, "database.json");
+      const payload = {
+        stores: this.stores,
+        roles: this.roles,
+        profiles: this.profiles,
+        courses: this.courses,
+        modules: this.modules,
+        lessonProgress: this.lessonProgress,
+        quizzes: this.quizzes,
+        quizAttempts: this.quizAttempts,
+        auditLogs: this.auditLogs,
+        categories: this.categories,
+        settings: this.settings,
+        certificates: this.certificates,
+        userCredentials: this.userCredentials,
+        userCourses: this.userCourses,
+      };
+      fs.writeFileSync(filePath, JSON.stringify(payload, null, 2), "utf-8");
+    } catch {
+      // Ignora erro em ambientes restritos
+    }
+  }
+
+  /**
+   * Carrega os dados persistidos do disco rígido
+   */
+  public loadFromDisk(): boolean {
+    if (typeof window !== "undefined") return false;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const fs = require("fs");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const path = require("path");
+      const filePath = path.join(process.cwd(), "data", "database.json");
+      if (fs.existsSync(filePath)) {
+        const raw = fs.readFileSync(filePath, "utf-8");
+        const data = JSON.parse(raw);
+        if (Array.isArray(data.stores)) this.stores = data.stores;
+        if (Array.isArray(data.roles)) this.roles = data.roles;
+        if (Array.isArray(data.profiles)) this.profiles = data.profiles;
+        if (Array.isArray(data.courses)) this.courses = data.courses;
+        if (Array.isArray(data.modules)) this.modules = data.modules;
+        if (Array.isArray(data.lessonProgress)) this.lessonProgress = data.lessonProgress;
+        if (Array.isArray(data.quizzes)) this.quizzes = data.quizzes;
+        if (Array.isArray(data.quizAttempts)) this.quizAttempts = data.quizAttempts;
+        if (Array.isArray(data.auditLogs)) this.auditLogs = data.auditLogs;
+        if (Array.isArray(data.categories)) this.categories = data.categories;
+        if (data.settings && typeof data.settings === "object") this.settings = data.settings;
+        if (Array.isArray(data.certificates)) this.certificates = data.certificates;
+        if (data.userCredentials && typeof data.userCredentials === "object") this.userCredentials = data.userCredentials;
+        if (Array.isArray(data.userCourses)) this.userCourses = data.userCourses;
+        return true;
+      }
+    } catch {
+      // Ignora erro de leitura
+    }
+    return false;
+  }
 }
 
 // Instância Singleton do Banco

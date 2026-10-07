@@ -3,6 +3,10 @@
 import { useEffect, useState, useTransition } from "react";
 import {
   BookOpen,
+  Upload,
+  Eye,
+  Printer,
+  RotateCcw,
   Plus,
   Video,
   FileText,
@@ -25,6 +29,7 @@ import {
 } from "lucide-react";
 import {
   getAllCoursesAdminAction,
+  getCategoriesAction,
   getUsersListAction,
   getUserCourseAccessMatrixAction,
   toggleCourseVisibilityForUserAction,
@@ -34,7 +39,8 @@ import {
   getCourseFullDetailsAction,
   saveCourseStructureAction,
 } from "@/app/actions/admin";
-import { Course, Profile, Module, Lesson, Quiz, QuizQuestion } from "@/types/database";
+import { Course, Profile, Module, Lesson, Quiz, QuizQuestion, Category } from "@/types/database";
+import { CertificateRenderer, CERTIFICATE_TEMPLATES } from "@/components/certificates/certificate-renderer";
 
 export default function CoursesAdminPage() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -60,6 +66,12 @@ export default function CoursesAdminPage() {
   const [pdfAttachmentUrl, setPdfAttachmentUrl] = useState("");
   const [certificateEnabled, setCertificateEnabled] = useState(true);
   const [minScoreToPass, setMinScoreToPass] = useState(70);
+  const [availableCategories, setAvailableCategories] = useState<Category[]>([]);
+  const [certificateTemplateId, setCertificateTemplateId] = useState("1");
+  const [certificateLocation, setCertificateLocation] = useState("São Paulo - SP");
+  const [certificateCustomLogoUrl, setCertificateCustomLogoUrl] = useState("");
+  const [certificateCustomBgUrl, setCertificateCustomBgUrl] = useState("");
+  const [isFullCertPreviewOpen, setIsFullCertPreviewOpen] = useState(false);
 
   // Módulos e Aulas
   const [modules, setModules] = useState<
@@ -97,8 +109,12 @@ export default function CoursesAdminPage() {
   const [isSaving, startSaving] = useTransition();
 
   const loadData = async () => {
-    const coursesList = await getAllCoursesAdminAction();
+    const [coursesList, catsList] = await Promise.all([
+      getAllCoursesAdminAction(),
+      getCategoriesAction(),
+    ]);
     setCourses(coursesList);
+    setAvailableCategories(catsList);
     const usersRes = await getUsersListAction({ pageSize: 50 });
     setUsers(usersRes.users);
     if (usersRes.users.length > 0 && !selectedUser) {
@@ -148,6 +164,10 @@ export default function CoursesAdminPage() {
     setPdfAttachmentUrl("/TREINAMENTO_COMERCIAL_GOLD_COMFORT_IA.pdf");
     setCertificateEnabled(true);
     setMinScoreToPass(70);
+    setCertificateTemplateId("1");
+    setCertificateLocation("São Paulo - SP");
+    setCertificateCustomLogoUrl("");
+    setCertificateCustomBgUrl("");
 
     // Módulos iniciais pré-configurados para agilidade
     setModules([
@@ -201,6 +221,10 @@ export default function CoursesAdminPage() {
     setPdfAttachmentUrl(course.pdfAttachmentUrl || "");
     setCertificateEnabled(course.certificateEnabled !== false);
     setMinScoreToPass(course.minScoreToPass || 70);
+    setCertificateTemplateId(course.certificateTemplateId || "1");
+    setCertificateLocation(course.certificateLocation || "São Paulo - SP");
+    setCertificateCustomLogoUrl(course.certificateCustomLogoUrl || "");
+    setCertificateCustomBgUrl(course.certificateCustomBgUrl || "");
 
     // Buscar detalhes com módulos e quiz do servidor
     const details = await getCourseFullDetailsAction(course.id);
@@ -357,7 +381,11 @@ export default function CoursesAdminPage() {
           pdfAttachmentUrl,
           certificateEnabled,
           minScoreToPass,
-        });
+          certificateTemplateId,
+          certificateLocation,
+          certificateCustomLogoUrl,
+          certificateCustomBgUrl,
+        } as any);
         if (!created.success || !created.course) {
           alert(created.error || "Falha ao criar treinamento.");
           return;
@@ -376,7 +404,11 @@ export default function CoursesAdminPage() {
           pdfAttachmentUrl,
           certificateEnabled,
           minScoreToPass,
-        });
+          certificateTemplateId,
+          certificateLocation,
+          certificateCustomLogoUrl,
+          certificateCustomBgUrl,
+        } as any);
       }
 
       // Salvar a estrutura de Módulos, Aulas e Quiz
@@ -396,8 +428,62 @@ export default function CoursesAdminPage() {
     });
   };
 
+  // Handlers de Upload para os arquivos do Construtor de Cursos
+  const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setThumbnailUrl(event.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePdfUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPdfAttachmentName(file.name);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setPdfAttachmentUrl(event.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleLessonVideoUpload = (mIdx: number, lIdx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const clone = [...modules];
+      clone[mIdx].lessons[lIdx].videoUrl = event.target?.result as string;
+      setModules(clone);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleCertLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setCertificateCustomLogoUrl(event.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleCertBgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setCertificateCustomBgUrl(event.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
-    <div className="space-y-8 animate-element max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -415,6 +501,7 @@ export default function CoursesAdminPage() {
         </div>
 
         <button
+          id="btn-create-course"
           onClick={handleOpenCreateModal}
           className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-xs shadow-lg shadow-violet-950 transition-all shrink-0 cursor-pointer"
         >
@@ -662,7 +749,7 @@ export default function CoursesAdminPage() {
 
       {/* MODAL ESTRUTURADOR DE TREINAMENTO (Criação e Edição Completa) */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-element">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
           <div className="w-full max-w-4xl bg-zinc-950 border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
             {/* Header do Modal */}
             <div className="p-6 border-b border-white/5 bg-zinc-900/50 flex items-center justify-between shrink-0">
@@ -727,6 +814,7 @@ export default function CoursesAdminPage() {
               </button>
 
               <button
+                id="tab-certificate"
                 onClick={() => setModalTab("certificate")}
                 className={`py-3 transition-colors relative cursor-pointer ${
                   modalTab === "certificate" ? "text-violet-400" : "text-zinc-400 hover:text-white"
@@ -767,13 +855,27 @@ export default function CoursesAdminPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                       <label className="text-zinc-400 block mb-1.5 font-medium">Categoria</label>
-                      <input
-                        type="text"
+                      <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        placeholder="Ex: Lentes Multifocais"
                         className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500"
-                      />
+                      >
+                        {availableCategories.length > 0 ? (
+                          availableCategories.map((c) => (
+                            <option key={c.id} value={c.name}>
+                              {c.name}
+                            </option>
+                          ))
+                        ) : (
+                          <>
+                            <option value="Lentes Multifocais">Lentes Multifocais</option>
+                            <option value="Tratamentos & Tecnologia">Tratamentos & Tecnologia</option>
+                            <option value="Atendimento & Venda Consultiva">Atendimento & Venda Consultiva</option>
+                            <option value="Optometria & Medidas Ópticas">Optometria & Medidas Ópticas</option>
+                            <option value="Laboratório & Montagem">Laboratório & Montagem</option>
+                          </>
+                        )}
+                      </select>
                     </div>
 
                     <div>
@@ -799,15 +901,43 @@ export default function CoursesAdminPage() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="text-zinc-400 block mb-1.5 font-medium">URL da Imagem de Capa (Thumbnail)</label>
-                    <input
-                      type="text"
-                      value={thumbnailUrl}
-                      onChange={(e) => setThumbnailUrl(e.target.value)}
-                      placeholder="https://images.unsplash.com/..."
-                      className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500 font-mono text-[11px]"
-                    />
+                  <div className="space-y-3">
+                    <label className="text-zinc-400 block font-medium">Imagem de Capa do Treinamento (Thumbnail)</label>
+                    
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                      <label className="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-xs flex items-center gap-2 cursor-pointer transition-colors shadow-lg shadow-violet-950/40">
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>Fazer Upload da Imagem de Capa</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleThumbnailUpload}
+                          className="hidden"
+                        />
+                      </label>
+
+                      <input
+                        type="text"
+                        value={thumbnailUrl}
+                        onChange={(e) => setThumbnailUrl(e.target.value)}
+                        placeholder="Ou cole a URL direta: https://images.unsplash.com/..."
+                        className="flex-1 bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500 font-mono text-[11px]"
+                      />
+                    </div>
+
+                    {thumbnailUrl && (
+                      <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/40 border border-white/5">
+                        <img
+                          src={thumbnailUrl}
+                          alt="Pré-visualização da Capa"
+                          className="w-20 h-14 object-cover rounded-xl border border-white/10"
+                        />
+                        <div className="text-xs">
+                          <span className="font-semibold text-white block">Pré-visualização da Capa</span>
+                          <span className="text-[11px] text-zinc-400">Imagem ativa para o catálogo dos alunos</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -835,15 +965,39 @@ export default function CoursesAdminPage() {
                     />
                   </div>
 
-                  <div>
-                    <label className="text-zinc-400 block mb-1.5 font-medium">Caminho ou Link do PDF</label>
-                    <input
-                      type="text"
-                      value={pdfAttachmentUrl}
-                      onChange={(e) => setPdfAttachmentUrl(e.target.value)}
-                      placeholder="Ex: /TREINAMENTO_COMERCIAL_GOLD_COMFORT_IA.pdf ou URL externa"
-                      className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500 font-mono text-[11px]"
-                    />
+                  <div className="space-y-3">
+                    <label className="text-zinc-400 block font-medium">Caminho, Link ou Arquivo do PDF</label>
+                    
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                      <label className="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-xs flex items-center gap-2 cursor-pointer transition-colors shadow-lg shadow-violet-950/40">
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>Fazer Upload do Arquivo PDF</span>
+                        <input
+                          type="file"
+                          accept="application/pdf"
+                          onChange={handlePdfUpload}
+                          className="hidden"
+                        />
+                      </label>
+
+                      <input
+                        type="text"
+                        value={pdfAttachmentUrl}
+                        onChange={(e) => setPdfAttachmentUrl(e.target.value)}
+                        placeholder="Ou informe link: /apostila.pdf ou URL externa"
+                        className="flex-1 bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500 font-mono text-[11px]"
+                      />
+                    </div>
+
+                    {pdfAttachmentUrl && (
+                      <div className="flex items-center gap-3 p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">
+                        <FileText className="w-4 h-4 shrink-0" />
+                        <div className="text-xs">
+                          <span className="font-semibold block">{pdfAttachmentName || "Apostila Carregada"}</span>
+                          <span className="text-[10px] text-emerald-400/80">Arquivo pronto para download pelos alunos no player</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -962,8 +1116,24 @@ export default function CoursesAdminPage() {
                                     </select>
                                   </div>
 
-                                  <div className="sm:col-span-2">
-                                    <label className="text-[10px] text-zinc-500 block mb-0.5">URL do Vídeo</label>
+                                  <div className="sm:col-span-2 space-y-1">
+                                    <div className="flex items-center justify-between">
+                                      <label className="text-[10px] text-zinc-500 block">
+                                        {les.videoProvider === "direct_mp4" ? "Vídeo MP4 (Link ou Upload Local)" : "URL do Vídeo"}
+                                      </label>
+                                      {les.videoProvider === "direct_mp4" && (
+                                        <label className="text-[10px] text-violet-400 hover:text-violet-300 font-semibold cursor-pointer flex items-center gap-1">
+                                          <Upload className="w-2.5 h-2.5" />
+                                          <span>Upload MP4</span>
+                                          <input
+                                            type="file"
+                                            accept="video/mp4,video/*"
+                                            onChange={(e) => handleLessonVideoUpload(mIdx, lIdx, e)}
+                                            className="hidden"
+                                          />
+                                        </label>
+                                      )}
+                                    </div>
                                     <input
                                       type="text"
                                       value={les.videoUrl}
@@ -972,7 +1142,7 @@ export default function CoursesAdminPage() {
                                         clone[mIdx].lessons[lIdx].videoUrl = e.target.value;
                                         setModules(clone);
                                       }}
-                                      placeholder="https://www.youtube.com/watch?v=..."
+                                      placeholder={les.videoProvider === "direct_mp4" ? "Link MP4 ou arquivo carregado" : "https://www.youtube.com/watch?v=..."}
                                       className="w-full bg-zinc-900 border border-white/10 rounded-lg px-2 py-1 text-white font-mono text-[10px]"
                                     />
                                   </div>
@@ -1113,29 +1283,198 @@ export default function CoursesAdminPage() {
                 </div>
               )}
 
-              {/* SUB-ABA 5: CERTIFICADO */}
+              {/* SUB-ABA 5: CERTIFICADO (Configurações e Janela ao Lado de Pré-visualização) */}
               {modalTab === "certificate" && (
-                <div className="space-y-4">
-                  <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-300">
-                    <p className="font-semibold mb-1 flex items-center gap-1.5">
-                      <Award className="w-4 h-4" /> Certificação Oficial de Conclusão
-                    </p>
-                    <p className="text-[11px] text-zinc-400 leading-relaxed">
-                      Ao atingir a pontuação mínima na avaliação final e concluir 100% das videoaulas, o aluno recebe o certificado em PDF com selo corporativo e notificação automática pelo Resend.
-                    </p>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                  {/* Coluna Esquerda: Controles e Modelos */}
+                  <div className="lg:col-span-7 space-y-5">
+                    <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-300">
+                      <p className="font-semibold mb-1 flex items-center gap-1.5 text-xs">
+                        <Award className="w-4 h-4" /> Certificação Oficial de Conclusão
+                      </p>
+                      <p className="text-[11px] text-zinc-400 leading-relaxed">
+                        Ao atingir a pontuação mínima na avaliação final e concluir 100% das videoaulas, o aluno recebe o certificado em PDF com selo corporativo.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-zinc-900/50 border border-white/10">
+                      <input
+                        type="checkbox"
+                        id="certCheck"
+                        checked={certificateEnabled}
+                        onChange={(e) => setCertificateEnabled(e.target.checked)}
+                        className="w-4 h-4 rounded text-violet-600"
+                      />
+                      <label htmlFor="certCheck" className="text-white font-medium cursor-pointer text-xs">
+                        Habilitar Emissão Automática de Certificado para este Treinamento
+                      </label>
+                    </div>
+
+                    {/* Seletor dos 5 Modelos Pré-prontos */}
+                    <div className="space-y-2">
+                      <label className="text-zinc-300 font-semibold block text-xs">
+                        Escolha o Modelo de Certificado (5 Templates Oficiais)
+                      </label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {CERTIFICATE_TEMPLATES.map((tpl) => (
+                          <button
+                            key={tpl.id}
+                            type="button"
+                            onClick={() => setCertificateTemplateId(tpl.id)}
+                            className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                              certificateTemplateId === tpl.id
+                                ? "bg-violet-600/20 border-violet-500 text-white shadow-md shadow-violet-950"
+                                : "bg-black/40 border-white/5 text-zinc-400 hover:border-white/20 hover:text-white"
+                            }`}
+                          >
+                            <span className="font-bold text-xs block">{tpl.name}</span>
+                            <span className={`text-[10px] mt-1 font-semibold ${tpl.accentColor}`}>
+                              {tpl.badgeText}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Personalização: Logo, Fundo e Local */}
+                    <div className="space-y-3 pt-2 border-t border-white/5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {/* Upload de Logo */}
+                        <div>
+                          <label className="text-zinc-400 block mb-1 text-[11px] font-medium">Logotipo do Certificado</label>
+                          <div className="flex items-center gap-2">
+                            <label className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-xs font-semibold flex items-center gap-1.5 cursor-pointer">
+                              <Upload className="w-3 h-3" />
+                              <span>Subir Logo</span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleCertLogoUpload}
+                                className="hidden"
+                              />
+                            </label>
+                            {certificateCustomLogoUrl && (
+                              <span className="text-[10px] text-emerald-400 font-semibold">Logo Ativo</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Local / Cidade */}
+                        <div>
+                          <label className="text-zinc-400 block mb-1 text-[11px] font-medium">Local / Cidade da Emissão</label>
+                          <input
+                            type="text"
+                            value={certificateLocation}
+                            onChange={(e) => setCertificateLocation(e.target.value)}
+                            placeholder="São Paulo - SP"
+                            className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-violet-500"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Upload de Modelo/Fundo Customizado */}
+                      <div>
+                        <label className="text-zinc-400 block mb-1 text-[11px] font-medium">Fundo ou Moldura Personalizada (Opcional)</label>
+                        <div className="flex items-center gap-2">
+                          <label className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-xs font-semibold flex items-center gap-1.5 cursor-pointer">
+                            <Upload className="w-3 h-3" />
+                            <span>Subir Imagem de Fundo</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleCertBgUpload}
+                              className="hidden"
+                            />
+                          </label>
+                          {certificateCustomBgUrl && (
+                            <button
+                              type="button"
+                              onClick={() => setCertificateCustomBgUrl("")}
+                              className="text-[10px] text-red-400 hover:underline"
+                            >
+                              Remover Fundo Customizado
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-4 rounded-2xl bg-zinc-900/50 border border-white/5">
-                    <input
-                      type="checkbox"
-                      id="certCheck"
-                      checked={certificateEnabled}
-                      onChange={(e) => setCertificateEnabled(e.target.checked)}
-                      className="w-4 h-4 rounded text-violet-600"
-                    />
-                    <label htmlFor="certCheck" className="text-white font-medium cursor-pointer">
-                      Habilitar Emissão Automática de Certificado para este Treinamento
-                    </label>
+                  {/* Coluna Direita: Janela Pequena com o Modelo do Certificado */}
+                  <div className="lg:col-span-5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                        <span>Pré-visualização do Certificado</span>
+                      </span>
+                      <span className="text-[10px] text-amber-400 font-mono">Modelo {certificateTemplateId}</span>
+                    </div>
+
+                    <div className="p-3 rounded-2xl bg-black/50 border border-white/10 shadow-xl space-y-3">
+                      <CertificateRenderer
+                        templateId={certificateTemplateId}
+                        courseTitle={title || "Nome do Treinamento"}
+                        studentName="NOME DO ALUNO CADASTRADO"
+                        location={certificateLocation}
+                        customLogoUrl={certificateCustomLogoUrl}
+                        customBgUrl={certificateCustomBgUrl}
+                        score={minScoreToPass || 70}
+                        durationHours={Math.round((estimatedDurationMin || 120) / 60)}
+                        isMiniature={true}
+                        allowOpenFull={true}
+                      />
+
+                      <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-zinc-400">
+                        <span>Dados dinâmicos do aluno no ato da aprovação</span>
+                        <button
+                          type="button"
+                          onClick={() => setIsFullCertPreviewOpen(true)}
+                          className="text-violet-400 hover:text-violet-300 font-semibold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Eye className="w-3 h-3" />
+                          <span>Ampliar / Imprimir</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {isFullCertPreviewOpen && (
+                      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-element">
+                        <div className="relative w-full max-w-4xl flex flex-col items-center">
+                          <div className="w-full flex items-center justify-between pb-3 text-white">
+                            <span className="font-bold text-sm">Visualização Oficial do Certificado Gerado</span>
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => window.print()}
+                                className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs flex items-center gap-1"
+                              >
+                                <Printer className="w-3.5 h-3.5" />
+                                <span>Imprimir / Gerar PDF</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setIsFullCertPreviewOpen(false)}
+                                className="p-1.5 rounded-xl bg-white/10 text-white"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+
+                          <CertificateRenderer
+                            templateId={certificateTemplateId}
+                            courseTitle={title || "Nome do Treinamento"}
+                            studentName="NOME DO ALUNO CADASTRADO"
+                            location={certificateLocation}
+                            customLogoUrl={certificateCustomLogoUrl}
+                            customBgUrl={certificateCustomBgUrl}
+                            score={minScoreToPass || 70}
+                            durationHours={Math.round((estimatedDurationMin || 120) / 60)}
+                            isMiniature={false}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

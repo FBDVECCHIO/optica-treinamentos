@@ -27,6 +27,8 @@ export interface SignInPageProps {
   title?: React.ReactNode;
   description?: React.ReactNode;
   heroImageSrc?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
   testimonials?: Testimonial[];
   onSignIn?: (event: React.FormEvent<HTMLFormElement>) => void;
   onGoogleSignIn?: () => void;
@@ -61,6 +63,8 @@ export const SignInPage: React.FC<SignInPageProps> = ({
   title = <span className="font-light text-foreground tracking-tighter">Bem-vindo</span>,
   description = "Acesse a plataforma oficial de capacitação das ópticas parceiras.",
   heroImageSrc = "https://images.unsplash.com/photo-1591076482161-42ce6da69f68?q=80&w=1200&auto=format&fit=crop",
+  heroTitle = "Capacitação Técnica de Alta Performance",
+  heroSubtitle = "Aumente a conversão de lentes de valor agregado, elimine erros de adaptação e garanta a satisfação do cliente da ótica.",
   testimonials = [],
   onSignIn,
   onGoogleSignIn,
@@ -210,10 +214,10 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                 Linha Gold Comfort & Smartplay
               </div>
               <h2 className="text-2xl font-bold text-white tracking-tight leading-snug">
-                Capacitação Técnica de Alta Performance
+                {heroTitle}
               </h2>
               <p className="text-xs text-zinc-300 mt-2 leading-relaxed">
-                Aumente a conversão de lentes de valor agregado, elimine erros de adaptação e garanta a satisfação do cliente da ótica.
+                {heroSubtitle}
               </p>
             </div>
 
