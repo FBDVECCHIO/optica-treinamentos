@@ -212,6 +212,22 @@ export async function loginAction(formData: FormData): Promise<ActionResult> {
     };
   }
 
+  // Verificação de status da loja contratante (exceto Administrador Master)
+  if (profile.accessLevel !== "master" && profile.storeId) {
+    const store = db.stores.find((s) => s.id === profile.storeId);
+    if (store && (!store.active || store.subscriptionStatus === "suspended" || store.subscriptionStatus === "canceled")) {
+      await logAudit({
+        action: "LOGIN_FAILURE",
+        userEmail: email,
+        metadata: { reason: "Loja suspensa/inativa", storeId: store.id, storeName: store.name },
+      });
+      return {
+        success: false,
+        error: `O plano de capacitação da sua loja (${store.name}) encontra-se temporariamente suspenso. Procure a gerência da sua óptica ou o suporte SRL.`,
+      };
+    }
+  }
+
   // Validação de senha do perfil
   const storedPassword = db.userCredentials[email];
   if (storedPassword && storedPassword !== password) {
@@ -281,14 +297,38 @@ export async function registerAction(data: {
 
   // Localizar ou registrar a loja pelo CNPJ
   let store = db.stores.find((s) => s.cnpj === data.storeCnpj);
-  if (!store) {
+  if (store) {
+    const existingStore = store;
+    if (!existingStore.active || existingStore.subscriptionStatus === "suspended" || existingStore.subscriptionStatus === "canceled") {
+      return {
+        success: false,
+        error: `O plano de capacitação da loja "${existingStore.name}" encontra-se suspenso. Procure a gerência da sua unidade ou a administração SRL.`,
+      };
+    }
+    const currentActiveUsers = db.profiles.filter((p) => p.storeId === existingStore.id && p.active).length;
+    const seatLimit = existingStore.userLimit || 10;
+    if (currentActiveUsers >= seatLimit) {
+      return {
+        success: false,
+        error: `A loja "${existingStore.name}" atingiu a cota máxima de ${seatLimit} colaboradores contratados no plano ${existingStore.planName || "Padrão"}. Solicite ao gestor o upgrade do plano para liberar mais acessos.`,
+      };
+    }
+  } else {
     store = {
       id: `store_${Date.now()}`,
       name: data.storeName.toUpperCase(),
       cnpj: data.storeCnpj,
       address: data.address.toUpperCase(),
       active: true,
+      planName: "Degustação Inicial (Trial)",
+      subscriptionStatus: "trial",
+      userLimit: 5,
+      validUntil: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
+      monthlyValue: 0.0,
+      billingCycle: "monthly",
+      notes: "Unidade cadastrada via autoatendimento (período de degustação de 15 dias).",
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
     db.stores.push(store);
   }

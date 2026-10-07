@@ -9,7 +9,7 @@ import {
   sendDiagnosticTestEmail,
   ResendMetricsSummary,
 } from "@/lib/email/resend";
-import { Role, Profile, Course, Module, Lesson, Quiz, QuizQuestion, Category, SystemSettings, IssuedCertificate } from "@/types/database";
+import { Role, Profile, Course, Module, Lesson, Quiz, QuizQuestion, Category, SystemSettings, IssuedCertificate, Store, SubscriptionStatus, BillingCycle } from "@/types/database";
 import {
   getAllEmailTemplates,
   updateEmailTemplate,
@@ -868,4 +868,220 @@ export async function updateSystemSettingsAction(
 
   return { success: true, settings: { ...db.settings } };
 }
+
+/**
+ * 9. GESTÃO DE LOJAS, PLANOS & ASSINATURAS (Multi-tenancy & Governança de Licenças)
+ */
+export interface StoreWithStats extends Store {
+  activeUsersCount: number;
+  availableSeats: number;
+  usagePercent: number;
+}
+
+export async function getStoresWithStatsAction(): Promise<StoreWithStats[]> {
+  const currentUser = await getCurrentUser();
+  let storesList = [...db.stores];
+
+  // Se o usuário for gerente, visualiza apenas a própria unidade
+  if (currentUser?.accessLevel === "manager" && currentUser.storeId) {
+    storesList = storesList.filter((s) => s.id === currentUser.storeId);
+  }
+
+  return storesList.map((store) => {
+    const activeUsersCount = db.profiles.filter(
+      (p) => p.storeId === store.id && p.active !== false
+    ).length;
+    const limit = store.userLimit && store.userLimit > 0 ? store.userLimit : 10;
+    const availableSeats = Math.max(0, limit - activeUsersCount);
+    const usagePercent = Math.min(100, Math.round((activeUsersCount / limit) * 100));
+
+    return {
+      ...store,
+      activeUsersCount,
+      availableSeats,
+      usagePercent,
+    };
+  });
+}
+
+export async function createStoreAction(data: {
+  name: string;
+  cnpj: string;
+  address?: string;
+  phone?: string;
+  planName?: string;
+  subscriptionStatus?: SubscriptionStatus;
+  userLimit?: number;
+  validUntil?: string;
+  monthlyValue?: number;
+  billingCycle?: BillingCycle;
+  notes?: string;
+}): Promise<{ success: boolean; store?: Store; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master") {
+    return { success: false, error: "Apenas Administrador Master pode cadastrar novas lojas e contratos." };
+  }
+
+  const cleanName = data.name.trim();
+  const cleanCnpj = data.cnpj.trim();
+
+  if (!cleanName || !cleanCnpj) {
+    return { success: false, error: "Nome da Ótica e CNPJ são campos obrigatórios." };
+  }
+
+  if (db.stores.some((s) => s.cnpj === cleanCnpj)) {
+    return { success: false, error: "Já existe uma loja cadastrada com este CNPJ no sistema." };
+  }
+
+  const now = new Date().toISOString();
+  const newStore: Store = {
+    id: `store_${Date.now()}`,
+    name: cleanName,
+    cnpj: cleanCnpj,
+    address: data.address?.trim() || "",
+    phone: data.phone?.trim() || "",
+    active: (data.subscriptionStatus === "active" || data.subscriptionStatus === "trial"),
+    planName: data.planName?.trim() || "Essencial Balcão (5 Licenças)",
+    subscriptionStatus: data.subscriptionStatus || "active",
+    userLimit: data.userLimit && data.userLimit > 0 ? Number(data.userLimit) : 5,
+    validUntil: data.validUntil || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+    monthlyValue: data.monthlyValue !== undefined ? Number(data.monthlyValue) : 290,
+    billingCycle: data.billingCycle || "monthly",
+    notes: data.notes?.trim() || "",
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  db.stores.push(newStore);
+  db.saveToDisk();
+
+  await logAudit({
+    action: "STORE_CREATED",
+    userId: user.id,
+    userEmail: user.email,
+    metadata: {
+      storeId: newStore.id,
+      storeName: newStore.name,
+      planName: newStore.planName,
+      userLimit: newStore.userLimit,
+    },
+  });
+
+  return { success: true, store: newStore };
+}
+
+export async function updateStoreAction(
+  id: string,
+  data: Partial<Store>
+): Promise<{ success: boolean; store?: Store; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master") {
+    return { success: false, error: "Apenas Administrador Master pode editar contratos de lojas." };
+  }
+
+  const store = db.stores.find((s) => s.id === id);
+  if (!store) {
+    return { success: false, error: "Loja não encontrada." };
+  }
+
+  if (data.name !== undefined) store.name = data.name.trim();
+  if (data.cnpj !== undefined) store.cnpj = data.cnpj.trim();
+  if (data.address !== undefined) store.address = data.address.trim();
+  if (data.phone !== undefined) store.phone = data.phone.trim();
+  if (data.planName !== undefined) store.planName = data.planName.trim();
+  if (data.subscriptionStatus !== undefined) {
+    store.subscriptionStatus = data.subscriptionStatus;
+    store.active = (data.subscriptionStatus === "active" || data.subscriptionStatus === "trial");
+  }
+  if (data.userLimit !== undefined) {
+    store.userLimit = Number(data.userLimit) > 0 ? Number(data.userLimit) : 5;
+  }
+  if (data.validUntil !== undefined) store.validUntil = data.validUntil;
+  if (data.monthlyValue !== undefined) store.monthlyValue = Number(data.monthlyValue);
+  if (data.billingCycle !== undefined) store.billingCycle = data.billingCycle;
+  if (data.notes !== undefined) store.notes = data.notes.trim();
+
+  store.updatedAt = new Date().toISOString();
+  db.saveToDisk();
+
+  await logAudit({
+    action: "STORE_UPDATED",
+    userId: user.id,
+    userEmail: user.email,
+    metadata: {
+      storeId: store.id,
+      storeName: store.name,
+      planName: store.planName,
+      status: store.subscriptionStatus,
+      userLimit: store.userLimit,
+    },
+  });
+
+  return { success: true, store };
+}
+
+export async function toggleStoreStatusAction(
+  id: string,
+  newStatus: SubscriptionStatus
+): Promise<{ success: boolean; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master") {
+    return { success: false, error: "Apenas Administrador Master pode alterar o status da loja." };
+  }
+
+  const store = db.stores.find((s) => s.id === id);
+  if (!store) {
+    return { success: false, error: "Loja não encontrada." };
+  }
+
+  store.subscriptionStatus = newStatus;
+  store.active = (newStatus === "active" || newStatus === "trial");
+  store.updatedAt = new Date().toISOString();
+  db.saveToDisk();
+
+  await logAudit({
+    action: "STORE_STATUS_TOGGLED",
+    userId: user.id,
+    userEmail: user.email,
+    metadata: {
+      storeId: store.id,
+      storeName: store.name,
+      newStatus,
+    },
+  });
+
+  return { success: true };
+}
+
+export async function deleteStoreAction(id: string): Promise<{ success: boolean; error?: string }> {
+  const user = await getCurrentUser();
+  if (user?.accessLevel !== "master") {
+    return { success: false, error: "Apenas Administrador Master pode excluir unidades." };
+  }
+
+  const store = db.stores.find((s) => s.id === id);
+  if (!store) return { success: true };
+
+  // Verificação de segurança: não permitir excluir loja se houver colaboradores vinculados
+  const boundProfiles = db.profiles.filter((p) => p.storeId === id);
+  if (boundProfiles.length > 0) {
+    return {
+      success: false,
+      error: `Não é possível excluir a loja "${store.name}" pois existem ${boundProfiles.length} colaborador(es) vinculado(s). Recomendamos alterar o status da assinatura para "Suspensa" para bloquear o acesso preservando o histórico de treinamentos e certificados.`,
+    };
+  }
+
+  db.stores = db.stores.filter((s) => s.id !== id);
+  db.saveToDisk();
+
+  await logAudit({
+    action: "STORE_DELETED",
+    userId: user.id,
+    userEmail: user.email,
+    metadata: { storeId: id, storeName: store.name },
+  });
+
+  return { success: true };
+}
+
 

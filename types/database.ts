@@ -1,12 +1,24 @@
 export type UserRole = "master" | "manager" | "student";
 
+export type SubscriptionStatus = "active" | "trial" | "suspended" | "canceled";
+export type BillingCycle = "monthly" | "quarterly" | "annual" | "trade_partner";
+
 export interface Store {
   id: string;
   name: string;
   cnpj: string;
   address?: string;
+  phone?: string;
   active: boolean;
+  planName?: string;
+  subscriptionStatus?: SubscriptionStatus;
+  userLimit?: number;
+  validUntil?: string;
+  monthlyValue?: number;
+  billingCycle?: BillingCycle;
+  notes?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface Role {
@@ -143,7 +155,11 @@ export interface AuditLog {
     | "COURSE_DELETED"
     | "CATEGORY_CREATED"
     | "CATEGORY_UPDATED"
-    | "CATEGORY_DELETED";
+    | "CATEGORY_DELETED"
+    | "STORE_CREATED"
+    | "STORE_UPDATED"
+    | "STORE_STATUS_TOGGLED"
+    | "STORE_DELETED";
   ipAddress?: string;
   userAgent?: string;
   metadata?: Record<string, unknown>;
