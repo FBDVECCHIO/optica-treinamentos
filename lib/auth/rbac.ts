@@ -12,3 +12,11 @@ export function canManageRoles(role: UserRole | string | undefined): boolean {
 export function canViewAuditLogs(role: UserRole | string | undefined): boolean {
   return role === "master";
 }
+
+export function canManagePlans(role: UserRole | string | undefined): boolean {
+  return role === "master";
+}
+
+export function canViewFinance(role: UserRole | string | undefined): boolean {
+  return role === "master";
+}
