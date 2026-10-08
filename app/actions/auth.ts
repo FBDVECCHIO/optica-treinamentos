@@ -676,3 +676,293 @@ export async function updateUserProfileAction(data: {
 
   return { success: true, user: profile };
 }
+
+/**
+ * Consulta detalhes da loja para convite de novos colaboradores
+ */
+export async function getStoreInviteDetailsAction(storeId: string): Promise<{
+  success: boolean;
+  store?: {
+    id: string;
+    name: string;
+    cnpj: string;
+    userLimit: number;
+    activeUsersCount: number;
+    availableSeats: number;
+    active: boolean;
+    subscriptionStatus?: string;
+  };
+  error?: string;
+}> {
+  const store = db.stores.find(
+    (s) => s.id === storeId || s.cnpj.replace(/\D/g, "") === storeId.replace(/\D/g, "")
+  );
+  if (!store) {
+    return { success: false, error: "Link de convite inválido ou loja não localizada." };
+  }
+
+  const activeUsersCount = db.profiles.filter((p) => p.storeId === store.id && p.active).length;
+  const userLimit = store.userLimit || 10;
+  const availableSeats = Math.max(0, userLimit - activeUsersCount);
+
+  return {
+    success: true,
+    store: {
+      id: store.id,
+      name: store.name,
+      cnpj: store.cnpj,
+      userLimit,
+      activeUsersCount,
+      availableSeats,
+      active: store.active,
+      subscriptionStatus: store.subscriptionStatus,
+    },
+  };
+}
+
+/**
+ * Cadastro simplificado do colaborador através do link de convite da loja
+ */
+export async function registerFromInviteAction(data: {
+  storeId: string;
+  name: string;
+  email: string;
+  phone: string;
+  password?: string;
+}): Promise<ActionResult> {
+  const cleanEmail = data.email.trim().toLowerCase();
+
+  // Validar se e-mail já existe
+  const existing = db.profiles.find((p) => p.email.toLowerCase() === cleanEmail);
+  if (existing) {
+    return { success: false, error: "Este e-mail já possui cadastro na plataforma. Faça login com suas credenciais." };
+  }
+
+  // Localizar a loja
+  const store = db.stores.find(
+    (s) => s.id === data.storeId || s.cnpj.replace(/\D/g, "") === data.storeId.replace(/\D/g, "")
+  );
+  if (!store) {
+    return { success: false, error: "Loja não identificada pelo convite." };
+  }
+
+  if (!store.active || store.subscriptionStatus === "suspended" || store.subscriptionStatus === "canceled") {
+    return {
+      success: false,
+      error: `O plano de capacitação da loja "${store.name}" encontra-se temporariamente suspenso. Procure seu gerente.`,
+    };
+  }
+
+  const currentActiveUsers = db.profiles.filter((p) => p.storeId === store.id && p.active).length;
+  const seatLimit = store.userLimit || 10;
+  if (currentActiveUsers >= seatLimit) {
+    return {
+      success: false,
+      error: `A loja "${store.name}" atingiu o limite de ${seatLimit} colaboradores contratados. Peça ao seu gerente para ampliar as vagas.`,
+    };
+  }
+
+  const newUserId = `usr_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+  const newProfile: Profile = {
+    id: newUserId,
+    name: data.name.toUpperCase().trim(),
+    email: cleanEmail,
+    cpf: "CONVITE-" + Date.now().toString().slice(-6),
+    phone: data.phone.trim(),
+    address: store.address || "",
+    storeId: store.id,
+    storeName: store.name,
+    storeCnpj: store.cnpj,
+    roleId: "role_consultor",
+    roleTitle: "CONSULTOR ÓPTICO / VENDEDOR",
+    accessLevel: "student",
+    active: true,
+    emailVerified: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  db.profiles.push(newProfile);
+
+  // Senha padrão ou fornecida
+  const userPassword = data.password || "aluno123";
+  db.userCredentials[cleanEmail] = userPassword;
+
+  // Liberar cursos cadastrados para o novo aluno
+  db.courses.forEach((c) => {
+    if (!db.userCourses.some((uc) => uc.userId === newUserId && uc.courseId === c.id)) {
+      db.userCourses.push({
+        userId: newUserId,
+        courseId: c.id,
+        isEnabled: true,
+      });
+    }
+  });
+
+  db.saveToDisk();
+
+  // Criar sessão de login direta
+  try {
+    const cookieStore = await cookies();
+    cookieStore.set(
+      "optica_session",
+      JSON.stringify({ userId: newProfile.id, role: "student" }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+        sameSite: "lax",
+      }
+    );
+  } catch {
+    // fallback
+  }
+
+  await logAudit({
+    action: "USER_REGISTERED",
+    userId: newProfile.id,
+    userEmail: cleanEmail,
+    metadata: { storeId: store.id, storeName: store.name, source: "invite" },
+  });
+
+  return {
+    success: true,
+    user: newProfile,
+    redirectUrl: "/courses",
+  };
+}
+
+/**
+ * Contratação de Plano / Ativação de Unidade Óptica (Fluxo B2B Comercial)
+ */
+export async function subscribeStoreAction(data: {
+  storeName: string;
+  storeCnpj: string;
+  storePhone: string;
+  storeAddress: string;
+  managerName: string;
+  managerEmail: string;
+  managerPassword: string;
+  planName: string;
+  userLimit: number;
+  monthlyValue: number;
+  billingCycle: "monthly" | "annual" | "trade_partner";
+}): Promise<ActionResult> {
+  const cleanEmail = data.managerEmail.trim().toLowerCase();
+
+  // 1. Validar e-mail do gestor
+  const existingUser = db.profiles.find((p) => p.email.toLowerCase() === cleanEmail);
+  if (existingUser) {
+    return {
+      success: false,
+      error: "Este e-mail já possui cadastro na plataforma. Faça login ou utilize outro e-mail para o gestor.",
+    };
+  }
+
+  // 2. Validar CNPJ da ótica
+  const existingStore = db.stores.find((s) => s.cnpj === data.storeCnpj);
+  if (existingStore) {
+    return {
+      success: false,
+      error: `A unidade "${existingStore.name}" (CNPJ ${data.storeCnpj}) já está cadastrada na plataforma. Faça login com suas credenciais ou solicite resgate de senha.`,
+    };
+  }
+
+  // 3. Criar a nova Store
+  const isTrial = data.planName.toLowerCase().includes("trial") || data.planName.toLowerCase().includes("degustação");
+  const validUntilDays = isTrial ? 15 : data.billingCycle === "annual" ? 365 : 30;
+
+  const newStoreId = `store_${Date.now()}`;
+  const newStore = {
+    id: newStoreId,
+    name: data.storeName.toUpperCase().trim(),
+    cnpj: data.storeCnpj,
+    phone: data.storePhone.trim(),
+    address: data.storeAddress.toUpperCase().trim(),
+    active: true,
+    planName: data.planName,
+    subscriptionStatus: (isTrial ? "trial" : "active") as any,
+    userLimit: data.userLimit || (isTrial ? 5 : 10),
+    validUntil: new Date(Date.now() + validUntilDays * 24 * 60 * 60 * 1000).toISOString(),
+    monthlyValue: data.monthlyValue || 0,
+    billingCycle: data.billingCycle || "monthly",
+    notes: isTrial ? "Período de Degustação Comercial (15 dias)" : `Contrato ${data.planName} ativado online.`,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  db.stores.push(newStore);
+
+  // 4. Criar o Perfil do Gerente / Contratante da Loja
+  const managerId = `usr_mgr_${Date.now()}`;
+  const managerProfile: Profile = {
+    id: managerId,
+    name: data.managerName.toUpperCase().trim(),
+    email: cleanEmail,
+    cpf: "GESTOR-" + Date.now().toString().slice(-6),
+    phone: data.storePhone.trim(),
+    address: data.storeAddress.toUpperCase().trim(),
+    storeId: newStoreId,
+    storeName: newStore.name,
+    storeCnpj: newStore.cnpj,
+    roleId: "role_gerente",
+    roleTitle: "GERENTE DE LOJA / CONTRATANTE",
+    accessLevel: "manager",
+    active: true,
+    emailVerified: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  db.profiles.push(managerProfile);
+  db.userCredentials[cleanEmail] = data.managerPassword;
+
+  // 5. Liberar todos os cursos para o Gestor
+  db.courses.forEach((c) => {
+    db.userCourses.push({
+      userId: managerId,
+      courseId: c.id,
+      isEnabled: true,
+    });
+  });
+
+  db.saveToDisk();
+
+  // 6. Iniciar sessão do gestor
+  try {
+    const cookieStore = await cookies();
+    cookieStore.set(
+      "optica_session",
+      JSON.stringify({ userId: managerProfile.id, role: "manager" }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+        sameSite: "lax",
+      }
+    );
+  } catch {
+    // fallback
+  }
+
+  await logAudit({
+    action: "STORE_CREATED",
+    userId: managerId,
+    userEmail: cleanEmail,
+    metadata: {
+      storeId: newStoreId,
+      storeName: newStore.name,
+      plan: data.planName,
+      isTrial,
+      source: "subscription_flow",
+    },
+  });
+
+  return {
+    success: true,
+    user: managerProfile,
+    redirectUrl: "/admin/users",
+  };
+}

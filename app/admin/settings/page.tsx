@@ -23,6 +23,8 @@ import {
   Check,
   Phone,
   MapPin,
+  Copy,
+  MessageSquare,
 } from "lucide-react";
 import {
   getCategoriesAction,
@@ -109,6 +111,15 @@ export default function AdminSettingsPage() {
   const [editingStore, setEditingStore] = useState<StoreWithStats | null>(null);
   const [isSavingStore, setIsSavingStore] = useState(false);
   const [isTogglingStoreId, setIsTogglingStoreId] = useState<string | null>(null);
+  const [copiedStoreId, setCopiedStoreId] = useState<string | null>(null);
+
+  const handleCopyStoreInvite = (storeId: string) => {
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    const inviteUrl = `${origin}/convite/${storeId}`;
+    navigator.clipboard.writeText(inviteUrl);
+    setCopiedStoreId(storeId);
+    setTimeout(() => setCopiedStoreId(null), 3000);
+  };
 
   const [storeForm, setStoreForm] = useState({
     name: "",
@@ -216,8 +227,8 @@ export default function AdminSettingsPage() {
     }
   };
 
-  // Upload de Imagem de Login via FileReader
-  const handleLoginImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Upload de Imagem de Login com Compressão Automática via Canvas (evita payload excessivo)
+  const handleLoginImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -226,13 +237,52 @@ export default function AdminSettingsPage() {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const base64 = event.target?.result as string;
-      setLoginHeroImage(base64);
-      showFeedback("Imagem carregada localmente para pré-visualização. Clique em Salvar para aplicar.");
-    };
-    reader.readAsDataURL(file);
+    try {
+      showFeedback("Processando e otimizando imagem...", "success");
+      const compressedBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target?.result as string;
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const maxDimension = 1440;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxDimension || height > maxDimension) {
+              if (width > height) {
+                height = Math.round((height * maxDimension) / width);
+                width = maxDimension;
+              } else {
+                width = Math.round((width * maxDimension) / height);
+                height = maxDimension;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            if (!ctx) {
+              resolve(event.target?.result as string);
+              return;
+            }
+            ctx.drawImage(img, 0, 0, width, height);
+            const optimized = canvas.toDataURL("image/jpeg", 0.85);
+            resolve(optimized);
+          };
+          img.onerror = () => reject(new Error("Falha ao carregar arquivo de imagem."));
+        };
+        reader.onerror = () => reject(new Error("Erro ao ler arquivo."));
+      });
+
+      setLoginHeroImage(compressedBase64);
+      localStorage.setItem("optica_login_hero_image_draft", compressedBase64);
+      showFeedback("Imagem otimizada com sucesso! Clique em 'Salvar e Publicar no Login' para aplicar.");
+    } catch {
+      showFeedback("Erro ao processar imagem. Tente uma imagem diferente.", "error");
+    }
   };
 
   const handleSaveSettings = async () => {
@@ -245,8 +295,11 @@ export default function AdminSettingsPage() {
       });
 
       if (res.success) {
-        showFeedback("Configurações visuais da tela de login atualizadas com sucesso!");
-        if (res.settings) setSettings(res.settings);
+        showFeedback("Configurações visuais da tela de login atualizadas e salvas em disco!");
+        if (res.settings) {
+          setSettings(res.settings);
+          localStorage.setItem("optica_login_hero_image", res.settings.loginHeroImageUrl || "");
+        }
       } else {
         showFeedback(res.error || "Erro ao atualizar configurações.", "error");
       }
@@ -745,6 +798,37 @@ export default function AdminSettingsPage() {
                         {/* Ações */}
                         <td className="py-3.5 px-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => handleCopyStoreInvite(store.id)}
+                              className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                              title={
+                                copiedStoreId === store.id
+                                  ? "Link de convite copiado!"
+                                  : "Copiar link de convite exclusivo da loja"
+                              }
+                            >
+                              {copiedStoreId === store.id ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+
+                            <a
+                              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                                `Olá equipe da ${store.name}! Segue o link de acesso aos treinamentos oficiais da nossa ótica: ${
+                                  typeof window !== "undefined" ? window.location.origin : ""
+                                }/convite/${store.id}. Acesse para iniciar seus módulos!`
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-colors cursor-pointer"
+                              title="Compartilhar convite no grupo do WhatsApp da equipe"
+                            >
+                              <MessageSquare className="w-3.5 h-3.5" />
+                            </a>
+
                             <button
                               onClick={() => handleToggleStoreStatus(store)}
                               disabled={isTogglingStoreId === store.id}

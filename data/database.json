@@ -157,7 +157,7 @@
       "active": true,
       "emailVerified": true,
       "createdAt": "2026-01-01T00:00:00.000Z",
-      "updatedAt": "2026-10-07T15:02:16.767Z"
+      "updatedAt": "2026-10-08T13:58:20.954Z"
     },
     {
       "id": "usr_master",
@@ -372,7 +372,7 @@
       "active": true,
       "emailVerified": true,
       "createdAt": "2026-10-07T11:56:11.927Z",
-      "updatedAt": "2026-10-07T15:02:16.778Z"
+      "updatedAt": "2026-10-08T13:58:20.965Z"
     }
   ],
   "courses": [
@@ -881,6 +881,145 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "log_1791467900965_r3zvt",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "PASSWORD_RESET_COMPLETED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "success": true,
+        "accessLevel": "master"
+      },
+      "createdAt": "2026-10-08T13:58:20.965Z"
+    },
+    {
+      "id": "log_1791467894637_2do6f",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_DELETED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791467894595",
+        "name": "Design de Armações & Visagismo Óptico"
+      },
+      "createdAt": "2026-10-08T13:58:14.637Z"
+    },
+    {
+      "id": "log_1791467894621_dtmnf",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791467894595",
+        "oldName": "Design de Armações & Estilo",
+        "newName": "Design de Armações & Visagismo Óptico"
+      },
+      "createdAt": "2026-10-08T13:58:14.621Z"
+    },
+    {
+      "id": "log_1791467894604_gepkr",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "CATEGORY_CREATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "categoryId": "cat_1791467894595",
+        "name": "Design de Armações & Estilo"
+      },
+      "createdAt": "2026-10-08T13:58:14.604Z"
+    },
+    {
+      "id": "log_1791467889657_0lrn6",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "COURSE_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "courseId": "course_1791467889468",
+        "changes": {
+          "title": "Treinamento Antirreflexo Premium (Edição 2026)",
+          "estimatedDurationMin": 120
+        }
+      },
+      "createdAt": "2026-10-08T13:58:09.657Z"
+    },
+    {
+      "id": "log_1791467889610_zktt0",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "COURSE_UPDATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "courseId": "course_1791467889468",
+        "structureSaved": true,
+        "modulesCount": 1,
+        "lessonsCount": 2
+      },
+      "createdAt": "2026-10-08T13:58:09.610Z"
+    },
+    {
+      "id": "log_1791467889519_6z5uf",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "COURSE_CREATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "courseId": "course_1791467889468",
+        "title": "Treinamento de Lentes Antirreflexo Premium"
+      },
+      "createdAt": "2026-10-08T13:58:09.519Z"
+    },
+    {
+      "id": "log_1791467883724_glzo9",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "STORE_STATUS_TOGGLED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "storeId": "store_1791467883595",
+        "storeName": "Ótica Teste Automação Express",
+        "newStatus": "active"
+      },
+      "createdAt": "2026-10-08T13:58:03.724Z"
+    },
+    {
+      "id": "log_1791467883666_bc3wg",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "STORE_STATUS_TOGGLED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "storeId": "store_1791467883595",
+        "storeName": "Ótica Teste Automação Express",
+        "newStatus": "suspended"
+      },
+      "createdAt": "2026-10-08T13:58:03.666Z"
+    },
+    {
+      "id": "log_1791467883619_x77ty",
+      "userId": "usr_fbdv",
+      "userEmail": "fbdv1202@gmail.com",
+      "action": "STORE_CREATED",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Unknown Client",
+      "metadata": {
+        "storeId": "store_1791467883595",
+        "storeName": "Ótica Teste Automação Express",
+        "planName": "Performance Pro (15 Licenças)",
+        "userLimit": 15
+      },
+      "createdAt": "2026-10-08T13:58:03.619Z"
+    },
     {
       "id": "log_1791385336777_ne3dr",
       "userEmail": "fbdv1202@gmail.com",
@@ -1476,7 +1615,7 @@
     "loginHeroImageUrl": "https://images.unsplash.com/custom-test-image.jpg",
     "loginHeroTitle": "Treinamento Exclusivo Rede Óptica 2026",
     "loginHeroSubtitle": "Aumente a conversão de lentes de valor agregado, elimine erros de adaptação e garanta a satisfação do cliente da ótica.",
-    "updatedAt": "2026-10-07T15:02:09.900Z"
+    "updatedAt": "2026-10-08T13:58:14.638Z"
   },
   "certificates": [
     {

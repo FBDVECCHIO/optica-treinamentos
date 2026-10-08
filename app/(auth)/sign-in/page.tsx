@@ -32,8 +32,26 @@ export default function SignInRoute() {
   const [systemSettings, setSystemSettings] = useState<SystemSettings | null>(null);
 
   useEffect(() => {
+    // Carrega instantaneamente do cache local se disponível para evitar flash
+    const cachedHero = typeof window !== "undefined" ? localStorage.getItem("optica_login_hero_image") : null;
+    if (cachedHero) {
+      setSystemSettings((prev) => ({
+        loginHeroImageUrl: cachedHero,
+        loginHeroTitle: prev?.loginHeroTitle || "Capacitação Técnica de Alta Performance",
+        loginHeroSubtitle: prev?.loginHeroSubtitle || "Aumente a conversão de lentes de valor agregado...",
+        updatedAt: new Date().toISOString(),
+      }));
+    }
+
     getSystemSettingsAction()
-      .then((data) => setSystemSettings(data))
+      .then((data) => {
+        if (data) {
+          setSystemSettings(data);
+          if (data.loginHeroImageUrl) {
+            localStorage.setItem("optica_login_hero_image", data.loginHeroImageUrl);
+          }
+        }
+      })
       .catch(() => {});
   }, []);
 

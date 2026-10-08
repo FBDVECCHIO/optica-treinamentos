@@ -544,17 +544,17 @@ export default function CoursesAdminPage() {
         </button>
       </div>
 
-      {/* Conteúdo Aba 1: Catálogo e Timeline dos Cursos */}
+      {/* Conteúdo Aba 1: Catálogo e Timeline dos Cursos (3 Colunas Otimizadas) */}
       {activeTab === "timeline" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {courses.map((course) => (
             <div
               key={course.id}
               className="rounded-3xl bg-zinc-900/60 border border-white/10 overflow-hidden shadow-xl flex flex-col justify-between hover:border-violet-500/40 transition-all group"
             >
               <div>
-                {/* Capa / Thumbnail */}
-                <div className="relative h-44 w-full bg-zinc-950 overflow-hidden">
+                {/* Capa / Thumbnail Compacta */}
+                <div className="relative h-36 w-full bg-zinc-950 overflow-hidden">
                   <img
                     src={course.thumbnailUrl}
                     alt={course.title}
@@ -563,66 +563,66 @@ export default function CoursesAdminPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
 
                   {/* Badges superiores */}
-                  <div className="absolute top-3 left-3 flex gap-2">
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-violet-600/90 text-white backdrop-blur-md">
-                      {course.category || "Treinamento Oficial"}
+                  <div className="absolute top-2.5 left-2.5 flex gap-1.5">
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-semibold bg-violet-600/90 text-white backdrop-blur-md">
+                      {course.category || "Oficial"}
                     </span>
                     <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-semibold backdrop-blur-md ${
+                      className={`px-2 py-0.5 rounded-full text-[9px] font-semibold backdrop-blur-md ${
                         course.isPublished
                           ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                           : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
                       }`}
                     >
-                      {course.isPublished ? "Publicado" : "Rascunho"}
+                      {course.isPublished ? "Ativo" : "Rascunho"}
                     </span>
                   </div>
 
                   {course.certificateEnabled && (
-                    <div className="absolute top-3 right-3 p-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300" title="Certificado Habilitado">
-                      <Award className="w-3.5 h-3.5" />
+                    <div className="absolute top-2.5 right-2.5 p-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300" title="Certificado Habilitado">
+                      <Award className="w-3 h-3" />
                     </div>
                   )}
 
-                  <div className="absolute bottom-3 left-4 right-4">
-                    <h2 className="text-base font-bold text-white line-clamp-1">{course.title}</h2>
+                  <div className="absolute bottom-2.5 left-3.5 right-3.5">
+                    <h2 className="text-sm font-bold text-white line-clamp-1">{course.title}</h2>
                   </div>
                 </div>
 
-                {/* Detalhes do Treinamento */}
-                <div className="p-5 space-y-4">
-                  <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                {/* Detalhes do Treinamento Compactados */}
+                <div className="p-4 space-y-3">
+                  <p className="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed">
                     {course.description}
                   </p>
 
                   {/* Grade de Indicadores do Curso */}
-                  <div className="grid grid-cols-3 gap-2 text-center p-3 rounded-2xl bg-black/40 border border-white/5 text-xs">
+                  <div className="grid grid-cols-3 gap-1.5 text-center p-2.5 rounded-2xl bg-black/40 border border-white/5 text-xs">
                     <div>
-                      <span className="block font-bold text-white text-sm">
+                      <span className="block font-bold text-white text-xs">
                         {course.modulesCount || 2}
                       </span>
-                      <span className="text-[10px] text-zinc-500">Módulos</span>
+                      <span className="text-[9px] text-zinc-500">Módulos</span>
                     </div>
                     <div>
-                      <span className="block font-bold text-violet-400 text-sm">
+                      <span className="block font-bold text-violet-400 text-xs">
                         {course.lessonsCount || 4}
                       </span>
-                      <span className="text-[10px] text-zinc-500">Aulas em Vídeo</span>
+                      <span className="text-[9px] text-zinc-500">Aulas</span>
                     </div>
                     <div>
-                      <span className="block font-bold text-emerald-400 text-sm">
+                      <span className="block font-bold text-emerald-400 text-xs">
                         {Math.round((course.estimatedDurationMin || 120) / 60)}h
                       </span>
-                      <span className="text-[10px] text-zinc-500">Carga Horária</span>
+                      <span className="text-[9px] text-zinc-500">Carga Horária</span>
                     </div>
                   </div>
 
                   {/* Material em PDF */}
                   {course.pdfAttachmentUrl && (
-                    <div className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 text-xs border border-white/5">
-                      <div className="flex items-center gap-2 truncate">
-                        <FileText className="w-4 h-4 text-violet-400 shrink-0" />
-                        <span className="text-zinc-300 truncate text-[11px]">
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-white/5 text-[11px] border border-white/5">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <FileText className="w-3.5 h-3.5 text-violet-400 shrink-0" />
+                        <span className="text-zinc-300 truncate text-[10px]">
                           {course.pdfAttachmentName || "Apostila Oficial"}
                         </span>
                       </div>
@@ -630,7 +630,7 @@ export default function CoursesAdminPage() {
                         href={course.pdfAttachmentUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-[11px] text-violet-400 hover:text-violet-300 font-semibold shrink-0"
+                        className="text-[10px] text-violet-400 hover:text-violet-300 font-semibold shrink-0"
                       >
                         Baixar
                       </a>
@@ -638,9 +638,9 @@ export default function CoursesAdminPage() {
                   )}
 
                   {/* Timeline de Execução e Avanço do Curso */}
-                  <div className="space-y-1.5 pt-1">
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-zinc-400">Estruturação do Treinamento</span>
+                  <div className="space-y-1 pt-0.5">
+                    <div className="flex items-center justify-between text-[10px]">
+                      <span className="text-zinc-400">Estruturação</span>
                       <span className="text-emerald-400 font-medium">100% Concluído</span>
                     </div>
                     <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
@@ -651,18 +651,18 @@ export default function CoursesAdminPage() {
               </div>
 
               {/* Ações do Card */}
-              <div className="p-5 pt-0 flex items-center justify-between gap-3 border-t border-white/5 mt-2">
+              <div className="p-4 pt-0 flex items-center justify-between gap-2 border-t border-white/5 mt-1">
                 <button
                   onClick={() => handleOpenEditModal(course)}
-                  className="flex-1 py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-xs border border-white/10 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="flex-1 py-1.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-xs border border-white/10 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <Pencil className="w-3.5 h-3.5 text-violet-400" />
-                  <span>Estruturar Treinamento</span>
+                  <Pencil className="w-3 h-3 text-violet-400" />
+                  <span>Estruturar</span>
                 </button>
 
                 <button
                   onClick={() => handleDeleteCourse(course.id)}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 transition-colors cursor-pointer"
                   title="Excluir Treinamento"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -749,10 +749,10 @@ export default function CoursesAdminPage() {
 
       {/* MODAL ESTRUTURADOR DE TREINAMENTO (Criação e Edição Completa) */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="w-full max-w-4xl bg-zinc-950 border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md overflow-x-hidden">
+          <div className="w-full max-w-6xl bg-zinc-950 border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             {/* Header do Modal */}
-            <div className="p-6 border-b border-white/5 bg-zinc-900/50 flex items-center justify-between shrink-0">
+            <div className="p-5 sm:p-6 border-b border-white/5 bg-zinc-900/60 flex items-center justify-between shrink-0">
               <div>
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-violet-400" />
@@ -772,10 +772,10 @@ export default function CoursesAdminPage() {
             </div>
 
             {/* Sub-abas internas do Editor Estrutural */}
-            <div className="flex border-b border-white/5 px-6 gap-6 text-xs font-semibold bg-zinc-900/20 shrink-0">
+            <div className="flex border-b border-white/5 px-6 gap-6 text-xs font-semibold bg-zinc-900/30 shrink-0 overflow-x-auto scrollbar-none">
               <button
                 onClick={() => setModalTab("general")}
-                className={`py-3 transition-colors relative cursor-pointer ${
+                className={`py-3 transition-colors relative cursor-pointer whitespace-nowrap ${
                   modalTab === "general" ? "text-violet-400" : "text-zinc-400 hover:text-white"
                 }`}
               >
@@ -785,7 +785,7 @@ export default function CoursesAdminPage() {
 
               <button
                 onClick={() => setModalTab("pdf")}
-                className={`py-3 transition-colors relative cursor-pointer ${
+                className={`py-3 transition-colors relative cursor-pointer whitespace-nowrap ${
                   modalTab === "pdf" ? "text-violet-400" : "text-zinc-400 hover:text-white"
                 }`}
               >
@@ -795,7 +795,7 @@ export default function CoursesAdminPage() {
 
               <button
                 onClick={() => setModalTab("modules")}
-                className={`py-3 transition-colors relative cursor-pointer ${
+                className={`py-3 transition-colors relative cursor-pointer whitespace-nowrap ${
                   modalTab === "modules" ? "text-violet-400" : "text-zinc-400 hover:text-white"
                 }`}
               >
@@ -805,7 +805,7 @@ export default function CoursesAdminPage() {
 
               <button
                 onClick={() => setModalTab("quiz")}
-                className={`py-3 transition-colors relative cursor-pointer ${
+                className={`py-3 transition-colors relative cursor-pointer whitespace-nowrap ${
                   modalTab === "quiz" ? "text-violet-400" : "text-zinc-400 hover:text-white"
                 }`}
               >
@@ -816,7 +816,7 @@ export default function CoursesAdminPage() {
               <button
                 id="tab-certificate"
                 onClick={() => setModalTab("certificate")}
-                className={`py-3 transition-colors relative cursor-pointer ${
+                className={`py-3 transition-colors relative cursor-pointer whitespace-nowrap ${
                   modalTab === "certificate" ? "text-violet-400" : "text-zinc-400 hover:text-white"
                 }`}
               >
@@ -826,86 +826,107 @@ export default function CoursesAdminPage() {
             </div>
 
             {/* Conteúdo com Scroll da Sub-aba Ativa */}
-            <div className="overflow-y-auto p-6 space-y-6 flex-1 text-xs">
-              {/* SUB-ABA 1: GERAL */}
+            <div className="overflow-y-auto overflow-x-hidden p-6 space-y-6 flex-1 text-xs">
+              {/* SUB-ABA 1: GERAL (Layout 2 Colunas Otimizado para Widescreen sem Scroll) */}
               {modalTab === "general" && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-zinc-400 block mb-1.5 font-medium">Título Oficial do Treinamento</label>
-                    <input
-                      type="text"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Ex: Treinamento Comercial: Linha Gold Comfort IA"
-                      className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-zinc-400 block mb-1.5 font-medium">Descrição Técnica e Comercial</label>
-                    <textarea
-                      rows={3}
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Descreva os objetivos de aprendizagem para os consultores ópticos..."
-                      className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500 leading-relaxed"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                  {/* Coluna Esquerda: Dados Textuais (7 cols) */}
+                  <div className="lg:col-span-7 space-y-4">
                     <div>
-                      <label className="text-zinc-400 block mb-1.5 font-medium">Categoria</label>
-                      <select
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500"
-                      >
-                        {availableCategories.length > 0 ? (
-                          availableCategories.map((c) => (
-                            <option key={c.id} value={c.name}>
-                              {c.name}
-                            </option>
-                          ))
-                        ) : (
-                          <>
-                            <option value="Lentes Multifocais">Lentes Multifocais</option>
-                            <option value="Tratamentos & Tecnologia">Tratamentos & Tecnologia</option>
-                            <option value="Atendimento & Venda Consultiva">Atendimento & Venda Consultiva</option>
-                            <option value="Optometria & Medidas Ópticas">Optometria & Medidas Ópticas</option>
-                            <option value="Laboratório & Montagem">Laboratório & Montagem</option>
-                          </>
-                        )}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="text-zinc-400 block mb-1.5 font-medium">Carga Horária Estimada (min)</label>
+                      <label className="text-zinc-400 block mb-1 font-medium">Título Oficial do Treinamento</label>
                       <input
-                        type="number"
-                        value={estimatedDurationMin}
-                        onChange={(e) => setEstimatedDurationMin(Number(e.target.value))}
-                        className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500"
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Ex: Treinamento Comercial: Linha Gold Comfort IA"
+                        className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-violet-500 text-xs"
                       />
                     </div>
 
                     <div>
-                      <label className="text-zinc-400 block mb-1.5 font-medium">Status de Publicação</label>
-                      <select
-                        value={isPublished ? "true" : "false"}
-                        onChange={(e) => setIsPublished(e.target.value === "true")}
-                        className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500"
-                      >
-                        <option value="true">Publicado para Alunos</option>
-                        <option value="false">Rascunho (Oculto)</option>
-                      </select>
+                      <label className="text-zinc-400 block mb-1 font-medium">Descrição Técnica e Comercial</label>
+                      <textarea
+                        rows={3}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Descreva os objetivos de aprendizagem para os consultores ópticos..."
+                        className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-violet-500 leading-relaxed text-xs resize-none"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="text-zinc-400 block mb-1 font-medium">Categoria</label>
+                        <select
+                          value={category}
+                          onChange={(e) => setCategory(e.target.value)}
+                          className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-violet-500 text-xs"
+                        >
+                          {availableCategories.length > 0 ? (
+                            availableCategories.map((c) => (
+                              <option key={c.id} value={c.name}>
+                                {c.name}
+                              </option>
+                            ))
+                          ) : (
+                            <>
+                              <option value="Lentes Multifocais">Lentes Multifocais</option>
+                              <option value="Tratamentos & Tecnologia">Tratamentos & Tecnologia</option>
+                              <option value="Atendimento & Venda Consultiva">Atendimento & Venda Consultiva</option>
+                              <option value="Optometria & Medidas Ópticas">Optometria & Medidas Ópticas</option>
+                              <option value="Laboratório & Montagem">Laboratório & Montagem</option>
+                            </>
+                          )}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-zinc-400 block mb-1 font-medium">Carga Horária (min)</label>
+                        <input
+                          type="number"
+                          value={estimatedDurationMin}
+                          onChange={(e) => setEstimatedDurationMin(Number(e.target.value))}
+                          className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-violet-500 text-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-zinc-400 block mb-1 font-medium">Status de Publicação</label>
+                        <select
+                          value={isPublished ? "true" : "false"}
+                          onChange={(e) => setIsPublished(e.target.value === "true")}
+                          className="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-violet-500 text-xs"
+                        >
+                          <option value="true">Publicado para Alunos</option>
+                          <option value="false">Rascunho (Oculto)</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <label className="text-zinc-400 block font-medium">Imagem de Capa do Treinamento (Thumbnail)</label>
-                    
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                      <label className="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-xs flex items-center gap-2 cursor-pointer transition-colors shadow-lg shadow-violet-950/40">
+                  {/* Coluna Direita: Box de Imagem de Capa e Pré-visualização Elegante (5 cols) */}
+                  <div className="lg:col-span-5 p-4 rounded-2xl bg-black/40 border border-white/10 space-y-3">
+                    <label className="text-zinc-300 font-semibold block text-xs">
+                      Imagem de Capa do Treinamento (Thumbnail)
+                    </label>
+
+                    <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-zinc-900 border border-white/10 flex items-center justify-center">
+                      {thumbnailUrl ? (
+                        <img
+                          src={thumbnailUrl}
+                          alt="Pré-visualização da Capa"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="text-center p-4 text-zinc-500">
+                          <BookOpen className="w-8 h-8 mx-auto mb-1 opacity-40 text-violet-400" />
+                          <span className="text-[11px]">Nenhuma imagem selecionada</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <label className="w-full py-2 px-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-lg shadow-violet-950/40">
                         <Upload className="w-3.5 h-3.5" />
                         <span>Fazer Upload da Imagem de Capa</span>
                         <input
@@ -920,77 +941,65 @@ export default function CoursesAdminPage() {
                         type="text"
                         value={thumbnailUrl}
                         onChange={(e) => setThumbnailUrl(e.target.value)}
-                        placeholder="Ou cole a URL direta: https://images.unsplash.com/..."
-                        className="flex-1 bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500 font-mono text-[11px]"
+                        placeholder="Ou cole a URL direta: https://..."
+                        className="w-full bg-zinc-900/90 border border-white/10 rounded-xl px-3 py-1.5 text-white focus:outline-none focus:border-violet-500 font-mono text-[10px]"
                       />
                     </div>
-
-                    {thumbnailUrl && (
-                      <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/40 border border-white/5">
-                        <img
-                          src={thumbnailUrl}
-                          alt="Pré-visualização da Capa"
-                          className="w-20 h-14 object-cover rounded-xl border border-white/10"
-                        />
-                        <div className="text-xs">
-                          <span className="font-semibold text-white block">Pré-visualização da Capa</span>
-                          <span className="text-[11px] text-zinc-400">Imagem ativa para o catálogo dos alunos</span>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               )}
 
-              {/* SUB-ABA 2: PDF */}
+              {/* SUB-ABA 2: PDF (Layout 2 Colunas Lado a Lado) */}
               {modalTab === "pdf" && (
-                <div className="space-y-4">
-                  <div className="p-4 rounded-2xl bg-violet-600/10 border border-violet-500/20 text-violet-300">
-                    <p className="font-semibold mb-1 flex items-center gap-1.5">
-                      <FileText className="w-4 h-4" /> Material Didático em PDF
-                    </p>
-                    <p className="text-[11px] text-zinc-400 leading-relaxed">
-                      O arquivo anexado fica disponível diretamente na área do aluno para estudo, revisão e download de apostilas oficiais.
-                    </p>
-                  </div>
-
-                  <div>
-                    <label className="text-zinc-400 block mb-1.5 font-medium">Nome do Arquivo PDF</label>
-                    <input
-                      type="text"
-                      value={pdfAttachmentName}
-                      onChange={(e) => setPdfAttachmentName(e.target.value)}
-                      placeholder="Ex: Manual de Prescrição Gold Comfort IA.pdf"
-                      className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500"
-                    />
-                  </div>
-
-                  <div className="space-y-3">
-                    <label className="text-zinc-400 block font-medium">Caminho, Link ou Arquivo do PDF</label>
-                    
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                      <label className="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-xs flex items-center gap-2 cursor-pointer transition-colors shadow-lg shadow-violet-950/40">
-                        <Upload className="w-3.5 h-3.5" />
-                        <span>Fazer Upload do Arquivo PDF</span>
-                        <input
-                          type="file"
-                          accept="application/pdf"
-                          onChange={handlePdfUpload}
-                          className="hidden"
-                        />
-                      </label>
-
-                      <input
-                        type="text"
-                        value={pdfAttachmentUrl}
-                        onChange={(e) => setPdfAttachmentUrl(e.target.value)}
-                        placeholder="Ou informe link: /apostila.pdf ou URL externa"
-                        className="flex-1 bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500 font-mono text-[11px]"
-                      />
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                  <div className="lg:col-span-6 space-y-4">
+                    <div className="p-4 rounded-2xl bg-violet-600/10 border border-violet-500/20 text-violet-300">
+                      <p className="font-semibold mb-1 flex items-center gap-1.5 text-xs">
+                        <FileText className="w-4 h-4" /> Material Didático em PDF
+                      </p>
+                      <p className="text-[11px] text-zinc-400 leading-relaxed">
+                        O arquivo anexado fica disponível diretamente na área do aluno para estudo, revisão e download de apostilas oficiais.
+                      </p>
                     </div>
 
+                    <div>
+                      <label className="text-zinc-400 block mb-1.5 font-medium">Nome do Arquivo PDF</label>
+                      <input
+                        type="text"
+                        value={pdfAttachmentName}
+                        onChange={(e) => setPdfAttachmentName(e.target.value)}
+                        placeholder="Ex: Manual de Prescrição Gold Comfort IA.pdf"
+                        className="w-full bg-black/50 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-violet-500 text-xs"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-6 p-4 rounded-2xl bg-black/40 border border-white/10 space-y-3">
+                    <label className="text-zinc-300 font-semibold block text-xs">
+                      Caminho, Link ou Upload do PDF
+                    </label>
+
+                    <label className="w-full py-2.5 px-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-lg shadow-violet-950/40">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>Fazer Upload do Arquivo PDF</span>
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={handlePdfUpload}
+                        className="hidden"
+                      />
+                    </label>
+
+                    <input
+                      type="text"
+                      value={pdfAttachmentUrl}
+                      onChange={(e) => setPdfAttachmentUrl(e.target.value)}
+                      placeholder="Ou informe link: /apostila.pdf ou URL externa"
+                      className="w-full bg-zinc-900/90 border border-white/10 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-violet-500 font-mono text-[11px]"
+                    />
+
                     {pdfAttachmentUrl && (
-                      <div className="flex items-center gap-3 p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">
+                      <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">
                         <FileText className="w-4 h-4 shrink-0" />
                         <div className="text-xs">
                           <span className="font-semibold block">{pdfAttachmentName || "Apostila Carregada"}</span>

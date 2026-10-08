@@ -1,4 +1,4 @@
-﻿import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 vi.mock("next/headers", () => ({
   cookies: async () => ({
@@ -174,6 +174,7 @@ describe("Governança de Lojas, Planos e Cotas de Licenças (Multi-Tenancy)", ()
       storeCnpj: cappedCnpj,
       storeName: "Ótica Cota Limitada",
       address: "Rua Teste, 1",
+      roleId: "role_consultor",
     });
 
     expect(registerRes.success).toBe(false);

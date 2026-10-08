@@ -16,6 +16,10 @@ import {
   X,
   Save,
   Building2,
+  MessageSquare,
+  Copy,
+  Share2,
+  Check,
 } from "lucide-react";
 import {
   getUsersListAction,
@@ -40,6 +44,15 @@ export default function UsersAdminPage() {
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [editingUser, setEditingUser] = useState<Profile | null>(null);
   const [editLoading, setEditLoading] = useState(false);
+  const [copiedStoreId, setCopiedStoreId] = useState<string | null>(null);
+
+  const handleCopyInvite = (storeId: string) => {
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    const inviteUrl = `${origin}/convite/${storeId}`;
+    navigator.clipboard.writeText(inviteUrl);
+    setCopiedStoreId(storeId);
+    setTimeout(() => setCopiedStoreId(null), 3000);
+  };
 
   const fetchUsers = () => {
     startTransition(async () => {
@@ -125,6 +138,53 @@ export default function UsersAdminPage() {
           <p className="text-xs text-zinc-400 mt-0.5">
             Acompanhe todos os consultores, gerentes e técnicos vinculados às lojas e CNPJs.
           </p>
+        </div>
+      </div>
+
+      {/* Card de Link de Convite da Loja (Para Envio Rápido no WhatsApp da Equipe) */}
+      <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-violet-900/30 via-zinc-900/60 to-black/60 border border-violet-500/20 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-violet-400 text-xs font-semibold">
+            <Building2 className="w-4 h-4" />
+            <span>Link Exclusivo de Convite para a Equipe da Loja</span>
+          </div>
+          <p className="text-xs text-zinc-300">
+            Envie este link direto no WhatsApp dos consultores da loja. Eles entram sem precisar digitar CNPJ.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => handleCopyInvite("store_matriz")}
+            className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-xs flex items-center gap-2 transition-all cursor-pointer border border-white/10"
+          >
+            {copiedStoreId === "store_matriz" ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-emerald-400">Link Copiado!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5" />
+                <span>Copiar Link de Convite</span>
+              </>
+            )}
+          </button>
+
+          <a
+            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+              `Olá equipe! Segue o link de acesso aos treinamentos oficiais da nossa ótica: ${
+                typeof window !== "undefined" ? window.location.origin : ""
+              }/convite/store_matriz. Acesse e inicie suas aulas!`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center gap-2 transition-all shadow-md shadow-emerald-950/40 cursor-pointer"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>Compartilhar no Grupo do WhatsApp</span>
+          </a>
         </div>
       </div>
 
@@ -256,6 +316,25 @@ export default function UsersAdminPage() {
                       >
                         <KeyRound className="w-3.5 h-3.5" />
                       </button>
+
+                      {user.phone && (
+                        <a
+                          href={`https://api.whatsapp.com/send?phone=55${user.phone.replace(
+                            /\D/g,
+                            ""
+                          )}&text=${encodeURIComponent(
+                            `Olá ${user.name}! Sou o gestor da ${
+                              user.storeName || "nossa óptica"
+                            }. Lembramos que seu treinamento corporativo SRL está ativo na plataforma. Acesse hoje para concluir seus módulos e emitir seu certificado!`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-xl bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-400 border border-emerald-500/20 transition-all cursor-pointer"
+                          title="Cobrar progresso via WhatsApp com 1 clique"
+                        >
+                          <MessageSquare className="w-3.5 h-3.5" />
+                        </a>
+                      )}
 
                       {user.accessLevel !== "master" && (
                         <button
