@@ -159,7 +159,13 @@ export interface AuditLog {
     | "STORE_CREATED"
     | "STORE_UPDATED"
     | "STORE_STATUS_TOGGLED"
-    | "STORE_DELETED";
+    | "STORE_DELETED"
+    | "PLAN_CREATED"
+    | "PLAN_UPDATED"
+    | "PLAN_DELETED"
+    | "COUPON_CREATED"
+    | "COUPON_DELETED"
+    | "INVOICE_EMITTED";
   ipAddress?: string;
   userAgent?: string;
   metadata?: Record<string, unknown>;
@@ -196,3 +202,76 @@ export interface IssuedCertificate {
   issuedAt: string;
   verificationCode: string;
 }
+
+export interface Plan {
+  id: string;
+  name: string;
+  slug: string;
+  monthlyPrice: number;
+  annualPrice: number; // Preço com desconto anual
+  annualDiscountPercent: number; // Ex: 20
+  userLimit: number;
+  badge: string;
+  description: string;
+  highlight: boolean;
+  active: boolean;
+  features: string[];
+  ctaText: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface Coupon {
+  id: string;
+  code: string;
+  discountType: "percent" | "fixed";
+  discountValue: number;
+  applicablePlans: string[]; // "all" ou IDs dos planos
+  validUntil: string;
+  maxUses: number;
+  usedCount: number;
+  active: boolean;
+  createdAt: string;
+}
+
+export interface FinancialTransaction {
+  id: string;
+  storeId: string;
+  storeName: string;
+  storeCnpj: string;
+  planName: string;
+  billingCycle: "monthly" | "annual";
+  amount: number;
+  discountApplied: number;
+  couponCode?: string;
+  paymentMethod: "credit_card" | "pix" | "boleto" | "faturado";
+  paymentGateway: "stripe" | "asaas" | "mercadopago" | "simulado";
+  status: "paid" | "pending" | "refunded" | "failed";
+  dueDate: string;
+  paidAt?: string;
+  nfStatus: "emitted" | "pending" | "processing" | "canceled";
+  nfNumber?: string;
+  nfKey?: string;
+  nfUrl?: string;
+  createdAt: string;
+}
+
+export interface CnpjLookupResult {
+  cnpj: string;
+  razaoSocial: string;
+  nomeFantasia?: string;
+  situacao: string; // "ATIVA", etc.
+  dataAbertura?: string;
+  endereco: {
+    logradouro: string;
+    numero: string;
+    bairro: string;
+    municipio: string;
+    uf: string;
+    cep: string;
+  };
+  telefone?: string;
+  email?: string;
+  valido: boolean;
+}
+

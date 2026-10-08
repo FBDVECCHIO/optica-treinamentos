@@ -24,7 +24,7 @@ export default async function StudentLayout({
                 <Glasses className="w-5 h-5" />
               </div>
               <div>
-                <h1 className="font-bold text-sm text-white tracking-tight">ÓPTICA TRAINING</h1>
+                <h1 className="font-bold text-sm text-white tracking-tight">ÓPTICA NA PRÁTICA</h1>
                 <p className="text-[10px] text-zinc-400 uppercase">{storeName}</p>
               </div>
             </Link>

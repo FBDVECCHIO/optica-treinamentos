@@ -11,6 +11,9 @@ import {
   Category,
   SystemSettings,
   IssuedCertificate,
+  Plan,
+  Coupon,
+  FinancialTransaction,
 } from "@/types/database";
 
 // In-Memory & Local Database Store with Pre-Seeded Optical Data & Disk Persistence
@@ -496,6 +499,212 @@ class DatabaseStore {
     },
   ];
 
+  // Planos Comerciais Configuráveis pelo Admin Master
+  public plans: Plan[] = [
+    {
+      id: "trial",
+      name: "Degustação Gratuita (Trial 15 dias)",
+      slug: "trial-15-dias",
+      monthlyPrice: 0,
+      annualPrice: 0,
+      annualDiscountPercent: 0,
+      userLimit: 5,
+      badge: "Sem Cartão de Crédito",
+      description: "Ideal para testar na prática com sua equipe de balcão.",
+      highlight: true,
+      active: true,
+      features: [
+        "Até 5 colaboradores inclusos",
+        "Acesso completo aos cursos oficiais",
+        "Emissão de certificados com selo SRL",
+        "Suporte via WhatsApp",
+      ],
+      ctaText: "Começar Degustação Gratuita",
+      createdAt: new Date("2026-01-01").toISOString(),
+    },
+    {
+      id: "essencial",
+      name: "Essencial Balcão (5 Licenças)",
+      slug: "essencial-balcao",
+      monthlyPrice: 390,
+      annualPrice: 312,
+      annualDiscountPercent: 20,
+      userLimit: 5,
+      badge: "1 Loja Individual",
+      description: "Para óticas de rua com equipe enxuta e foco em vendas.",
+      highlight: false,
+      active: true,
+      features: [
+        "Até 5 colaboradores simultâneos",
+        "Quizzes avaliativos e ranking interno",
+        "Link de convite direto por WhatsApp",
+        "Cobrança mensal com cancelamento livre",
+      ],
+      ctaText: "Contratar Essencial",
+      createdAt: new Date("2026-01-01").toISOString(),
+    },
+    {
+      id: "pro",
+      name: "Performance Pro (15 Licenças)",
+      slug: "performance-pro",
+      monthlyPrice: 790,
+      annualPrice: 632,
+      annualDiscountPercent: 20,
+      userLimit: 15,
+      badge: "Mais Escolhido",
+      description: "Para lojas de shopping ou equipes comerciais robustas.",
+      highlight: true,
+      active: true,
+      features: [
+        "Até 15 colaboradores simultâneos",
+        "Personalização de certificados com logo da loja",
+        "Relatórios de auditoria e avanço por módulo",
+        "Cobrança de alunos com 1 clique no WhatsApp",
+      ],
+      ctaText: "Contratar Pro",
+      createdAt: new Date("2026-01-01").toISOString(),
+    },
+    {
+      id: "master",
+      name: "Rede Master Expansão (50 Licenças)",
+      slug: "rede-master-expansao",
+      monthlyPrice: 1490,
+      annualPrice: 1192,
+      annualDiscountPercent: 20,
+      userLimit: 50,
+      badge: "Redes e Franquias",
+      description: "Para redes de óticas que necessitam de consolidação de filiais.",
+      highlight: false,
+      active: true,
+      features: [
+        "Até 50 colaboradores em múltiplas filiais",
+        "Gestão de matriz e filiais centralizada",
+        "Treinamentos exclusivos customizados",
+        "Gerente de conta e suporte prioritário",
+      ],
+      ctaText: "Contratar Rede Master",
+      createdAt: new Date("2026-01-01").toISOString(),
+    },
+  ];
+
+  // Cupons de Desconto
+  public coupons: Coupon[] = [
+    {
+      id: "cpn_bemvindo20",
+      code: "BEMVINDO20",
+      discountType: "percent",
+      discountValue: 20,
+      applicablePlans: ["essencial", "pro", "master"],
+      validUntil: new Date("2026-12-31T23:59:59Z").toISOString(),
+      maxUses: 100,
+      usedCount: 14,
+      active: true,
+      createdAt: new Date("2026-01-01").toISOString(),
+    },
+    {
+      id: "cpn_optica100",
+      code: "OPTICA100",
+      discountType: "fixed",
+      discountValue: 100,
+      applicablePlans: ["pro", "master"],
+      validUntil: new Date("2026-11-30T23:59:59Z").toISOString(),
+      maxUses: 50,
+      usedCount: 8,
+      active: true,
+      createdAt: new Date("2026-02-01").toISOString(),
+    },
+    {
+      id: "cpn_tradesrl",
+      code: "TRADESRL",
+      discountType: "percent",
+      discountValue: 30,
+      applicablePlans: ["all"],
+      validUntil: new Date("2026-12-31T23:59:59Z").toISOString(),
+      maxUses: 200,
+      usedCount: 32,
+      active: true,
+      createdAt: new Date("2026-02-15").toISOString(),
+    },
+  ];
+
+  // Gestão Financeira, Entradas e Notas Fiscais
+  public transactions: FinancialTransaction[] = [
+    {
+      id: "inv_20260301_01",
+      storeId: "store_matriz",
+      storeName: "ÓPTICA SRL - MATRIZ SÃO PAULO",
+      storeCnpj: "12.345.678/0001-95",
+      planName: "Rede Master Expansão (50 Licenças)",
+      billingCycle: "annual",
+      amount: 14304.0,
+      discountApplied: 3576.0,
+      couponCode: "BEMVINDO20",
+      paymentMethod: "credit_card",
+      paymentGateway: "stripe",
+      status: "paid",
+      dueDate: new Date("2026-01-05").toISOString(),
+      paidAt: new Date("2026-01-05T14:32:00Z").toISOString(),
+      nfStatus: "emitted",
+      nfNumber: "NFS-e 2026/00142",
+      nfKey: "35260112345678000195550010000001421008892113",
+      createdAt: new Date("2026-01-05").toISOString(),
+    },
+    {
+      id: "inv_20260301_02",
+      storeId: "store_filial1",
+      storeName: "ÓPTICA SRL - FILIAL SHOPPING",
+      storeCnpj: "12.345.678/0002-76",
+      planName: "Performance Pro (15 Licenças)",
+      billingCycle: "monthly",
+      amount: 790.0,
+      discountApplied: 0.0,
+      paymentMethod: "pix",
+      paymentGateway: "stripe",
+      status: "paid",
+      dueDate: new Date("2026-03-15").toISOString(),
+      paidAt: new Date("2026-03-15T10:15:22Z").toISOString(),
+      nfStatus: "emitted",
+      nfNumber: "NFS-e 2026/00188",
+      nfKey: "35260312345678000276550010000001881004456789",
+      createdAt: new Date("2026-03-15").toISOString(),
+    },
+    {
+      id: "inv_20260301_03",
+      storeId: "store_campinas",
+      storeName: "ÓPTICA SRL - FILIAL CAMPINAS SHOPPING",
+      storeCnpj: "12.345.678/0003-88",
+      planName: "Essencial Balcão (5 Licenças)",
+      billingCycle: "monthly",
+      amount: 390.0,
+      discountApplied: 0.0,
+      paymentMethod: "boleto",
+      paymentGateway: "asaas",
+      status: "paid",
+      dueDate: new Date("2026-03-20").toISOString(),
+      paidAt: new Date("2026-03-19T16:40:00Z").toISOString(),
+      nfStatus: "emitted",
+      nfNumber: "NFS-e 2026/00195",
+      nfKey: "35260312345678000388550010000001951009988771",
+      createdAt: new Date("2026-03-15").toISOString(),
+    },
+    {
+      id: "inv_20260301_04",
+      storeId: "store_rj",
+      storeName: "ÓPTICA SRL - FILIAL BARRA DA TIJUCA RJ",
+      storeCnpj: "12.345.678/0004-99",
+      planName: "Performance Pro (15 Licenças)",
+      billingCycle: "monthly",
+      amount: 790.0,
+      discountApplied: 0.0,
+      paymentMethod: "credit_card",
+      paymentGateway: "stripe",
+      status: "pending",
+      dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+      nfStatus: "pending",
+      createdAt: new Date().toISOString(),
+    },
+  ];
+
   constructor() {
     this.loadFromDisk();
   }
@@ -530,6 +739,9 @@ class DatabaseStore {
         certificates: this.certificates,
         userCredentials: this.userCredentials,
         userCourses: this.userCourses,
+        plans: this.plans,
+        coupons: this.coupons,
+        transactions: this.transactions,
       };
       fs.writeFileSync(filePath, JSON.stringify(payload, null, 2), "utf-8");
     } catch {
@@ -565,6 +777,9 @@ class DatabaseStore {
         if (Array.isArray(data.certificates)) this.certificates = data.certificates;
         if (data.userCredentials && typeof data.userCredentials === "object") this.userCredentials = data.userCredentials;
         if (Array.isArray(data.userCourses)) this.userCourses = data.userCourses;
+        if (Array.isArray(data.plans) && data.plans.length > 0) this.plans = data.plans;
+        if (Array.isArray(data.coupons) && data.coupons.length > 0) this.coupons = data.coupons;
+        if (Array.isArray(data.transactions) && data.transactions.length > 0) this.transactions = data.transactions;
         return true;
       }
     } catch {

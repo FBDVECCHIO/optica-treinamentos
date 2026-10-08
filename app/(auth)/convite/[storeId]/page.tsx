@@ -105,7 +105,7 @@ export default function StoreInvitePage() {
             <Glasses className="w-6 h-6" />
           </div>
           <div>
-            <span className="font-bold tracking-tight text-lg block leading-tight">ÓPTICA TRAINING</span>
+            <span className="font-bold tracking-tight text-lg block leading-tight">ÓPTICA NA PRÁTICA</span>
             <span className="text-xs text-zinc-400">Plataforma de Capacitação SRL</span>
           </div>
         </div>

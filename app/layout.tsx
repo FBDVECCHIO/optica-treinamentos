@@ -3,8 +3,13 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: "Plataforma de Treinamentos para Ópticas | Linha Gold Comfort & Smartplay",
+  title: "Óptica Na Prática | Plataforma Corporativa de Treinamentos",
   description: "Ambiente corporativo de capacitação profissional e certificação para equipes de lojas ópticas.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({

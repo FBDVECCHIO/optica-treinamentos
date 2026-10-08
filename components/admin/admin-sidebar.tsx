@@ -20,6 +20,8 @@ import {
   ChevronRight,
   User,
   Settings,
+  CreditCard,
+  DollarSign,
 } from "lucide-react";
 import { Profile } from "@/types/database";
 import { ThemeToggle } from "@/components/theme-provider";
@@ -100,7 +102,11 @@ export function AdminSidebar({ initialUser }: AdminSidebarProps) {
   ];
 
   if (currentUser?.accessLevel === "master") {
-    navItems.push({ href: "/admin/audit-logs", label: "Logs de Auditoria", icon: ShieldCheck });
+    navItems.push(
+      { href: "/admin/plans", label: "Planos & Assinaturas", icon: CreditCard },
+      { href: "/admin/finance", label: "Fiscal & Entradas", icon: DollarSign },
+      { href: "/admin/audit-logs", label: "Logs de Auditoria", icon: ShieldCheck }
+    );
   }
 
   const effectiveWidth = isCollapsed ? 72 : sidebarWidth;
@@ -124,14 +130,14 @@ export function AdminSidebar({ initialUser }: AdminSidebarProps) {
                   <Glasses className="w-5 h-5" />
                 </div>
                 <div className="truncate">
-                  <h1 className="font-bold text-xs tracking-tight text-white truncate">GESTÃO ÓPTICA</h1>
+                  <h1 className="font-bold text-xs tracking-tight text-white truncate">ÓPTICA NA PRÁTICA</h1>
                   <p className="text-[9px] text-zinc-400 uppercase tracking-wider truncate">
                     {currentUser?.accessLevel === "master" ? "SUPERADMIN" : "GERENTE DE LOJA"}
                   </p>
                 </div>
               </Link>
             ) : (
-              <Link href="/admin" className="mx-auto" title="Gestão Óptica">
+              <Link href="/admin" className="mx-auto" title="Óptica Na Prática">
                 <div className="p-2 rounded-xl bg-violet-600/20 border border-violet-500/30 text-violet-400">
                   <Glasses className="w-5 h-5" />
                 </div>

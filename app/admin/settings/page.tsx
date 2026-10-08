@@ -540,7 +540,7 @@ export default function AdminSettingsPage() {
           }`}
         >
           <StoreIcon className="w-4 h-4" />
-          <span>Lojas, Planos & Assinaturas ({stores.length})</span>
+          <span>Lojas & Filiais ({stores.length})</span>
           {activeTab === "stores" && (
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-500 rounded-full" />
           )}
