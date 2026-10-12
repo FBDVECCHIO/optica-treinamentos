@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { getPublicPlansAction } from "@/app/actions/admin";
 import { Plan } from "@/types/database";
+import RibbonGlow from "@/components/ui/ribbon-glow";
 
 const FALLBACK_PLANS: Plan[] = [
   {
@@ -230,8 +231,22 @@ export default async function HomePage() {
         </div>
 
         {/* Seção Inferior do Hero: Tabela de Planos Comerciais */}
-        <div id="planos" className="mt-20 pt-10 border-t border-white/10 w-full space-y-8">
-          <div className="text-center max-w-3xl mx-auto space-y-1">
+        <div id="planos" className="mt-20 pt-12 pb-10 border border-white/10 w-full space-y-8 relative rounded-3xl overflow-hidden px-4 sm:px-8 shadow-2xl">
+          {/* Ribbon Glow WebGL2 Efeito de Fundo Interativo */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <RibbonGlow
+              background="#09090b"
+              color1="#0E3D46"
+              color2="#3B1C71"
+              speed={45}
+              size={110}
+              className="w-full h-full opacity-85"
+            />
+            {/* Vinheta suave para fusão perfeita com as bordas e contraste com o conteúdo */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#09090b]/80 via-transparent to-[#09090b]/90 pointer-events-none" />
+          </div>
+
+          <div className="relative z-10 text-center max-w-3xl mx-auto space-y-1">
             <span className="text-xs font-semibold text-violet-400 uppercase tracking-wider">
               Planos Comerciais & Assinaturas
             </span>
@@ -243,14 +258,14 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 text-left">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 text-left">
             {plans.map((plan) => (
               <div
                 key={plan.id}
-                className={`p-6 rounded-3xl border transition-all flex flex-col justify-between ${
+                className={`p-6 rounded-3xl border transition-all flex flex-col justify-between backdrop-blur-md ${
                   plan.highlight
-                    ? "bg-violet-600/15 border-violet-500 shadow-xl shadow-violet-950/40 relative"
-                    : "bg-zinc-900/60 border-white/10 hover:border-white/20"
+                    ? "bg-violet-950/40 border-violet-500 shadow-xl shadow-violet-950/40 relative"
+                    : "bg-zinc-900/75 border-white/10 hover:border-white/20"
                 }`}
               >
                 <div>
