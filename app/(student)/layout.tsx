@@ -14,32 +14,32 @@ export default async function StudentLayout({
   const isPrivileged = user?.accessLevel === "master" || user?.accessLevel === "manager";
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-[#fafafa] flex flex-col">
+    <div className="min-h-screen bg-[#F7F7F1] text-[#0A0A0A] flex flex-col">
       {/* Top Navbar */}
-      <header className="sticky top-0 z-50 bg-zinc-950/80 backdrop-blur-xl border-b border-white/10 px-6 py-4">
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-[#C9D0D6] px-6 py-4 shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/dashboard" className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-violet-600/20 border border-violet-500/30 text-violet-400">
+              <div className="p-2 rounded-xl bg-[#0A0A0A] text-[#C7FF2E] shadow-sm">
                 <Glasses className="w-5 h-5" />
               </div>
               <div>
-                <h1 className="font-bold text-sm text-white tracking-tight">ÓPTICA NA PRÁTICA</h1>
-                <p className="text-[10px] text-zinc-400 uppercase">{storeName}</p>
+                <h1 className="font-extrabold text-sm text-[#0A0A0A] tracking-tight">ÓPTICA NA PRÁTICA</h1>
+                <p className="text-[10px] text-[#6F7780] uppercase font-medium">{storeName}</p>
               </div>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-1 pl-4 border-l border-white/10 text-xs">
+            <nav className="hidden md:flex items-center gap-1 pl-4 border-l border-[#C9D0D6] text-xs">
               <Link
                 href="/dashboard"
-                className="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-lg text-[#0A0A0A] hover:bg-[#C9D0D6]/30 transition-colors flex items-center gap-1.5 font-semibold"
               >
                 <LayoutDashboard className="w-3.5 h-3.5" />
                 <span>Dashboard</span>
               </Link>
               <Link
                 href="/courses"
-                className="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-lg text-[#0A0A0A] hover:bg-[#C9D0D6]/30 transition-colors flex items-center gap-1.5 font-semibold"
               >
                 <BookOpen className="w-3.5 h-3.5" />
                 <span>Meus Treinamentos</span>
@@ -51,26 +51,26 @@ export default async function StudentLayout({
             {isPrivileged && (
               <Link
                 href="/admin"
-                className="px-3 py-1.5 rounded-xl bg-violet-500/10 border border-violet-500/30 text-violet-300 hover:bg-violet-500/20 transition-all text-xs font-medium flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-xl bg-[#0A0A0A] text-[#C7FF2E] hover:bg-[#262626] transition-all text-xs font-bold flex items-center gap-1.5 shadow-sm"
               >
-                <Shield className="w-3.5 h-3.5 text-violet-400" />
+                <Shield className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Painel de Gestão</span>
               </Link>
             )}
 
-            <div className="flex items-center gap-2 pl-3 border-l border-white/10">
+            <div className="flex items-center gap-2 pl-3 border-l border-[#C9D0D6]">
               <div className="text-right hidden sm:block">
-                <p className="text-xs font-semibold text-white leading-tight">{userName}</p>
-                <p className="text-[10px] text-zinc-400">{userRole}</p>
+                <p className="text-xs font-bold text-[#0A0A0A] leading-tight">{userName}</p>
+                <p className="text-[10px] text-[#6F7780]">{userRole}</p>
               </div>
-              <div className="w-8 h-8 rounded-full bg-violet-600/30 border border-violet-500/40 text-violet-300 flex items-center justify-center text-xs font-bold">
+              <div className="w-8 h-8 rounded-full bg-[#0A0A0A] text-[#C7FF2E] flex items-center justify-center text-xs font-bold shadow-sm">
                 <User className="w-4 h-4" />
               </div>
             </div>
 
             <Link
               href="/sign-in"
-              className="p-2 rounded-xl text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+              className="p-2 rounded-xl text-[#6F7780] hover:text-red-600 hover:bg-red-50 transition-colors"
               title="Sair da Plataforma"
             >
               <LogOut className="w-4 h-4" />
@@ -85,7 +85,7 @@ export default async function StudentLayout({
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-4 px-6 text-center text-xs text-zinc-500">
+      <footer className="border-t border-[#C9D0D6] py-4 px-6 text-center text-xs text-[#6F7780]">
         Plataforma Corporativa SRL Ópticas &bull; Treinamentos Linha Gold Comfort & Guia Smartplay &bull; 2026
       </footer>
     </div>

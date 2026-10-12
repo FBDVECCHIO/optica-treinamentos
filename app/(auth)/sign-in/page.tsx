@@ -32,13 +32,14 @@ export default function SignInRoute() {
   const [systemSettings, setSystemSettings] = useState<SystemSettings | null>(null);
 
   useEffect(() => {
+    const defaultHero = "https://images.unsplash.com/photo-1591076482161-42ce6da69f68?q=80&w=1200&auto=format&fit=crop";
     // Carrega instantaneamente do cache local se disponível para evitar flash
     const cachedHero = typeof window !== "undefined" ? localStorage.getItem("optica_login_hero_image") : null;
-    if (cachedHero) {
+    if (cachedHero && !cachedHero.includes("custom-test-image.jpg")) {
       setSystemSettings((prev) => ({
         loginHeroImageUrl: cachedHero,
         loginHeroTitle: prev?.loginHeroTitle || "Capacitação Técnica de Alta Performance",
-        loginHeroSubtitle: prev?.loginHeroSubtitle || "Aumente a conversão de lentes de valor agregado...",
+        loginHeroSubtitle: prev?.loginHeroSubtitle || "Aumente a conversão de lentes de valor agregado, elimine erros de adaptação e garanta a satisfação do cliente da ótica.",
         updatedAt: new Date().toISOString(),
       }));
     }
@@ -46,10 +47,15 @@ export default function SignInRoute() {
     getSystemSettingsAction()
       .then((data) => {
         if (data) {
-          setSystemSettings(data);
-          if (data.loginHeroImageUrl) {
-            localStorage.setItem("optica_login_hero_image", data.loginHeroImageUrl);
-          }
+          const finalImage = (data.loginHeroImageUrl && !data.loginHeroImageUrl.includes("custom-test-image.jpg"))
+            ? data.loginHeroImageUrl
+            : defaultHero;
+
+          setSystemSettings({
+            ...data,
+            loginHeroImageUrl: finalImage,
+          });
+          localStorage.setItem("optica_login_hero_image", finalImage);
         }
       })
       .catch(() => {});

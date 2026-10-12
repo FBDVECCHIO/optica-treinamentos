@@ -278,8 +278,26 @@ export default function AdminSettingsPage() {
       });
 
       setLoginHeroImage(compressedBase64);
+      localStorage.setItem("optica_login_hero_image", compressedBase64);
       localStorage.setItem("optica_login_hero_image_draft", compressedBase64);
-      showFeedback("Imagem otimizada com sucesso! Clique em 'Salvar e Publicar no Login' para aplicar.");
+
+      // Auto-save imediato no banco de dados e disco para fixação permanente
+      try {
+        const res = await updateSystemSettingsAction({
+          loginHeroImageUrl: compressedBase64,
+          loginHeroTitle: loginTitle,
+          loginHeroSubtitle: loginSubtitle,
+        });
+
+        if (res.success && res.settings) {
+          setSettings(res.settings);
+          showFeedback("Foto enviada, fixada e publicada com sucesso na tela de login!");
+        } else {
+          showFeedback("Imagem carregada localmente. Clique em 'Salvar e Publicar no Login' para fixar.");
+        }
+      } catch {
+        showFeedback("Imagem carregada no navegador. Clique em 'Salvar e Publicar' para confirmar.");
+      }
     } catch {
       showFeedback("Erro ao processar imagem. Tente uma imagem diferente.", "error");
     }
@@ -310,12 +328,24 @@ export default function AdminSettingsPage() {
     }
   };
 
-  const handleResetDefaultBanner = () => {
+  const handleResetDefaultBanner = async () => {
     const defaultUrl = "https://images.unsplash.com/photo-1591076482161-42ce6da69f68?q=80&w=1200&auto=format&fit=crop";
     setLoginHeroImage(defaultUrl);
     setLoginTitle("Capacitação Técnica de Alta Performance");
     setLoginSubtitle("Aumente a conversão de lentes de valor agregado, elimine erros de adaptação e garanta a satisfação do cliente da ótica.");
-    showFeedback("Banner redefinido para a imagem oficial de lentes ópticas. Clique em Salvar para confirmar.");
+    localStorage.setItem("optica_login_hero_image", defaultUrl);
+    localStorage.removeItem("optica_login_hero_image_draft");
+    try {
+      const res = await updateSystemSettingsAction({
+        loginHeroImageUrl: defaultUrl,
+        loginHeroTitle: "Capacitação Técnica de Alta Performance",
+        loginHeroSubtitle: "Aumente a conversão de lentes de valor agregado, elimine erros de adaptação e garanta a satisfação do cliente da ótica.",
+      });
+      if (res.success && res.settings) {
+        setSettings(res.settings);
+      }
+    } catch {}
+    showFeedback("Banner redefinido para a imagem oficial de lentes ópticas e salvo com sucesso!");
   };
 
   // Funções de Gestão de Lojas & Planos

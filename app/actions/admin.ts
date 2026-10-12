@@ -1314,7 +1314,7 @@ export async function getCouponsAction(): Promise<Coupon[]> {
 }
 
 export async function createCouponAction(
-  data: Omit<Coupon, "id" | "usedCount" | "createdAt">
+  data: Omit<Coupon, "id" | "usedCount" | "createdAt" | "active"> & { active?: boolean }
 ): Promise<{ success: boolean; coupon?: Coupon; error?: string }> {
   const user = await getCurrentUser();
   if (user?.accessLevel !== "master") {

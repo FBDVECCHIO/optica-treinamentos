@@ -59,5 +59,12 @@ describe("Gestão de Categorias e Configurações Visuais do Sistema", () => {
     expect(updateRes.success).toBe(true);
     expect(updateRes.settings?.loginHeroImageUrl).toBe("https://images.unsplash.com/custom-test-image.jpg");
     expect(updateRes.settings?.loginHeroTitle).toBe("Treinamento Exclusivo Rede Óptica 2026");
+
+    // Restaura as configurações originais para não poluir o banco em disco
+    await updateSystemSettingsAction({
+      loginHeroImageUrl: initial.loginHeroImageUrl,
+      loginHeroTitle: initial.loginHeroTitle,
+      loginHeroSubtitle: initial.loginHeroSubtitle,
+    });
   });
 });

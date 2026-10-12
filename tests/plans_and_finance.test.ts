@@ -124,6 +124,7 @@ describe("Gestão de Cupons de Desconto", () => {
       applicablePlans: ["all"],
       validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
       maxUses: 10,
+      active: true,
     });
 
     expect(createRes.success).toBe(true);
