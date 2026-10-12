@@ -118,6 +118,20 @@ export default async function HomePage() {
 
   return (
     <div className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-[#09090b] text-white">
+      {/* Ribbon Glow WebGL2 — Background Dinâmico Interativo da Página Principal */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <RibbonGlow
+          background="#09090b"
+          color1="#0E3D46"
+          color2="#3B1C71"
+          speed={45}
+          size={110}
+          className="w-full h-full opacity-80"
+        />
+        {/* Vinheta sutil perimetral para profundidade cinematográfica */}
+        <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_30%,#09090b_95%] opacity-65 pointer-events-none" />
+      </div>
+
       {/* Background Glows */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-violet-600/10 blur-[150px] pointer-events-none rounded-full" />
       <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-emerald-600/10 blur-[140px] pointer-events-none rounded-full" />
@@ -231,22 +245,8 @@ export default async function HomePage() {
         </div>
 
         {/* Seção Inferior do Hero: Tabela de Planos Comerciais */}
-        <div id="planos" className="mt-20 pt-12 pb-10 border border-white/10 w-full space-y-8 relative rounded-3xl overflow-hidden px-4 sm:px-8 shadow-2xl">
-          {/* Ribbon Glow WebGL2 Efeito de Fundo Interativo */}
-          <div className="absolute inset-0 pointer-events-none z-0">
-            <RibbonGlow
-              background="#09090b"
-              color1="#0E3D46"
-              color2="#3B1C71"
-              speed={45}
-              size={110}
-              className="w-full h-full opacity-85"
-            />
-            {/* Vinheta suave para fusão perfeita com as bordas e contraste com o conteúdo */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#09090b]/80 via-transparent to-[#09090b]/90 pointer-events-none" />
-          </div>
-
-          <div className="relative z-10 text-center max-w-3xl mx-auto space-y-1">
+        <div id="planos" className="mt-20 pt-10 border-t border-white/10 w-full space-y-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto space-y-1">
             <span className="text-xs font-semibold text-violet-400 uppercase tracking-wider">
               Planos Comerciais & Assinaturas
             </span>
@@ -258,7 +258,7 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 text-left">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 text-left">
             {plans.map((plan) => (
               <div
                 key={plan.id}
