@@ -66,129 +66,75 @@
 .animate-delay-1400 { animation-delay: 1400ms; }
 
 :root {
-  --background: #F7F7F1;
-  --foreground: #0A0A0A;
-  --card: #FFFFFF;
-  --card-foreground: #0A0A0A;
-  --primary: #C7FF2E;
-  --primary-foreground: #0A0A0A;
-  --secondary: #C9D0D6;
-  --secondary-foreground: #0A0A0A;
-  --muted: #6F7780;
-  --muted-foreground: #6F7780;
-  --border: #C9D0D6;
-  --brand-lime: #C7FF2E;
-  --brand-jet-black: #0A0A0A;
-  --brand-off-white: #F7F7F1;
-  --brand-chrome-silver: #C9D0D6;
-  --brand-smoke-gray: #6F7780;
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --border: #27272a;
 }
 
-html.light,
-html:not(.dark) {
-  --background: #F7F7F1;
-  --foreground: #0A0A0A;
-  --card: #FFFFFF;
-  --card-foreground: #0A0A0A;
-  --primary: #C7FF2E;
-  --primary-foreground: #0A0A0A;
-  --secondary: #C9D0D6;
-  --secondary-foreground: #0A0A0A;
-  --muted: #6F7780;
-  --muted-foreground: #6F7780;
-  --border: #C9D0D6;
+html.light {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
 }
 
-html.light body,
-html:not(.dark) body {
-  background-color: #F7F7F1 !important;
-  color: #0A0A0A !important;
+html.light body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
 }
 
 html.light .bg-zinc-950,
-html.light .bg-\[\#09090b\],
-html:not(.dark) .bg-zinc-950,
-html:not(.dark) .bg-\[\#09090b\] {
-  background-color: #F7F7F1 !important;
+html.light .bg-\[\#09090b\] {
+  background-color: #f8fafc !important;
 }
 
 html.light .bg-zinc-900,
 html.light .bg-zinc-900\/60,
-html.light .bg-zinc-900\/70,
 html.light .bg-zinc-900\/90,
 html.light .bg-zinc-900\/40,
 html.light .bg-black\/50,
-html.light .bg-black\/40,
-html:not(.dark) .bg-zinc-900,
-html:not(.dark) .bg-zinc-900\/60,
-html:not(.dark) .bg-zinc-900\/70,
-html:not(.dark) .bg-zinc-900\/90,
-html:not(.dark) .bg-zinc-900\/40,
-html:not(.dark) .bg-black\/50,
-html:not(.dark) .bg-black\/40 {
-  background-color: #FFFFFF !important;
-  border-color: #C9D0D6 !important;
+html.light .bg-black\/40 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
 }
 
 html.light .border-white\/10,
-html.light .border-white\/5,
-html:not(.dark) .border-white\/10,
-html:not(.dark) .border-white\/5 {
-  border-color: #C9D0D6 !important;
+html.light .border-white\/5 {
+  border-color: #e2e8f0 !important;
 }
 
 html.light .text-zinc-400,
-html.light .text-zinc-500,
-html:not(.dark) .text-zinc-400,
-html:not(.dark) .text-zinc-500 {
-  color: #6F7780 !important;
+html.light .text-zinc-500 {
+  color: #64748b !important;
 }
 
-html.light .text-white,
-html:not(.dark) .text-white {
-  color: #0A0A0A !important;
+html.light .text-white {
+  color: #0f172a !important;
 }
 
 html.light .text-zinc-200,
-html.light .text-zinc-300,
-html:not(.dark) .text-zinc-200,
-html:not(.dark) .text-zinc-300 {
-  color: #0A0A0A !important;
+html.light .text-zinc-300 {
+  color: #334155 !important;
 }
 
-html.light aside,
-html:not(.dark) aside {
-  background-color: #FFFFFF !important;
-  border-color: #C9D0D6 !important;
-}
-
-/* Transição de Destaques para Electric Lime e Jet Black */
-html.light .bg-violet-600,
-html:not(.dark) .bg-violet-600 {
-  background-color: #C7FF2E !important;
-  color: #0A0A0A !important;
-  font-weight: 700 !important;
-}
-
-html.light .hover\:bg-violet-500:hover,
-html:not(.dark) .hover\:bg-violet-500:hover {
-  background-color: #b5ee24 !important;
-  color: #0A0A0A !important;
-}
-
-html.light .text-violet-400,
-html.light .text-violet-300,
-html:not(.dark) .text-violet-400,
-html:not(.dark) .text-violet-300 {
-  color: #0A0A0A !important;
-}
-
-html.light .bg-violet-600\/20,
-html.light .bg-violet-500\/10,
-html:not(.dark) .bg-violet-600\/20,
-html:not(.dark) .bg-violet-500\/10 {
-  background-color: #C9D0D6 !important;
-  color: #0A0A0A !important;
+html.light aside {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
 }
 
 body {
@@ -205,14 +151,14 @@ body {
   height: 1.15rem;
   border: 1px solid var(--border);
   border-radius: 0.375rem;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.05);
   cursor: pointer;
   position: relative;
 }
 
 .custom-checkbox:checked {
-  background-color: #C7FF2E;
-  border-color: #0A0A0A;
+  background-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .custom-checkbox:checked::after {
@@ -221,7 +167,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #0A0A0A;
+  color: white;
   font-size: 0.75rem;
   font-weight: bold;
 }

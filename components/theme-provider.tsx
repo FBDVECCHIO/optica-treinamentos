@@ -12,24 +12,26 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: "light",
+  theme: "dark",
   toggleTheme: () => {},
   setTheme: () => {},
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Carregar preferência salva ou padronizar para o novo tema visual claro
+    // Carregar preferência salva ou respeitar sistema
     const saved = localStorage.getItem("optica_theme") as Theme | null;
     if (saved && (saved === "dark" || saved === "light")) {
       setThemeState(saved);
       applyTheme(saved);
     } else {
-      setThemeState("light");
-      applyTheme("light");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initial = prefersDark ? "dark" : "light";
+      setThemeState(initial);
+      applyTheme(initial);
     }
     setMounted(false); // evita mismatch inicial
     setMounted(true);
